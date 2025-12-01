@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Checkout – Porch Logic</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="../styles.css" />
+    <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body class="checkout-page">
+    <main>
+        <h1>CHECKOUT</h1>
+
+        <div class="content">
+            <form id="payment-form" class="checkout-grid">
+                <div class="checkout-panel checkout-details">
+                    <div class="field-group">
+                        <h2 class="field-group__label">Contact</h2>
+                        <div class="field-row">
+                            <label class="field">
+                                <span class="field__label">Email</span>
+                                <input type="email" id="email" name="email" placeholder="you@example.com" required />
+                            </label>
+                        </div>
+                        <div id="email-errors" class="field-error"></div>
+
+                        <label class="field subscribe-field">
+                            <input type="checkbox" id="subscribe-checkbox" />
+                            <span>Keep me in the loop about future Porch Logic experiments.</span>
+                        </label>
+                    </div>
+
+                    <div class="field-group">
+                        <h2 class="field-group__label">Shipping</h2>
+
+                        <div class="field-row">
+                            <div id="shipping-address-element" class="stripe-element-placeholder"></div>
+                        </div>
+                    </div>
+
+                    <div class="field-group">
+                        <h2 class="field-group__label">Payment</h2>
+                        <div class="field-row">
+                            <div id="payment-element" class="stripe-element-placeholder"></div>
+                        </div>
+                        <p id="payment-message" class="payment-message hidden" role="status"></p>
+                    </div>
+                </div>
+
+                <div class="checkout-panel checkout-summary">
+                    <h2 class="summary-label">Order</h2>
+
+                    <div class="summary-items" id="checkout-summary-items"></div>
+
+                    <div class="summary-lines">
+                        <div class="summary-line">
+                            <span>Subtotal</span>
+                            <span data-cart-subtotal>$0.00</span>
+                        </div>
+                        <div class="summary-line summary-line--muted">
+                            <span>Shipping</span>
+                            <span>Calculated next step</span>
+                        </div>
+                        <div class="summary-line summary-line--muted">
+                            <span>Tax</span>
+                            <span>Calculated next step</span>
+                        </div>
+                        <div class="summary-line summary-line--total">
+                            <span>Total</span>
+                            <span data-cart-total>$0.00</span>
+                        </div>
+                    </div>
+
+                    <p class="summary-note">
+                        By placing your order you agree to the Porch Logic terms and refund policy.
+                    </p>
+
+                    <button id="submit" type="submit" class="summary-button" disabled>
+                        <span id="spinner" class="spinner hidden" aria-hidden="true"></span>
+                        <span id="button-text">Place order</span>
+                    </button>
+                    <a href="../cart/" class="back-button">Back to cart</a>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script src="https://js.stripe.com/basil/stripe.js"></script>
+    <script src="../cart/cart.js"></script>
+    <script src="./checkout.js"></script>
+</body>
+
+</html>

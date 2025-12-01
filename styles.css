@@ -1,0 +1,309 @@
+:root {
+    --bg: #e3e3e3;
+    --border: #bababa;
+    --text-main: #111;
+    --text-muted: #777;
+    --accent: #ff9a2c;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+/* optional scrollbar helper */
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    /* overflow: hidden; */
+}
+
+body {
+    background: var(--bg);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color: var(--text-main);
+
+    width: 100dvw;
+    height: 100dvh;
+
+    display: flex;
+    flex-direction: column;
+    justify-content:flex-start;
+    align-items: center;    
+}
+
+/* main viewport shell */
+main {
+    aspect-ratio: 2/3;
+
+    max-width: 100%;
+    max-height: 100vh;
+
+    width: min(100%, calc(100dvh * 2 / 3));
+    height: min(100%, calc(100dvw * 3 / 2));
+
+    display: flex;
+    flex-direction: column;
+
+    position: relative;
+
+    overflow: hidden;
+}
+/* On phones: let main just fill the viewport, no fancy ratio */
+@media (max-width: 768px) {
+    main {
+        aspect-ratio: auto;
+        width: 100dvw;
+        height: 100dvh;
+        max-width: 100dvw;
+        max-height: 100dvh;
+    }
+}
+
+/* rotated title */
+h1 {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    transform: rotate(90deg) translateY(-100%);
+    transform-origin: top left;
+
+    font-size: 3rem;
+    z-index: 0;
+    margin: 0;
+    padding: 1rem;
+
+    overflow: hidden;
+}
+
+/* page content container (each page owns inner layout) */
+.content {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+/* utility */
+
+.hidden {
+    display: none !important;
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.is-disabled,
+button[disabled],
+.summary-button[disabled],
+.buy-button[disabled] {
+    opacity: 0.55;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* glyph modal + editor */
+
+.glyph-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(5, 7, 10, 0.9);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 1.2rem;
+    z-index: 20;
+}
+
+.glyph-modal.visible {
+    display: flex;
+}
+
+.glyph-modal-inner {
+    width: min(960px, 92vw);
+    max-height: 92vh;
+    overflow: auto;
+    background: #0b0d11;
+    color: #f4f6fb;
+    border: 1px solid #1f242c;
+    border-radius: 14px;
+    box-shadow: 0 18px 60px rgba(0, 0, 0, 0.45);
+    padding: 1.25rem 1.35rem 1.5rem;
+}
+
+.glyph-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.glyph-modal-subtitle {
+    color: #b7c0cc;
+    margin: 0.35rem 0 0.5rem;
+    font-size: 0.95rem;
+}
+
+.glyph-modal-editor {
+    margin-top: 0.8rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.glyph-mode-wrapper {
+    text-align: center;
+    margin-top: 0.4rem;
+    display: inline-flex;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+.glyph-mode-btn {
+    padding: 0.5rem 0.8rem;
+    cursor: pointer;
+    border-radius: 999px;
+    border: 1px solid #313945;
+    background: #0f141b;
+    color: #f4f6fb;
+    transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+}
+
+.glyph-mode-btn.active {
+    background: #1b222c;
+    border-color: var(--accent);
+    transform: translateY(-1px);
+}
+
+.glyph-icon {
+    display: block;
+    width: 32px;
+    height: 16px;
+    position: relative;
+}
+
+.glyph-icon-flat::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    border-bottom: 2px solid currentColor;
+    border-radius: 999px;
+}
+
+.glyph-icon-mound::before {
+    content: "";
+    position: absolute;
+    left: 4px;
+    right: 4px;
+    bottom: 0;
+    height: 100%;
+    border: 2px solid currentColor;
+    border-bottom: none;
+    border-radius: 999px 999px 0 0;
+}
+
+.glyph-icon-canvas {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+    aspect-ratio: 1 / 1;
+    max-height: 160px;
+}
+
+.glyph-icon-label {
+    font-size: 0.8rem;
+    color: #c6ced9;
+}
+
+.glyph-modal-close {
+    margin-top: 0.8rem;
+    align-self: flex-end;
+    background: #151b23;
+    color: #f4f6fb;
+    border: 1px solid #313945;
+    border-radius: 999px;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+}
+
+/* cart popup */
+
+dialog#cart-popup {
+    border: 1px solid #111;
+    border-radius: 14px;
+    padding: 0;
+    max-width: 420px;
+    width: 90vw;
+    box-shadow: 0 18px 60px rgba(0, 0, 0, 0.35);
+}
+
+dialog#cart-popup::backdrop {
+    background: rgba(0, 0, 0, 0.35);
+}
+
+dialog#cart-popup article {
+    padding: 1rem 1.2rem 1.1rem;
+}
+
+dialog#cart-popup header h2 {
+    margin: 0 0 0.3rem;
+    letter-spacing: 0.08em;
+}
+
+dialog#cart-popup p {
+    margin: 0 0 0.8rem;
+    color: var(--text-muted);
+}
+
+dialog#cart-popup footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.6rem;
+}
+
+dialog#cart-popup button,
+dialog#cart-popup a[role="button"] {
+    padding: 0.4rem 1rem;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: #fff;
+    color: #111;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+dialog#cart-popup a[role="button"] {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+}
