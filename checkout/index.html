@@ -11,10 +11,40 @@
 
 <body class="checkout-page">
     <main>
-        <h1>CHECKOUT</h1>
+        
 
-        <div class="content">
+        <div class="content no-scrollbar">
+            <h1>CHECKOUT</h1>
             <form id="payment-form" class="checkout-grid">
+                <div class="checkout-panel checkout-summary">
+                    <h2 class="summary-label">Order</h2>
+
+                    <div class="summary-items" id="checkout-summary-items"></div>
+
+                    <div class="summary-lines">
+                        <div class="summary-line">
+                            <span>Subtotal</span>
+                            <span data-cart-subtotal>$0.00</span>
+                        </div>
+                        <div class="summary-line summary-line--muted shipping-summary">
+                            <span>Shipping</span>
+                            <span><span data-shipping-label>Enter address for options</span> · <span data-cart-shipping>$0.00</span></span>
+                        </div>
+                        <div class="summary-line summary-line--muted">
+                            <span>Tax</span>
+                            <span>Calculated next step</span>
+                        </div>
+                        <div class="summary-line summary-line--total">
+                            <span>Total</span>
+                            <span data-cart-total>$0.00</span>
+                        </div>
+                    </div>
+
+                    <p class="summary-note">
+                        By placing your order you agree to the Porch Logic terms and refund policy.
+                    </p>
+                </div>
+
                 <div class="checkout-panel checkout-details">
                     <div class="field-group">
                         <h2 class="field-group__label">Contact</h2>
@@ -35,6 +65,35 @@
                     <div class="field-group">
                         <h2 class="field-group__label">Shipping</h2>
 
+                        <div class="shipping-methods" id="shipping-methods">
+                            <p class="shipping-hint" data-shipping-hint>Enter a shipping address to see available options.</p>
+
+                            <label class="shipping-option hidden" data-shipping-option data-region="US">
+                                <input type="radio" name="shipping_method" value="us_economy" data-shipping-amount="6" data-shipping-label="US Economy (3–7 days)">
+                                <span class="shipping-option__info">
+                                    <span class="shipping-option__name">US Economy</span>
+                                    <span class="shipping-option__meta">3–7 days</span>
+                                </span>
+                                <span class="shipping-option__price">$6</span>
+                            </label>
+                            <label class="shipping-option hidden" data-shipping-option data-region="US">
+                                <input type="radio" name="shipping_method" value="us_priority" data-shipping-amount="10" data-shipping-label="US Priority (2–3 days)">
+                                <span class="shipping-option__info">
+                                    <span class="shipping-option__name">US Priority</span>
+                                    <span class="shipping-option__meta">2–3 days</span>
+                                </span>
+                                <span class="shipping-option__price">$10</span>
+                            </label>
+                            <label class="shipping-option hidden" data-shipping-option data-region="INTL">
+                                <input type="radio" name="shipping_method" value="intl_economy" data-shipping-amount="20" data-shipping-label="International Economy (2–4 weeks)">
+                                <span class="shipping-option__info">
+                                    <span class="shipping-option__name">International Economy</span>
+                                    <span class="shipping-option__meta">2–4 weeks</span>
+                                </span>
+                                <span class="shipping-option__price">$20</span>
+                            </label>
+                        </div>
+
                         <div class="field-row">
                             <div id="shipping-address-element" class="stripe-element-placeholder"></div>
                         </div>
@@ -49,34 +108,7 @@
                     </div>
                 </div>
 
-                <div class="checkout-panel checkout-summary">
-                    <h2 class="summary-label">Order</h2>
-
-                    <div class="summary-items" id="checkout-summary-items"></div>
-
-                    <div class="summary-lines">
-                        <div class="summary-line">
-                            <span>Subtotal</span>
-                            <span data-cart-subtotal>$0.00</span>
-                        </div>
-                        <div class="summary-line summary-line--muted">
-                            <span>Shipping</span>
-                            <span>Calculated next step</span>
-                        </div>
-                        <div class="summary-line summary-line--muted">
-                            <span>Tax</span>
-                            <span>Calculated next step</span>
-                        </div>
-                        <div class="summary-line summary-line--total">
-                            <span>Total</span>
-                            <span data-cart-total>$0.00</span>
-                        </div>
-                    </div>
-
-                    <p class="summary-note">
-                        By placing your order you agree to the Porch Logic terms and refund policy.
-                    </p>
-
+                <div class="checkout-actions">
                     <button id="submit" type="submit" class="summary-button" disabled>
                         <span id="spinner" class="spinner hidden" aria-hidden="true"></span>
                         <span id="button-text">Place order</span>

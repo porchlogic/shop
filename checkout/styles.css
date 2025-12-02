@@ -1,15 +1,12 @@
 /* Uses vars + base layout from ../styles.css */
 
 .checkout-grid {
-    position: absolute;
-    /* inset: 0; */
-    margin-left: 5rem;
-    /* space for rotated H1 */
+    inset: 0;
     border-left: 1px solid var(--border);
     border-top: 1px solid var(--border);
 
-    display: grid;
-    grid-template-columns: 1.7fr 1.1fr;
+    display: flex;
+    flex-direction: column;
 }
 
 /* panels */
@@ -104,6 +101,58 @@
     background: #f8f8f8;
     padding: 0.55rem 0.6rem;
     min-height: 3rem;
+}
+
+.shipping-methods {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 0.6rem;
+}
+
+.shipping-hint {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+.shipping-option {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 0.6rem;
+    align-items: center;
+    padding: 0.55rem 0.65rem;
+    border: 1px solid var(--border);
+    border-radius: 0.6rem;
+    background: #fafafa;
+}
+
+.shipping-option input {
+    width: 1rem;
+    height: 1rem;
+    accent-color: var(--accent);
+    margin: 0;
+}
+
+.shipping-option__info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+}
+
+.shipping-option__name {
+    font-weight: 600;
+    letter-spacing: 0.02em;
+}
+
+.shipping-option__meta {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+.shipping-option__price {
+    font-weight: 600;
+    letter-spacing: 0.04em;
 }
 
 /* payment placeholder */
@@ -222,7 +271,6 @@
 /* CTA */
 
 .summary-button {
-    margin-top: auto;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -280,4 +328,32 @@
 .checkout-empty {
     color: var(--text-muted);
     margin: 0;
+}
+
+.checkout-actions {
+    border: 1px solid var(--border);
+    border-left: none;
+    border-top: none;
+    padding: 1rem 1.2rem 1.4rem;
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+}
+
+.checkout-actions .back-button {
+    margin-top: 0;
+}
+
+@media (max-width: 768px) {
+    .checkout-grid {
+        margin-left: 0;
+    }
+
+    .checkout-panel {
+        border-right: 1px solid var(--border);
+    }
+
+    .checkout-actions {
+        border-right: 1px solid var(--border);
+    }
 }

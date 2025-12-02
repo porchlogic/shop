@@ -61,13 +61,16 @@ function normalizeCartItems() {
     return items;
 }
 
-function calculateTotals(items) {
+function calculateTotals(items, shippingAmount = 0) {
     const subtotal = (items || getCartItems()).reduce((sum, item) => {
         const price = Number(item.price || 0);
         const qty = Number(item.quantity || 0);
         return sum + price * qty;
     }, 0);
-    return { subtotal, total: subtotal };
+    const shipping = Number.isFinite(Number(shippingAmount))
+        ? Number(shippingAmount)
+        : 0;
+    return { subtotal, shipping, total: subtotal + shipping };
 }
 
 function formatMoney(amount) {
@@ -500,10 +503,21 @@ function updateCartIconCount() {
     });
 }
 
-function updateTotalsUI(items) {
-    const { subtotal, total } = calculateTotals(items || getCartItems());
+function updateTotalsUI(items, shippingAmount) {
+    const shippingValue =
+        typeof shippingAmount === 'number'
+            ? shippingAmount
+            : Number(window?.CHECKOUT_SHIPPING_AMOUNT || 0);
+
+    const { subtotal, shipping, total } = calculateTotals(
+        items || getCartItems(),
+        shippingValue
+    );
     const subtotalEls = document.querySelectorAll('[data-cart-subtotal]');
     subtotalEls.forEach((el) => (el.textContent = formatMoney(subtotal)));
+
+    const shippingEls = document.querySelectorAll('[data-cart-shipping]');
+    shippingEls.forEach((el) => (el.textContent = formatMoney(shipping)));
 
     const totalEls = document.querySelectorAll('[data-cart-total], #cart-total');
     totalEls.forEach((el) => (el.textContent = formatMoney(total)));

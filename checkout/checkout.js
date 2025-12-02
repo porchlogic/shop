@@ -3,6 +3,7 @@ const stripe = Stripe("pk_live_51J3mlbABTHjSuIhXgQq9s0XUfm1Fgnao9DnO29jF1hf4LpKh
 
 const THIS_API_BASE = "https://api.porchlogic.com";
 let checkout = null;
+let selectedShipping = null;
 
 // Kick off once this file is loaded (on checkout page)
 initialize().catch(err => {
@@ -42,10 +43,12 @@ async function initialize() {
     // Hit your existing backend exactly like before
     console.log("➡️ Sending POST to /create-checkout-session:", JSON.stringify({ cartItems }, null, 2));
 
+    const shippingMethod = getSelectedShippingMethod();
+
     const promise = fetch(`${THIS_API_BASE}/create-checkout-session`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ cartItems })
+        body: JSON.stringify({ cartItems, shippingMethod })
     }).then(async (res) => {
         let data = null;
         try {
@@ -146,6 +149,11 @@ async function initialize() {
 
     const shippingAddressElement = checkout.createShippingAddressElement();
     shippingAddressElement.mount("#shipping-address-element");
+    shippingAddressElement.on("change", (event) => {
+        const country = event?.value?.address?.country || null;
+        handleShippingAddressChange(country);
+    });
+
 }
 
 // ---- submit handler ----
@@ -186,6 +194,13 @@ async function handleSubmit(e) {
         }
     }
 
+    const shippingMethod = getSelectedShippingMethod();
+    if (!shippingMethod) {
+        showMessage("Select a shipping option after entering your address.");
+        setLoading(false);
+        return;
+    }
+
     // Confirm with Stripe
     const { error } = await checkout.confirm();
 
@@ -197,6 +212,107 @@ async function handleSubmit(e) {
 
     // On success, Stripe will redirect to YOUR_DOMAIN/stripe/return.html
 }
+
+// ---- shipping ----
+
+function setSubmitLockedByShipping(locked) {
+    const submitBtn = document.getElementById("submit");
+    if (!submitBtn) return;
+    if (locked) {
+        submitBtn.dataset.locked = "shipping";
+        submitBtn.disabled = true;
+        submitBtn.classList.add("is-disabled");
+    } else {
+        if (submitBtn.dataset.locked === "shipping") {
+            delete submitBtn.dataset.locked;
+        }
+        updateCheckoutButtonState();
+    }
+}
+
+function getSelectedShippingMethod() {
+    const checked = document.querySelector('input[name="shipping_method"]:checked');
+    if (!checked) return null;
+
+    const amount = Number(checked.dataset.shippingAmount || 0);
+    const label = checked.dataset.shippingLabel || checked.value;
+
+    const method = { id: checked.value, label, amount };
+    selectedShipping = method;
+    return method;
+}
+
+function updateShippingTotals() {
+    const method = getSelectedShippingMethod();
+    window.CHECKOUT_SHIPPING_AMOUNT = method ? method.amount : 0;
+
+    const labelEl = document.querySelector("[data-shipping-label]");
+    const hintEl = document.querySelector("[data-shipping-hint]");
+    const shippingSummary = document.querySelector("[data-cart-shipping]");
+
+    if (labelEl) {
+        labelEl.textContent = method ? method.label : "Enter address for options";
+    }
+    if (shippingSummary) {
+        shippingSummary.textContent = formatMoney(method ? method.amount : 0);
+    }
+    if (hintEl) {
+        hintEl.textContent = method
+            ? "Shipping will be applied at checkout."
+            : "Enter a shipping address to see available options.";
+    }
+
+    setSubmitLockedByShipping(!method);
+    updateTotalsUI(undefined, method?.amount || 0);
+}
+
+function updateShippingVisibility(countryCode) {
+    const region = countryCode === "US" ? "US" : countryCode ? "INTL" : null;
+    const options = document.querySelectorAll("[data-shipping-option]");
+    let firstVisibleInput = null;
+
+    options.forEach((opt) => {
+        const optionRegion = opt.dataset.region;
+        const visible = region ? optionRegion === region : false;
+        opt.classList.toggle("hidden", !visible);
+
+        const input = opt.querySelector('input[name="shipping_method"]');
+        if (input) {
+            input.disabled = !visible;
+            if (!visible && input.checked) {
+                input.checked = false;
+            }
+            if (visible && !firstVisibleInput) {
+                firstVisibleInput = input;
+            }
+        }
+    });
+
+    if (firstVisibleInput) {
+        firstVisibleInput.checked = true;
+    }
+
+    updateShippingTotals();
+}
+
+function initShippingSelector() {
+    const inputs = document.querySelectorAll('input[name="shipping_method"]');
+    inputs.forEach((input) => {
+        input.addEventListener("change", () => {
+            updateShippingTotals();
+        });
+    });
+    setSubmitLockedByShipping(true);
+    updateShippingVisibility(null);
+}
+
+function handleShippingAddressChange(countryCode) {
+    updateShippingVisibility(countryCode || null);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    initShippingSelector();
+});
 
 // ---- inventory + UI helpers ----
 
