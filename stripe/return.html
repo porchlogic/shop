@@ -319,8 +319,8 @@
     <main>
         <header>
             <div>
-                <p class="eyebrow">Stripe return</p>
-                <h1>Payment status</h1>
+                <!-- <p class="eyebrow">Stripe return</p> -->
+                <h1>Order Status</h1>
             </div>
             <div class="badge neutral" id="status-pill">
                 <div class="loading-dot" id="status-dot"></div>
@@ -339,7 +339,7 @@
             </div>
         </section>
 
-        <section class="panel" id="codes-panel" hidden>
+        <section class="panel" id="codes-panel" style="visibility: hidden;">
             <h2>Activation codes</h2>
             <div class="codes" id="codes-list"></div>
             <p class="hint">Codes are also stored against your order. Keep them somewhere safe.</p>
@@ -350,10 +350,10 @@
             <p class="muted" id="next-steps">If your payment is complete, watch your email for a receipt and shipping updates.</p>
             <div class="actions">
                 <a class="btn" href="../index.html">Back to shop</a>
-                <a class="btn secondary" href="../cart/">View cart</a>
-                <button class="btn secondary" id="refresh-btn" type="button">Refresh status</button>
+                <!-- <a class="btn secondary" href="../cart/">View cart</a> -->
+                <!-- <button class="btn secondary" id="refresh-btn" type="button">Refresh status</button> -->
             </div>
-            <p class="hint">Session ID: <span class="inline-code" id="session-id">n/a</span></p>
+            <!-- <p class="hint">Session ID: <span class="inline-code" id="session-id">n/a</span></p> -->
         </section>
 
         <footer>
@@ -445,7 +445,7 @@
 
                 switch (status) {
                     case "complete":
-                        setStatus("Payment complete", "We received your payment and saved your order.", "success");
+                        setStatus("Payment complete", "We received your payment and your order is in the queue.", "success");
                         nextSteps.textContent = "Check your email for the receipt and fulfillment updates. Codes, if any, are listed above.";
                         break;
                     case "processing":
