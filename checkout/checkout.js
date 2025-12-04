@@ -9,7 +9,7 @@ const TEST_MODE_KEY = "porchlogic_checkout_test_mode";
 let stripe = null;
 let checkout = null;
 let selectedShipping = null;
-let testModeEnabled = false;
+let testModeEnabled = true;
 const testModeBanner = document.getElementById("test-mode-banner");
 
 function getStripeKey() {
