@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>M8 Plate</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        :root {
+            --bg: #e3e3e3;
+            --border: #bababa;
+            --text-main: #111;
+            --text-muted: #777;
+            --accent: #ff9a2c;
+
+            --base1: #d3cbbf;
+            /* light desert gray */
+            --base2: #b8b0a6;
+            /* mid desert gray */
+            --base3: #8e8983;
+            /* deeper shadow */
+        }
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 1rem;
+
+            background:
+            radial-gradient(ellipse at center,
+                rgba(40, 40, 40, 0.15) 0%,
+    
+                rgba(70, 70, 70, 0.15) 30%,
+    
+                rgba(110, 105, 100, 0.15) 65%,
+    
+                rgba(150, 145, 140, 0.15) 100%),
+            linear-gradient(to bottom,
+                rgba(180, 175, 168, 0.35) 0%,
+                rgba(120, 115, 110, 0.15) 60%,
+                rgba(60, 55, 50, 0.10) 100%);
+    
+        background-blend-mode: soft-light, normal;
+        }
+
+        main {
+            width: min(95vw, 768px);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            padding-inline: 0.25rem;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: clamp(1.25rem, 3vw, 1.75rem);
+        }
+
+        .hero {
+            border: 1px solid rgb(232, 143, 10);
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            /* <-- always a square, always visible */
+            border-radius: 0.5rem;
+            overflow: hidden;
+
+            /* placeholder visual; replace with your content */
+            background: radial-gradient(circle at top, #f7c46a, #e88f0a);
+        }
+
+        section.attributes {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.0rem;
+
+            border-left: 1px solid var(--border);
+            border-top: 1px solid var(--border);
+        }
+
+        .attribute {
+            padding: 0.5rem;
+            font-size: clamp(0.85rem, 2.4vw, 1rem);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+
+            border-right: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .attribute h3 {
+            text-align: left;
+            padding: 0.15rem 0;
+            font-size: clamp(0.85rem, 2.4vw, 1rem);
+            margin-block-start: 0;
+            margin-block-end: 0.25rem;
+        }
+
+        .value {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            flex-direction: row;
+            justify-content: space-evenly;
+        }
+
+        .options {
+            
+        }
+
+        section.cta {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            text-align: center;
+            padding: 1rem 0.5rem;
+        }
+
+        .price {
+            font-size: clamp(1.5rem, 4vw, 2rem);
+            font-weight: 600;
+        }
+
+        .buy {
+            font-size: clamp(0.9rem, 2.4vw, 1rem);
+            padding: 0.6em 1.2em;
+            width: 60%;
+            max-width: 260px;
+            border-radius: 999px;
+            border: none;
+            cursor: pointer;
+            background: #111;
+            color: #fff;
+        }
+
+        .buy:hover {
+            opacity: 0.9;
+        }
+
+        .comes-with {
+            font-size: clamp(0.8rem, 2vw, 0.95rem);
+        }
+
+        /* Small-screen tweaks */
+        @media (max-width: 480px) {
+            body {
+                padding: 0.5rem;
+            }
+
+            main {
+                padding: 0.75rem;
+                gap: 0.75rem;
+            }
+
+            .buy {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <header>
+            <h1>M8 PLATE</h1>
+        </header>
+
+        <section class="hero">
+            <!-- Hero content goes here -->
+        </section>
+
+        <section class="attributes">
+            <div class="attribute">
+                <h3>Material</h3>
+                <div class="value">PETG</div>
+            </div>
+            <div class="attribute">
+                <h3>Color</h3>
+                <div class="value options">
+                    <div class="option">Smoke</div>
+                    <div class="option">Clear</div>
+                </div>
+            </div>
+            <div class="attribute">
+                <h3>Custom Glyph</h3>
+                <div class="value">
+                    <button class="toggle"></button>
+                    <button class="glyph-thumb"></button>
+                </div>
+            </div>
+            <div class="attribute">
+                <h3>Made For</h3>
+                <div class="value">M8 Tracker model:01</div>
+            </div>
+        </section>
+
+        <section class="cta">
+            <div class="price">$32</div>
+            <button class="buy">Buy</button>
+            <div class="comes-with">Includes one future model at half off</div>
+        </section>
+    </main>
+</body>
+
+</html>

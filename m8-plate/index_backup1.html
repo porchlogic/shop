@@ -1,0 +1,450 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>M8 PLATE Layout</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="../styles.css" />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="carousel.css" />
+    <link rel="stylesheet" href="/styles/bg.css" />
+</head>
+
+<body>
+    <!-- <canvas id="bg-canvas"></canvas> -->
+
+    <main class="bg-shaded">
+        
+
+        <!-- Cart icon in upper-right -->
+        <a href="../cart/" class="cart-icon" aria-label="View cart">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path
+                    d="M7 18c-.6 0-1 .4-1 1s.4 1 1 1 1-.4 1-1-.4-1-1-1zm9 0c-.6 0-1 .4-1 1s.4 1 1 1 1-.4 1-1-.4-1-1-1zM6.2 6l-.3-1.2A1 1 0 0 0 5 4H3a1 1 0 1 0 0 2h1.3l2 8.2A1 1 0 0 0 7.3 15h9.8a1 1 0 0 0 1-.8l1.2-6A1 1 0 0 0 18.3 7H7.1L6.8 6z" />
+            </svg>
+            <span class="cart-count-badge" data-cart-count>0</span>
+        </a>
+
+        <div class="content">
+            
+            <div class="content-body">
+                <h1>M8 PLATE</h1>
+                <div class="hero">
+                    <div class="pl-carousel" data-carousel>
+                        <div class="pl-carousel__track" data-carousel-track>
+                            <div class="pl-carousel__slide is-active">
+                                <img src="/images/m8-plate-1.png" alt="M8 PLATE photo 1">
+                            </div>
+                            <div class="pl-carousel__slide">
+                                <img src="/images/m8-plate-2.png" alt="M8 PLATE photo 2">
+                            </div>
+                        </div>
+
+                        <button class="pl-carousel__arrow pl-carousel__arrow--prev" data-carousel-prev>
+                            ‹
+                        </button>
+                        <button class="pl-carousel__arrow pl-carousel__arrow--next" data-carousel-next>
+                            ›
+                        </button>
+
+                        <div class="pl-carousel__dots" data-carousel-dots></div>
+                    </div>
+                </div>
+
+                <div class="attributes">
+                    <!-- MATERIAL -->
+                    <div class="attribute attribute--material">
+                        <h2 class="attribute__label">Material</h2>
+                        <div class="attribute__value">
+                            <span class="attribute__primary-text">PETG</span>
+                        </div>
+                    </div>
+
+                    <!-- COLOR (pill selector) -->
+                    <div class="attribute attribute--color">
+                        <h2 class="attribute__label">Color</h2>
+                        <div class="attribute__value attribute__value--choices">
+                            <button class="chip chip--selected" type="button" aria-pressed="true" data-color="Smoke">
+                                Smoke
+                            </button>
+                            <button class="chip" type="button" aria-pressed="false" data-color="Clear">
+                                Clear
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- CUSTOM GLYPH (toggle + clickable square thumb) -->
+                    <div class="attribute attribute--glyph">
+                        <h2 class="attribute__label">+ Custom Glyph</h2>
+                        <div class="attribute__value attribute__value--glyph">
+                            <button class="toggle" type="button" aria-pressed="false" aria-label="Toggle custom glyph"
+                                id="glyph-toggle">
+                                <span class="toggle__knob"></span>
+                            </button>
+                            <button class="glyph-thumb is-disabled" type="button" aria-label="Edit custom glyph"
+                                aria-disabled="true" id="glyph-thumb" tabindex="-1">
+                                <canvas class="glyph-icon-canvas" width="160" height="80" id="glyph-thumb-canvas"></canvas>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- FOR quadrant -->
+                    <div class="attribute attribute--for">
+                        <h2 class="attribute__label">For</h2>
+                        <div class="attribute__value">
+                            <span class="attribute__primary-text">M8 TRACKER</span>
+                            <span class="attribute__secondary-text">model:01</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content-cta">
+                    <span class="attribute__price">$32.00</span>
+                    <span class="price-note">Includes half-off one future model.</span>
+                    <button type="button" class="buy-button" id="add-to-cart">
+                        Add to cart
+                    </button>
+                </div>
+
+            </div>
+
+            
+        </div>
+
+    </main>
+
+    <!-- Full-screen glyph editor modal -->
+    <div id="glyph-modal" class="glyph-modal hidden">
+        <div class="glyph-modal-inner card">
+            <header class="glyph-modal-header">
+                <h2>Custom AM8 Glyph</h2>
+            </header>
+            <p class="glyph-modal-subtitle">
+                Sculpt your glyph by clicking and dragging. Right-click to flatten segments.
+            </p>
+            <div id="glyph-modal-editor" class="glyph-modal-editor"></div>
+            <button type="button" class="glyph-modal-close" aria-label="Close glyph editor">
+                Close
+            </button>
+        </div>
+    </div>
+
+    <dialog id="cart-popup" aria-labelledby="cart-popup-title">
+        <article>
+            <header>
+                <h2 id="cart-popup-title">Cart updated</h2>
+            </header>
+            <p id="popup-message"></p>
+            <footer>
+                <button type="button" class="secondary" data-close-cart>
+                    Keep browsing
+                </button>
+                <a href="../cart/" role="button">Go to cart</a>
+            </footer>
+        </article>
+    </dialog>
+
+    <script src="../cart/cart.js"></script>
+    <script src="../shader.js"></script>
+    <script>
+        (function () {
+            document.addEventListener('DOMContentLoaded', function () {
+                const carousel = initCarousel(document.querySelector('[data-carousel]'));
+                initProduct(carousel);
+                wireCartPopup();
+            });
+
+            function initCarousel(root) {
+                if (!root) return null;
+
+                const track = root.querySelector('[data-carousel-track]');
+                const slides = Array.from(root.querySelectorAll('.pl-carousel__slide'));
+                const prevBtn = root.querySelector('[data-carousel-prev]');
+                const nextBtn = root.querySelector('[data-carousel-next]');
+                const dotsContainer = root.querySelector('[data-carousel-dots]');
+                if (!track || slides.length === 0) return null;
+
+                let currentIndex = 0;
+                const images = Array.from(root.querySelectorAll('.pl-carousel__slide img'));
+                const baseImageSources = images.map((img) => img.getAttribute('src') || '');
+
+                const dots = slides.map((_, index) => {
+                    const btn = document.createElement('button');
+                    if (index === 0) btn.classList.add('is-active');
+                    btn.addEventListener('click', function () {
+                        goToSlide(index);
+                    });
+                    dotsContainer.appendChild(btn);
+                    return btn;
+                });
+
+                function updateUI() {
+                    track.style.transform = `translateX(-${currentIndex * 100}%)`;
+                    slides.forEach((s, i) => s.classList.toggle('is-active', i === currentIndex));
+                    dots.forEach((d, i) => d.classList.toggle('is-active', i === currentIndex));
+                }
+
+                function goToSlide(index) {
+                    const count = slides.length;
+                    currentIndex = (index + count) % count;
+                    updateUI();
+                }
+
+                function applySuffix(src, suffix) {
+                    if (!src) return '';
+                    const [path, query = ''] = src.split('?');
+                    const dotIndex = path.lastIndexOf('.');
+                    const hasExtension = dotIndex > path.lastIndexOf('/');
+                    const suffixPart = suffix ? `_${suffix}` : '';
+                    const nextPath = hasExtension
+                        ? `${path.slice(0, dotIndex)}${suffixPart}${path.slice(dotIndex)}`
+                        : `${path}${suffixPart}`;
+                    return query ? `${nextPath}?${query}` : nextPath;
+                }
+
+                function setColorVariant(color) {
+                    const suffix = (color || '').toLowerCase();
+                    images.forEach((img, idx) => {
+                        const baseSrc = baseImageSources[idx];
+                        if (!baseSrc) return;
+                        img.src = applySuffix(baseSrc, suffix);
+                    });
+                    updateUI();
+                }
+
+                function next() { goToSlide(currentIndex + 1); }
+                function prev() { goToSlide(currentIndex - 1); }
+
+                if (prevBtn) prevBtn.addEventListener('click', prev);
+                if (nextBtn) nextBtn.addEventListener('click', next);
+
+                let startX = 0;
+                let currentX = 0;
+                let isDragging = false;
+                const swipeThreshold = 40;
+
+                function onTouchStart(e) {
+                    const touch = e.touches[0];
+                    startX = touch.clientX;
+                    currentX = startX;
+                    isDragging = true;
+                }
+                function onTouchMove(e) {
+                    if (!isDragging) return;
+                    const touch = e.touches[0];
+                    currentX = touch.clientX;
+                }
+                function onTouchEnd() {
+                    if (!isDragging) return;
+                    const deltaX = currentX - startX;
+                    if (Math.abs(deltaX) > swipeThreshold) {
+                        if (deltaX < 0) next();
+                        else prev();
+                    }
+                    isDragging = false;
+                }
+
+                track.addEventListener('touchstart', onTouchStart, { passive: true });
+                track.addEventListener('touchmove', onTouchMove, { passive: true });
+                track.addEventListener('touchend', onTouchEnd);
+
+                return {
+                    setColorVariant,
+                };
+            }
+
+            function initProduct(carouselApi) {
+                const PRODUCT = {
+                    id: 'm8_plate_1',
+                    name: 'M8 PLATE',
+                    price: 32.0,
+                    material: 'PETG',
+                };
+
+                const colorButtons = Array.from(
+                    document.querySelectorAll('[data-color]')
+                );
+                const glyphToggle = document.getElementById('glyph-toggle');
+                const glyphThumb = document.getElementById('glyph-thumb');
+                const glyphCanvas = document.getElementById('glyph-thumb-canvas');
+                const buyButton = document.getElementById('add-to-cart');
+                const mainEl = document.querySelector('main');
+
+                const state = {
+                    color: '',
+                    customGlyphEnabled: false,
+                    glyphData: null,
+                    showOnLive: false,
+                };
+
+                const slides = Array.from(document.querySelectorAll('.pl-carousel__slide'));
+                const baseBackgrounds = slides.map((slide) => {
+                    const img = slide.querySelector('img');
+                    return img ? img.getAttribute('src') || '' : '';
+                });
+
+                const buildVariantSrc = (src, color) => {
+                    if (!src) return '';
+                    const suffix = (color || '').toLowerCase();
+                    const [path, query = ''] = src.split('?');
+                    const dotIndex = path.lastIndexOf('.');
+                    const hasExtension = dotIndex > path.lastIndexOf('/');
+                    const withSuffix = suffix
+                        ? (hasExtension
+                            ? `${path.slice(0, dotIndex)}_${suffix}${path.slice(dotIndex)}`
+                            : `${path}_${suffix}`)
+                        : path;
+                    return query ? `${withSuffix}?${query}` : withSuffix;
+                };
+
+                const findActiveSlideIndex = () => slides.findIndex((s) => s.classList.contains('is-active'));
+                let activeSlideIndex = findActiveSlideIndex();
+                if (activeSlideIndex === -1) activeSlideIndex = 0;
+
+                const applyBodyBackground = () => {
+                    if (!mainEl) return;
+                    const baseSrc = baseBackgrounds[activeSlideIndex] || baseBackgrounds[0] || '';
+                    if (!baseSrc) return;
+                    const variantSrc = buildVariantSrc(baseSrc, state.color);
+                    mainEl.style.setProperty('background-image', `url("${variantSrc}")`, 'important');
+                    mainEl.style.setProperty('background-size', 'cover');
+                    mainEl.style.setProperty('background-position', 'center');
+                };
+
+                const slideObserver = new MutationObserver(() => {
+                    const idx = findActiveSlideIndex();
+                    if (idx !== -1 && idx !== activeSlideIndex) {
+                        activeSlideIndex = idx;
+                        applyBodyBackground();
+                    }
+                });
+
+                slides.forEach((slide) => {
+                    slideObserver.observe(slide, { attributes: true, attributeFilter: ['class'] });
+                });
+
+                const setColor = (color) => {
+                    const nextColor = color || 'Smoke';
+                    const changed = state.color !== nextColor;
+                    state.color = nextColor;
+                    colorButtons.forEach((btn) => {
+                        const isActive = btn.dataset.color === nextColor;
+                        btn.classList.toggle('chip--selected', isActive);
+                        btn.setAttribute('aria-pressed', String(isActive));
+                    });
+                    if (changed && carouselApi && typeof carouselApi.setColorVariant === 'function') {
+                        carouselApi.setColorVariant(nextColor);
+                        applyBodyBackground();
+                    }
+                };
+
+                colorButtons.forEach((btn) => {
+                    btn.addEventListener('click', () => {
+                        setColor(btn.dataset.color || 'Smoke');
+                    });
+                });
+
+                const renderThumb = () => {
+                    if (glyphCanvas && typeof renderGlyphThumbnail === 'function') {
+                        renderGlyphThumbnail(glyphCanvas, state.glyphData);
+                    }
+                };
+
+                const syncGlyphUI = () => {
+                    if (!glyphToggle) return;
+                    const enabled = state.customGlyphEnabled;
+                    glyphToggle.classList.toggle('is-on', enabled);
+                    glyphToggle.setAttribute('aria-pressed', String(enabled));
+
+                    if (glyphThumb) {
+                        glyphThumb.classList.toggle('is-disabled', !enabled);
+                        glyphThumb.setAttribute('aria-disabled', String(!enabled));
+                        glyphThumb.tabIndex = enabled ? 0 : -1;
+                    }
+
+                    if (enabled) {
+                        renderThumb();
+                    }
+                };
+
+                const openGlyphEditor = () => {
+                    if (
+                        typeof attachMoundGrid !== 'function' ||
+                        typeof renderGlyphThumbnail !== 'function'
+                    ) {
+                        return;
+                    }
+
+                    const glyphModal = document.getElementById('glyph-modal');
+                    const glyphModalEditor = document.getElementById('glyph-modal-editor');
+                    if (!glyphModal || !glyphModalEditor) return;
+
+                    glyphModal.classList.remove('hidden');
+                    glyphModal.classList.add('visible');
+
+                    attachMoundGrid('m8-product-config', glyphModalEditor, state.glyphData || null, {
+                        onDataChange: (data) => {
+                            state.glyphData = data;
+                        },
+                        onThumbnailUpdate: (data) => {
+                            state.glyphData = data;
+                            renderThumb();
+                        },
+                    });
+                };
+
+                if (glyphToggle) {
+                    glyphToggle.addEventListener('click', () => {
+                        state.customGlyphEnabled = !state.customGlyphEnabled;
+                        syncGlyphUI();
+                    });
+                }
+
+                if (glyphThumb) {
+                    glyphThumb.addEventListener('click', () => {
+                        if (!state.customGlyphEnabled) return;
+                        openGlyphEditor();
+                    });
+                }
+
+                if (buyButton) {
+                    buyButton.addEventListener('click', () => {
+                        const item = {
+                            ...PRODUCT,
+                            quantity: 1,
+                            color: state.color,
+                            customGlyphEnabled: state.customGlyphEnabled,
+                            glyphData: state.glyphData,
+                            showOnLive: state.showOnLive,
+                        };
+                        if (typeof addItemToCart === 'function') {
+                            addItemToCart(item);
+                        }
+                        if (typeof showCartPopup === 'function') {
+                            showCartPopup(`${item.name} added to cart.`);
+                        }
+                    });
+                }
+
+                setColor('Smoke');
+                applyBodyBackground();
+                syncGlyphUI();
+            }
+
+            function wireCartPopup() {
+                const cartPopup = document.getElementById('cart-popup');
+                const closeCartBtn = document.querySelector('[data-close-cart]');
+                if (cartPopup && closeCartBtn) {
+                    closeCartBtn.addEventListener('click', hideCartPopup);
+                    cartPopup.addEventListener('cancel', (event) => {
+                        event.preventDefault();
+                        hideCartPopup();
+                    });
+                }
+            }
+        })();
+    </script>
+</body>
+
+</html>

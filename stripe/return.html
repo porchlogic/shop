@@ -1,0 +1,485 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Payment status – Porch Logic</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        :root {
+            --bg: #e3e3e3;
+            --border: #bababa;
+            --text-main: #111;
+            --text-muted: #777;
+            --accent: #ff9a2c;
+            --success-bg: #e8f6ec;
+            --success-text: #0f5132;
+            --warn-bg: #fff4e5;
+            --warn-text: #7c4b00;
+            --error-bg: #fdeaea;
+            --error-text: #7a1c1c;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        @font-face {
+            font-family: "stealth57";
+            src: url("../fonts/stealth57.ttf") format("truetype");
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 1rem;
+            background:
+                radial-gradient(ellipse at center,
+                    rgba(40, 40, 40, 0.15) 0%,
+                    rgba(70, 70, 70, 0.15) 30%,
+                    rgba(110, 105, 100, 0.15) 65%,
+                    rgba(150, 145, 140, 0.15) 100%),
+                linear-gradient(to bottom,
+                    rgba(180, 175, 168, 0.35) 0%,
+                    rgba(120, 115, 110, 0.15) 60%,
+                    rgba(60, 55, 50, 0.10) 100%);
+            background-blend-mode: soft-light, normal;
+        }
+
+        main {
+            width: min(100vw, 768px);
+            border-radius: 0.75rem;
+            padding: 0.9rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            position: relative;
+            min-height: min(95vh, 960px);
+            background:
+                linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(245, 245, 245, 0.9)),
+                radial-gradient(circle at 30% 20%, rgba(255, 154, 44, 0.12), transparent 34%),
+                radial-gradient(circle at 80% 10%, rgba(0, 0, 0, 0.05), transparent 30%);
+            border: 1px solid var(--border);
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            border-bottom: 1px solid var(--border);
+            padding: 0.25rem 0.35rem 0.85rem;
+        }
+
+        h1 {
+            font-family: "stealth57", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            letter-spacing: 0.12em;
+            font-size: clamp(1.6rem, 6vw, 2.6rem);
+            margin: 0;
+            color: var(--text-muted);
+        }
+
+        .eyebrow {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.45rem 0.75rem;
+            border-radius: 999px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border: 1px solid var(--border);
+            background: #fff;
+            color: var(--text-main);
+        }
+
+        .badge.success {
+            background: var(--success-bg);
+            color: var(--success-text);
+            border-color: #b7e4c5;
+        }
+
+        .badge.warn {
+            background: var(--warn-bg);
+            color: var(--warn-text);
+            border-color: #f3d09c;
+        }
+
+        .badge.error {
+            background: var(--error-bg);
+            color: var(--error-text);
+            border-color: #f1b0b0;
+        }
+
+        .badge.neutral {
+            background: #f1f1f1;
+            color: var(--text-main);
+        }
+
+        .panel {
+            background: rgba(255, 255, 255, 0.92);
+            border: 1px solid var(--border);
+            border-radius: 0.65rem;
+            padding: 1.1rem 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        .panel h2 {
+            margin: 0;
+            font-size: 1.1rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .muted {
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        .status-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        .status-row {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .status-detail {
+            margin: 0.25rem 0 0;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .codes {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .code-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.65rem 0.85rem;
+            border-radius: 10px;
+            background: #f6f6f6;
+            border: 1px dashed var(--border);
+            font-family: ui-monospace, SFMono-Regular, SFMono-Regular, Menlo, Consolas, "Liberation Mono", "Courier New", monospace;
+            font-size: 0.95rem;
+        }
+
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-top: 0.5rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            padding: 0.75rem 1.1rem;
+            border-radius: 999px;
+            border: 1px solid transparent;
+            text-decoration: none;
+            color: #111;
+            background: var(--accent);
+            font-weight: 700;
+            letter-spacing: 0.01em;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+            transition: transform 140ms ease, box-shadow 140ms ease, filter 140ms ease;
+        }
+
+        .btn.secondary {
+            background: #f4f4f4;
+            border-color: var(--border);
+            box-shadow: none;
+            font-weight: 600;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 16px 32px rgba(0, 0, 0, 0.16);
+            filter: brightness(1.02);
+        }
+
+        .btn.secondary:hover {
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+            filter: none;
+        }
+
+        .hint {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin: 0.4rem 0 0;
+            line-height: 1.5;
+        }
+
+        .inline-code {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.2rem 0.45rem;
+            border-radius: 8px;
+            background: #f1f1f1;
+            border: 1px solid var(--border);
+            font-family: ui-monospace, SFMono-Regular, SFMono-Regular, Menlo, Consolas, "Liberation Mono", "Courier New", monospace;
+            font-size: 0.9rem;
+        }
+
+        .loading-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--text-muted);
+            opacity: 0.8;
+            animation: pulse 1s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                opacity: 0.25;
+                transform: scale(0.9);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            100% {
+                opacity: 0.25;
+                transform: scale(0.9);
+            }
+        }
+
+        footer {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            padding: 0 0.35rem 0.35rem;
+        }
+
+        @media (max-width: 540px) {
+            main {
+                padding: 1rem;
+            }
+
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .actions {
+                width: 100%;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <header>
+            <div>
+                <p class="eyebrow">Stripe return</p>
+                <h1>Payment status</h1>
+            </div>
+            <div class="badge neutral" id="status-pill">
+                <div class="loading-dot" id="status-dot"></div>
+                <span id="status-label">Checking status…</span>
+            </div>
+        </header>
+
+        <section class="panel">
+            <div class="status-grid">
+                <div class="status-row">
+                    <strong>Status</strong>
+                    <span class="inline-code" id="status-raw">pending</span>
+                </div>
+                <p class="status-detail" id="status-detail">Give us a second while we talk to Stripe.</p>
+                <p class="muted" id="status-email"></p>
+            </div>
+        </section>
+
+        <section class="panel" id="codes-panel" hidden>
+            <h2>Activation codes</h2>
+            <div class="codes" id="codes-list"></div>
+            <p class="hint">Codes are also stored against your order. Keep them somewhere safe.</p>
+        </section>
+
+        <section class="panel">
+            <h2>What next?</h2>
+            <p class="muted" id="next-steps">If your payment is complete, watch your email for a receipt and shipping updates.</p>
+            <div class="actions">
+                <a class="btn" href="../index.html">Back to shop</a>
+                <a class="btn secondary" href="../cart/">View cart</a>
+                <button class="btn secondary" id="refresh-btn" type="button">Refresh status</button>
+            </div>
+            <p class="hint">Session ID: <span class="inline-code" id="session-id">n/a</span></p>
+        </section>
+
+        <footer>
+            <p class="hint">Questions? Email <a href="mailto:support@porchlogic.com">support@porchlogic.com</a>.</p>
+        </footer>
+    </main>
+
+    <script>
+        const API_BASE = "https://api.porchlogic.com";
+        const params = new URLSearchParams(window.location.search);
+        const sessionId = params.get("session_id");
+
+        const statusLabel = document.getElementById("status-label");
+        const statusRaw = document.getElementById("status-raw");
+        const statusDetail = document.getElementById("status-detail");
+        const statusEmail = document.getElementById("status-email");
+        const statusPill = document.getElementById("status-pill");
+        const statusDot = document.getElementById("status-dot");
+        const nextSteps = document.getElementById("next-steps");
+        const codesPanel = document.getElementById("codes-panel");
+        const codesList = document.getElementById("codes-list");
+        const sessionIdEl = document.getElementById("session-id");
+        const refreshBtn = document.getElementById("refresh-btn");
+
+        function setPillTone(tone) {
+            statusPill.classList.remove("success", "warn", "error", "neutral");
+            statusPill.classList.add(tone);
+        }
+
+        function setStatus(title, detail, tone = "neutral") {
+            statusLabel.textContent = title;
+            statusDetail.textContent = detail || "";
+            setPillTone(tone);
+            if (tone === "success" || tone === "warn" || tone === "error") {
+                statusDot.style.display = "none";
+            } else {
+                statusDot.style.display = "inline-block";
+            }
+        }
+
+        function renderCodes(codes) {
+            codesList.innerHTML = "";
+            if (!codes || codes.length === 0) {
+                codesPanel.hidden = true;
+                return;
+            }
+            codesPanel.hidden = false;
+            codes.forEach((code) => {
+                const chip = document.createElement("div");
+                chip.className = "code-chip";
+                chip.textContent = code;
+                codesList.appendChild(chip);
+            });
+        }
+
+        async function fetchStatus() {
+            if (!sessionId) {
+                setStatus("Missing session ID", "This page needs the session_id from Stripe. Return to checkout and try again.", "error");
+                statusRaw.textContent = "n/a";
+                nextSteps.textContent = "Go back to checkout to restart payment.";
+                return;
+            }
+
+            sessionIdEl.textContent = sessionId;
+            setStatus("Checking status…", "Give us a second while we talk to Stripe.", "neutral");
+            statusRaw.textContent = "loading";
+            statusEmail.textContent = "";
+            renderCodes([]);
+
+            try {
+                const res = await fetch(`${API_BASE}/session-status?session_id=${encodeURIComponent(sessionId)}`, {
+                    method: "GET",
+                    headers: { "Accept": "application/json" },
+                });
+
+                if (!res.ok) {
+                    throw new Error(`Server responded with ${res.status}`);
+                }
+
+                const data = await res.json();
+                const status = data?.status || "unknown";
+                statusRaw.textContent = status;
+                const email = data?.customer_email || "";
+                if (email) {
+                    statusEmail.textContent = `Receipt and updates will go to ${email}.`;
+                }
+
+                renderCodes(data?.activation_codes || []);
+
+                switch (status) {
+                    case "complete":
+                        setStatus("Payment complete", "We received your payment and saved your order.", "success");
+                        nextSteps.textContent = "Check your email for the receipt and fulfillment updates. Codes, if any, are listed above.";
+                        break;
+                    case "processing":
+                        setStatus("Payment processing", "Stripe is finishing up. This can take a minute.", "neutral");
+                        nextSteps.textContent = "If the page doesn’t update automatically, refresh status in a moment.";
+                        break;
+                    case "open":
+                        setStatus("Payment not finished", "Your checkout session is still open. Use the Stripe link from your email to complete payment.", "warn");
+                        nextSteps.textContent = "If you closed the window, restart checkout from your cart to create a new session.";
+                        break;
+                    case "expired":
+                        setStatus("Session expired", "This checkout session is no longer active. Start again from your cart.", "warn");
+                        nextSteps.textContent = "Return to your cart and re-checkout. We didn't charge you for this session.";
+                        break;
+                    case "canceled":
+                        setStatus("Payment canceled", "The payment was canceled or declined. You can retry from the cart.", "warn");
+                        nextSteps.textContent = "If you still see issues, contact support with the session ID below.";
+                        break;
+                    default:
+                        setStatus(`Status: ${status}`, "We couldn't categorize this status. If you’re unsure, contact support with the session ID below.", "neutral");
+                        nextSteps.textContent = "Save the session ID and email support if you need help.";
+                        break;
+                }
+            } catch (err) {
+                console.error("❌ Failed to fetch session status:", err);
+                statusRaw.textContent = "error";
+                setStatus("Could not load status", "We couldn't reach the server. Refresh in a few seconds or contact support.", "error");
+                nextSteps.textContent = "If this keeps happening, email support with the session ID below.";
+            }
+        }
+
+        refreshBtn.addEventListener("click", fetchStatus);
+        fetchStatus();
+    </script>
+</body>
+
+</html>

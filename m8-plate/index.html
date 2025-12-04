@@ -5,112 +5,585 @@
     <meta charset="utf-8" />
     <title>M8 PLATE Layout</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="../styles.css" />
-    <link rel="stylesheet" href="styles.css" />
     <link rel="stylesheet" href="carousel.css" />
+    <style>
+        :root {
+            --bg: #e3e3e3;
+            --border: #bababa;
+            --text-main: #111;
+            --text-muted: #777;
+            --accent: #ff9a2c;
+            --base1: #d3cbbf;
+            --base2: #b8b0a6;
+            --base3: #8e8983;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        @font-face {
+            font-family: "stealth57";
+            src: url("../fonts/stealth57.ttf") format("truetype");
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 1rem;
+            background:
+                radial-gradient(ellipse at center,
+                    rgba(40, 40, 40, 0.15) 0%,
+                    rgba(70, 70, 70, 0.15) 30%,
+                    rgba(110, 105, 100, 0.15) 65%,
+                    rgba(150, 145, 140, 0.15) 100%),
+                linear-gradient(to bottom,
+                    rgba(180, 175, 168, 0.35) 0%,
+                    rgba(120, 115, 110, 0.15) 60%,
+                    rgba(60, 55, 50, 0.10) 100%);
+            background-blend-mode: soft-light, normal;
+        }
+
+        main {
+            width: min(100vw, 768px);
+            border-radius: 0.75rem;
+            padding: 0.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            position: relative;
+            min-height: min(95vh, 960px);
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.15);
+
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-inline: 0.25rem;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: clamp(1.5rem, 6vw, 2.75rem);
+            letter-spacing: 0.12em;
+            font-family: "stealth57", sans-serif;
+            color: var(--text-muted);
+            text-align: center;
+            white-space: nowrap;
+            padding: 1rem;
+        }
+
+        .shop-link {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            padding: 0.45rem 1rem;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            text-decoration: none;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            font-size: 0.7rem;
+            color: var(--text-main);
+            background: rgba(243, 243, 243, 0.9);
+            box-shadow: inset 0 0 0 1px #fff;
+        }
+
+        .shop-link__icon {
+            width: 1rem;
+            height: 1rem;
+        }
+
+        .hero {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+
+        section.attributes {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            border-left: 1px solid var(--border);
+            border-top: 1px solid var(--border);
+        }
+
+        .attribute {
+            padding: 0.9rem 1rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border-right: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            text-align: left;
+            gap: 0.4rem;
+        }
+
+        .attribute__label {
+            margin: 0;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+            color: var(--text-muted);
+        }
+
+        .attribute__primary-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--text-main);
+        }
+
+        .attribute__secondary-text {
+            margin-top: 0.15rem;
+            font-size: 0.8rem;
+            letter-spacing: 0.16em;
+            text-transform: lowercase;
+            color: var(--text-muted);
+        }
+
+        .attribute__value {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .attribute__value--choices {
+            flex-direction: row;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .chip {
+            padding: 0.35rem 0.6rem;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            background-color: #bfbfbf12;
+            cursor: pointer;
+        }
+
+        .chip--selected {
+            background: var(--accent);
+            color: #111;
+            border-color: #cfcfcf;
+            box-shadow: inset 0 0 0 2px #cfcfcf;
+        }
+
+        .attribute__value--glyph {
+            flex-direction: row;
+            align-items: center;
+            gap: 1rem;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        .toggle {
+            position: relative;
+            width: 3rem;
+            height: 1.6rem;
+            border-radius: 999px;
+            background: #626263;
+            border: 1px solid #cfd5de;
+            display: inline-flex;
+            align-items: center;
+            padding: 0 0.15rem;
+            cursor: pointer;
+            transition: background 0.2s ease, border-color 0.2s ease;
+            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.6);
+        }
+
+        .toggle.is-on {
+            background: #ffb05a;
+            border-color: #ffb05a;
+        }
+
+        .toggle__knob {
+            width: 1.05rem;
+            height: 1.05rem;
+            border-radius: 50%;
+            background: #fff;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+            transform: translateX(0);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .toggle.is-on .toggle__knob {
+            transform: translateX(1.2rem);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
+        }
+
+        .glyph-thumb {
+            width: 3.8rem;
+            height: 3.8rem;
+            border-radius: 0.25rem;
+            border: 1px solid var(--border);
+            background-color: #f7f7f7;
+            /* background-image: repeating-linear-gradient(135deg,
+                    #d0d0d0 0,
+                    #d0d0d0 4px,
+                    #f7f7f7 4px,
+                    #f7f7f7 8px); */
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.25rem;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .glyph-thumb .glyph-icon-canvas {
+            width: 100%;
+            height: 100%;
+        }
+
+        .glyph-thumb.is-disabled {
+            opacity: 0.1;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        section.cta {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.55rem;
+            text-align: center;
+            padding: 0.6rem 0.25rem 0.25rem;
+        }
+
+        .price {
+            font-size: 1rem;
+            letter-spacing: 0.12em;
+        }
+
+        .price-note {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            letter-spacing: 0.04em;
+        }
+
+        .buy {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.55rem 2rem;
+            border-radius: 999px;
+            text-decoration: none;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        .cart-icon {
+            position: relative;
+            width: 2.2rem;
+            height: 2.2rem;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            background: rgba(243, 243, 243, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            z-index: 2;
+        }
+
+        .cart-icon svg {
+            width: 1.2rem;
+            height: 1.2rem;
+            fill: var(--text-main);
+        }
+
+        .cart-count-badge {
+            position: absolute;
+            top: -0.3rem;
+            right: -0.4rem;
+            min-width: 1.2rem;
+            height: 1.2rem;
+            border-radius: 999px;
+            background: var(--accent);
+            color: #fff;
+            font-size: 0.7rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.1rem 0.35rem;
+            line-height: 1;
+        }
+
+        /* modal + utility */
+        .hidden {
+            display: none !important;
+        }
+
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        .is-disabled,
+        button[disabled],
+        .buy[disabled] {
+            opacity: 0.55;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .glyph-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(5, 7, 10, 0.9);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 1.2rem;
+            z-index: 20;
+        }
+
+        .glyph-modal.visible {
+            display: flex;
+        }
+
+        .glyph-modal-inner {
+            width: min(960px, 92vw);
+            max-height: 92vh;
+            overflow: auto;
+            background: #0b0d11;
+            color: #f4f6fb;
+            border: 1px solid #1f242c;
+            border-radius: 14px;
+            box-shadow: 0 18px 60px rgba(0, 0, 0, 0.45);
+            padding: 1.25rem 1.35rem 1.5rem;
+        }
+
+        .glyph-modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .glyph-modal-subtitle {
+            color: #b7c0cc;
+            margin: 0.35rem 0 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .glyph-modal-editor {
+            margin-top: 0.8rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        dialog#cart-popup {
+            border: 1px solid var(--border);
+            border-radius: 0.75rem;
+            padding: 0;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+        }
+
+        dialog#cart-popup::backdrop {
+            background: rgba(0, 0, 0, 0.35);
+        }
+
+        dialog#cart-popup article {
+            padding: 1rem 1.2rem 1.2rem;
+        }
+
+        dialog#cart-popup header h2 {
+            margin: 0 0 0.4rem;
+            font-size: 1.1rem;
+        }
+
+        dialog#cart-popup footer {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 0.75rem;
+        }
+
+        dialog#cart-popup button,
+        dialog#cart-popup a {
+            flex: 1;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.5rem;
+            border: 1px solid var(--border);
+            text-align: center;
+            text-decoration: none;
+            background: #f7f7f7;
+            color: var(--text-main);
+            cursor: pointer;
+        }
+
+        dialog#cart-popup a {
+            background: var(--accent);
+            color: #111;
+            border-color: #cfcfcf;
+            box-shadow: inset 0 0 0 2px #cfcfcf;
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 0;
+                overflow-y: auto;
+                height: 100svh;
+                min-height: 100svh;
+            }
+
+            main {
+                padding: 0.75rem;
+                gap: 0.75rem;
+                height: 100%;
+                min-height: 100%;
+                max-height: 100%;
+                width: 100vw;
+                border-radius: 0;
+                box-shadow: none;
+            }
+
+            .attribute {
+                padding: 0.75rem 0.8rem;
+            }
+
+            .buy {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 
 <body>
     <main>
-        
+        <header>
+            <a href="../" class="shop-link" aria-label="Back to shop">
+                <svg class="shop-link__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none"
+                    stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14.5 6.5 8 12l6.5 5.5" />
+                </svg>
+                Shop
+            </a>
+            <h1>M8 PLATE</h1>
+            <a href="../cart/" class="cart-icon" aria-label="View cart">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <path
+                        d="M7 18c-.6 0-1 .4-1 1s.4 1 1 1 1-.4 1-1-.4-1-1-1zm9 0c-.6 0-1 .4-1 1s.4 1 1 1 1-.4 1-1-.4-1-1-1zM6.2 6l-.3-1.2A1 1 0 0 0 5 4H3a1 1 0 1 0 0 2h1.3l2 8.2A1 1 0 0 0 7.3 15h9.8a1 1 0 0 0 1-.8l1.2-6A1 1 0 0 0 18.3 7H7.1L6.8 6z" />
+                </svg>
+                <span class="cart-count-badge" data-cart-count>0</span>
+            </a>
+        </header>
 
-        <!-- Cart icon in upper-right -->
-        <a href="../cart/" class="cart-icon" aria-label="View cart">
-            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                <path
-                    d="M7 18c-.6 0-1 .4-1 1s.4 1 1 1 1-.4 1-1-.4-1-1-1zm9 0c-.6 0-1 .4-1 1s.4 1 1 1 1-.4 1-1-.4-1-1-1zM6.2 6l-.3-1.2A1 1 0 0 0 5 4H3a1 1 0 1 0 0 2h1.3l2 8.2A1 1 0 0 0 7.3 15h9.8a1 1 0 0 0 1-.8l1.2-6A1 1 0 0 0 18.3 7H7.1L6.8 6z" />
-            </svg>
-            <span class="cart-count-badge" data-cart-count>0</span>
-        </a>
-
-        <div class="content">
-            
-            <div class="content-body">
-                <h1>M8 PLATE</h1>
-                <div class="hero">
-                    <div class="pl-carousel" data-carousel>
-                        <div class="pl-carousel__track" data-carousel-track>
-                            <div class="pl-carousel__slide is-active">
-                                <img src="/images/m8-hero-1.png" alt="M8 PLATE photo 1">
-                            </div>
-                            <div class="pl-carousel__slide">
-                                <img src="/images/m8-plate-2.png" alt="M8 PLATE photo 2">
-                            </div>
-                            <div class="pl-carousel__slide">
-                                <img src="/images/M8-Plate-1.png" alt="M8 PLATE photo 3">
-                            </div>
-                        </div>
-
-                        <button class="pl-carousel__arrow pl-carousel__arrow--prev" data-carousel-prev>
-                            ‹
-                        </button>
-                        <button class="pl-carousel__arrow pl-carousel__arrow--next" data-carousel-next>
-                            ›
-                        </button>
-
-                        <div class="pl-carousel__dots" data-carousel-dots></div>
+        <section class="hero">
+            <div class="pl-carousel" data-carousel>
+                <div class="pl-carousel__track" data-carousel-track>
+                    <div class="pl-carousel__slide is-active">
+                        <img src="/images/m8-plate-3.png" alt="M8 PLATE photo 1">
+                    </div>
+                    <div class="pl-carousel__slide">
+                        <img src="/images/m8-plate-4.png" alt="M8 PLATE photo 2">
                     </div>
                 </div>
 
-                <div class="attributes">
-                    <!-- MATERIAL -->
-                    <div class="attribute attribute--material">
-                        <h2 class="attribute__label">Material</h2>
-                        <div class="attribute__value">
-                            <span class="attribute__primary-text">PETG</span>
-                        </div>
-                    </div>
+                <button class="pl-carousel__arrow pl-carousel__arrow--prev" data-carousel-prev>
+                    ‹
+                </button>
+                <button class="pl-carousel__arrow pl-carousel__arrow--next" data-carousel-next>
+                    ›
+                </button>
 
-                    <!-- COLOR (pill selector) -->
-                    <div class="attribute attribute--color">
-                        <h2 class="attribute__label">Color</h2>
-                        <div class="attribute__value attribute__value--choices">
-                            <button class="chip chip--selected" type="button" aria-pressed="true" data-color="Smoke">
-                                Smoke
-                            </button>
-                            <button class="chip" type="button" aria-pressed="false" data-color="Clear">
-                                Clear
-                            </button>
-                        </div>
-                    </div>
+                <div class="pl-carousel__dots" data-carousel-dots></div>
+            </div>
+        </section>
 
-                    <!-- CUSTOM GLYPH (toggle + clickable square thumb) -->
-                    <div class="attribute attribute--glyph">
-                        <h2 class="attribute__label">+ Custom Glyph</h2>
-                        <div class="attribute__value attribute__value--glyph">
-                            <button class="toggle" type="button" aria-pressed="false" aria-label="Toggle custom glyph"
-                                id="glyph-toggle">
-                                <span class="toggle__knob"></span>
-                            </button>
-                            <button class="glyph-thumb is-disabled" type="button" aria-label="Edit custom glyph"
-                                aria-disabled="true" id="glyph-thumb" tabindex="-1">
-                                <canvas class="glyph-icon-canvas" width="160" height="80" id="glyph-thumb-canvas"></canvas>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- FOR quadrant -->
-                    <div class="attribute attribute--for">
-                        <h2 class="attribute__label">For</h2>
-                        <div class="attribute__value">
-                            <span class="attribute__primary-text">M8 TRACKER</span>
-                            <span class="attribute__secondary-text">model:01</span>
-                        </div>
-                    </div>
+        <section class="attributes">
+            <div class="attribute attribute--material">
+                <h2 class="attribute__label">Material</h2>
+                <div class="attribute__value">
+                    <span class="attribute__primary-text">PETG</span>
                 </div>
-
-                <div class="content-cta">
-                    <span class="attribute__price">$32.00</span>
-                    <button type="button" class="buy-button" id="add-to-cart">
-                        Add to cart
-                    </button>
-                </div>
-
             </div>
 
-            
-        </div>
+            <div class="attribute attribute--color">
+                <h2 class="attribute__label">Color</h2>
+                <div class="attribute__value attribute__value--choices">
+                    <button class="chip chip--selected" type="button" aria-pressed="true" data-color="Smoke">
+                        Smoke
+                    </button>
+                    <button class="chip" type="button" aria-pressed="false" data-color="Clear">
+                        Clear
+                    </button>
+                </div>
+            </div>
 
+            <div class="attribute attribute--glyph">
+                <h2 class="attribute__label">+ Custom Glyph</h2>
+                <div class="attribute__value attribute__value--glyph">
+                    <button class="toggle" type="button" aria-pressed="false" aria-label="Toggle custom glyph"
+                        id="glyph-toggle">
+                        <span class="toggle__knob"></span>
+                    </button>
+                    <button class="glyph-thumb is-disabled" type="button" aria-label="Edit custom glyph"
+                        aria-disabled="true" id="glyph-thumb" tabindex="-1">
+                        <canvas class="glyph-icon-canvas" width="160" height="80" id="glyph-thumb-canvas"></canvas>
+                    </button>
+                </div>
+            </div>
+
+            <div class="attribute attribute--for">
+                <h2 class="attribute__label">For</h2>
+                <div class="attribute__value">
+                    <span class="attribute__primary-text">M8 TRACKER</span>
+                    <span class="attribute__secondary-text">model:01</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta">
+            <span class="price">$32.00</span>
+            <span class="price-note">Includes half-off one future model.</span>
+            <button type="button" class="buy" id="add-to-cart">
+                Add to cart
+            </button>
+        </section>
     </main>
 
     <!-- Full-screen glyph editor modal -->
@@ -148,20 +621,24 @@
     <script>
         (function () {
             document.addEventListener('DOMContentLoaded', function () {
-                document.querySelectorAll('[data-carousel]').forEach(initCarousel);
-                initProduct();
+                const carousel = initCarousel(document.querySelector('[data-carousel]'));
+                initProduct(carousel);
                 wireCartPopup();
             });
 
             function initCarousel(root) {
+                if (!root) return null;
+
                 const track = root.querySelector('[data-carousel-track]');
                 const slides = Array.from(root.querySelectorAll('.pl-carousel__slide'));
                 const prevBtn = root.querySelector('[data-carousel-prev]');
                 const nextBtn = root.querySelector('[data-carousel-next]');
                 const dotsContainer = root.querySelector('[data-carousel-dots]');
-                if (!track || slides.length === 0) return;
+                if (!track || slides.length === 0) return null;
 
                 let currentIndex = 0;
+                const images = Array.from(root.querySelectorAll('.pl-carousel__slide img'));
+                const baseImageSources = images.map((img) => img.getAttribute('src') || '');
 
                 const dots = slides.map((_, index) => {
                     const btn = document.createElement('button');
@@ -182,6 +659,28 @@
                 function goToSlide(index) {
                     const count = slides.length;
                     currentIndex = (index + count) % count;
+                    updateUI();
+                }
+
+                function applySuffix(src, suffix) {
+                    if (!src) return '';
+                    const [path, query = ''] = src.split('?');
+                    const dotIndex = path.lastIndexOf('.');
+                    const hasExtension = dotIndex > path.lastIndexOf('/');
+                    const suffixPart = suffix ? `_${suffix}` : '';
+                    const nextPath = hasExtension
+                        ? `${path.slice(0, dotIndex)}${suffixPart}${path.slice(dotIndex)}`
+                        : `${path}${suffixPart}`;
+                    return query ? `${nextPath}?${query}` : nextPath;
+                }
+
+                function setColorVariant(color) {
+                    const suffix = (color || '').toLowerCase();
+                    images.forEach((img, idx) => {
+                        const baseSrc = baseImageSources[idx];
+                        if (!baseSrc) return;
+                        img.src = applySuffix(baseSrc, suffix);
+                    });
                     updateUI();
                 }
 
@@ -220,15 +719,25 @@
                 track.addEventListener('touchstart', onTouchStart, { passive: true });
                 track.addEventListener('touchmove', onTouchMove, { passive: true });
                 track.addEventListener('touchend', onTouchEnd);
+
+                return {
+                    setColorVariant,
+                };
             }
 
-            function initProduct() {
+            function initProduct(carouselApi) {
                 const PRODUCT = {
                     id: 'm8_plate_1',
                     name: 'M8 PLATE',
                     price: 32.0,
                     material: 'PETG',
                 };
+                const allowedColors = ['Smoke', 'Clear'];
+                const queryColor = new URLSearchParams(window.location.search).get('color');
+                const initialColor =
+                    allowedColors.find(
+                        (c) => c.toLowerCase() === (queryColor || '').trim().toLowerCase()
+                    ) || 'Smoke';
 
                 const colorButtons = Array.from(
                     document.querySelectorAll('[data-color]')
@@ -239,19 +748,24 @@
                 const buyButton = document.getElementById('add-to-cart');
 
                 const state = {
-                    color: 'Smoke',
+                    color: '',
                     customGlyphEnabled: false,
                     glyphData: null,
                     showOnLive: false,
                 };
 
                 const setColor = (color) => {
-                    state.color = color;
+                    const nextColor = color || 'Smoke';
+                    const changed = state.color !== nextColor;
+                    state.color = nextColor;
                     colorButtons.forEach((btn) => {
-                        const isActive = btn.dataset.color === color;
+                        const isActive = btn.dataset.color === nextColor;
                         btn.classList.toggle('chip--selected', isActive);
                         btn.setAttribute('aria-pressed', String(isActive));
                     });
+                    if (changed && carouselApi && typeof carouselApi.setColorVariant === 'function') {
+                        carouselApi.setColorVariant(nextColor);
+                    }
                 };
 
                 colorButtons.forEach((btn) => {
@@ -342,7 +856,7 @@
                     });
                 }
 
-                setColor(state.color);
+                setColor(initialColor);
                 syncGlyphUI();
             }
 

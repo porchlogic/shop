@@ -1,14 +1,68 @@
-// Publishable Stripe API key (live)
-const stripe = Stripe("pk_live_51J3mlbABTHjSuIhXgQq9s0XUfm1Fgnao9DnO29jF1hf4LpKh129cDDOpwiQRptEx7QlkcrnpHTfa3OQX30wHI4mB00NgdoLrSr");
+// Publishable Stripe API keys
+const STRIPE_KEYS = {
+    live: "pk_live_51J3mlbABTHjSuIhXgQq9s0XUfm1Fgnao9DnO29jF1hf4LpKh129cDDOpwiQRptEx7QlkcrnpHTfa3OQX30wHI4mB00NgdoLrSr",
+    test: "pk_test_51SadSnPADwDYgfnv3uZarRIVlDlx9waCCBQqaU0RLeRm9sN8ux3MdShacex3tPVHR7Qh3heZJwXI55rz9egsnX7y00M18XjPVQ",
+};
 
 const THIS_API_BASE = "https://api.porchlogic.com";
+const TEST_MODE_KEY = "porchlogic_checkout_test_mode";
+let stripe = null;
 let checkout = null;
 let selectedShipping = null;
+let testModeEnabled = false;
+const testModeBanner = document.getElementById("test-mode-banner");
 
-// Kick off once this file is loaded (on checkout page)
-initialize().catch(err => {
-    console.error("❌ Failed to initialize checkout:", err);
+function getStripeKey() {
+    return testModeEnabled ? STRIPE_KEYS.test : STRIPE_KEYS.live;
+}
+
+function applyTestModeBanner() {
+    if (!testModeBanner) return;
+    testModeBanner.classList.toggle("hidden", !testModeEnabled);
+}
+
+function setTestMode(enabled) {
+    testModeEnabled = enabled;
+    applyTestModeBanner();
+    try {
+        sessionStorage.setItem(TEST_MODE_KEY, enabled ? "1" : "0");
+    } catch (e) {
+        console.warn("Could not persist test mode state:", e);
+    }
+
+    if (checkout) {
+        window.location.reload();
+        return;
+    }
+
+    stripe = Stripe(getStripeKey());
+}
+
+function initTestMode() {
+    try {
+        testModeEnabled = sessionStorage.getItem(TEST_MODE_KEY) === "1";
+    } catch (e) {
+        console.warn("Could not read stored test mode state:", e);
+        testModeEnabled = false;
+    }
+    applyTestModeBanner();
+    stripe = Stripe(getStripeKey());
+    if (testModeEnabled) {
+        console.log("🧪 Test mode enabled. Using Stripe test key.");
+    }
+}
+
+document.addEventListener("keydown", (event) => {
+    const isToggle =
+        (event.key === "t" || event.key === "T") &&
+        // event.ctrlKey &&
+        event.shiftKey;
+    if (!isToggle) return;
+    event.preventDefault();
+    setTestMode(!testModeEnabled);
 });
+
+initTestMode();
 
 // ---- helpers that depend on checkout (guarded) ----
 
@@ -25,6 +79,11 @@ const paymentFormEl = document.querySelector("#payment-form");
 if (paymentFormEl) {
     paymentFormEl.addEventListener("submit", handleSubmit);
 }
+
+// Kick off once this file is loaded (on checkout page)
+initialize().catch(err => {
+    console.error("❌ Failed to initialize checkout:", err);
+});
 
 // ---- main init ----
 

@@ -4,6 +4,13 @@
     --text-main: #111;
     --text-muted: #777;
     --accent: #ff9a2c;
+
+    --base1: #d3cbbf;
+    /* light desert gray */
+    --base2: #b8b0a6;
+    /* mid desert gray */
+    --base3: #8e8983;
+    /* deeper shadow */
 }
 
 *,
@@ -22,7 +29,16 @@
     scrollbar-width: none;
 }
 
-
+/* Fullscreen background canvas for shader */
+#bg-canvas {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    z-index: -1;
+    pointer-events: none;
+}
 
 html,
 body {
@@ -32,7 +48,7 @@ body {
 }
 
 body {
-    background: var(--bg);
+    /* background: var(--bg); */
     font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     color: var(--text-main);
 
@@ -42,7 +58,18 @@ body {
     display: flex;
     flex-direction: column;
     justify-content:flex-start;
-    align-items: center;    
+    align-items: center;
+
+
+        
+}
+
+
+@font-face {
+    font-family: "stealth57";
+    src: url("../fonts/stealth57.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
 }
 
 /* main viewport shell */
@@ -58,7 +85,7 @@ main {
     display: flex;
     flex-direction: column;
 
-    position: relative;
+    position: absolute;
 
     overflow: hidden;
 }
@@ -91,9 +118,11 @@ main {
 } */
 
 h1 {
+    font-family: "stealth57", sans-serif;
     font-size: 2.5rem;
     margin: 0;
     padding: 0;
+    color: var(--text-muted);
 }
 
 /* page content container (each page owns inner layout) */
