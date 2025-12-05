@@ -96,6 +96,111 @@ function formatMoney(amount) {
 
 const moundGridInstances = new Map(); // uid -> { getData, setData }
 let activeGlyphUid = null;
+let glyphAudioContext = null;
+const GLYPH_STYLE_TAG_ID = 'glyph-editor-styles';
+
+function ensureGlyphEditorStyles() {
+    if (document.getElementById(GLYPH_STYLE_TAG_ID)) return;
+    const style = document.createElement('style');
+    style.id = GLYPH_STYLE_TAG_ID;
+    style.textContent = `
+.glyph-mode-wrapper {
+    text-align: center;
+    margin-top: 0.4rem;
+    display: inline-flex;
+    gap: 0.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.glyph-mode-btn,
+.glyph-sound-toggle {
+    padding: 0.5rem 0.8rem;
+    cursor: pointer;
+    border-radius: 999px;
+    border: 1px solid #313945;
+    background: #0f141b;
+    color: #f4f6fb;
+    transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease, opacity 0.15s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    font: inherit;
+}
+
+.glyph-mode-btn.active {
+    background: #1b222c;
+    border-color: var(--accent, #ff9a2c);
+    transform: translateY(-1px);
+}
+
+.glyph-icon {
+    display: block;
+    width: 32px;
+    height: 16px;
+    position: relative;
+}
+
+.glyph-icon-flat::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    border-bottom: 2px solid currentColor;
+    border-radius: 999px;
+}
+
+.glyph-icon-mound::before {
+    content: "";
+    position: absolute;
+    left: 4px;
+    right: 4px;
+    bottom: 0;
+    height: 100%;
+    border: 2px solid currentColor;
+    border-bottom: none;
+    border-radius: 999px 999px 0 0;
+}
+
+.glyph-icon-label {
+    font-size: 0.8rem;
+    color: #c6ced9;
+}
+
+.glyph-sound-toggle[aria-pressed="false"] {
+    opacity: 0.6;
+}
+
+.glyph-sound-toggle .glyph-sound-dot {
+    width: 0.65rem;
+    height: 0.65rem;
+    border-radius: 50%;
+    background: var(--accent, #ff9a2c);
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.06);
+}
+
+.glyph-sound-toggle[aria-pressed="false"] .glyph-sound-dot {
+    background: #5a6473;
+    box-shadow: none;
+}
+    `;
+    document.head.appendChild(style);
+}
+
+function getGlyphAudioContext() {
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if (!AudioCtx) return null;
+    if (!glyphAudioContext) {
+        glyphAudioContext = new AudioCtx();
+    }
+    if (glyphAudioContext.state === 'suspended') {
+        glyphAudioContext.resume();
+    }
+    return glyphAudioContext;
+}
 
 function createMoundGrid(canvas, controls, initialData, onChange) {
     const ROWS = 8;
@@ -118,9 +223,11 @@ function createMoundGrid(canvas, controls, initialData, onChange) {
     let dragButton = 0; // 0 = left, 2 = right
     let changedThisDrag = new Set();
     let mode = 'mound'; // 'mound' or 'flat'
+    let soundEnabled = true;
 
     const flatBtn = controls?.flatBtn || null;
     const moundBtn = controls?.moundBtn || null;
+    const soundToggleBtn = controls?.soundToggle || null;
 
     function setMode(newMode) {
         mode = newMode;
@@ -130,6 +237,25 @@ function createMoundGrid(canvas, controls, initialData, onChange) {
 
     if (flatBtn) flatBtn.addEventListener('click', () => setMode('flat'));
     if (moundBtn) moundBtn.addEventListener('click', () => setMode('mound'));
+
+    function setSoundEnabled(enabled) {
+        soundEnabled = enabled;
+        if (soundToggleBtn) {
+            soundToggleBtn.setAttribute('aria-pressed', String(soundEnabled));
+            const labelEl = soundToggleBtn.querySelector('.glyph-icon-label');
+            if (labelEl) labelEl.textContent = soundEnabled ? 'Sound on' : 'Sound off';
+        }
+    }
+
+    if (soundToggleBtn) {
+        soundToggleBtn.addEventListener('click', () => {
+            setSoundEnabled(!soundEnabled);
+            if (soundEnabled) {
+                getGlyphAudioContext();
+            }
+        });
+        setSoundEnabled(soundEnabled);
+    }
 
     setMode('mound');
 
@@ -144,10 +270,42 @@ function createMoundGrid(canvas, controls, initialData, onChange) {
         return { row, col };
     }
 
+    function playBumpSound() {
+        if (!soundEnabled) return;
+        const ctx = getGlyphAudioContext();
+        if (!ctx) return;
+
+        const now = ctx.currentTime;
+        const osc = ctx.createOscillator();
+        osc.type = 'sine';
+
+        const baseFreq = 170 + Math.random() * 90;
+        const endFreq = baseFreq * (0.45 + Math.random() * 0.12);
+        osc.frequency.setValueAtTime(baseFreq, now);
+        osc.frequency.exponentialRampToValueAtTime(endFreq, now + 0.1);
+
+        const gain = ctx.createGain();
+        const peak = 0.2 + Math.random() * 0.08;
+        gain.gain.setValueAtTime(0.0001, now);
+        gain.gain.exponentialRampToValueAtTime(peak, now + 0.01);
+        gain.gain.exponentialRampToValueAtTime(0.00001, now + 0.16);
+
+        const filter = ctx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(900 + Math.random() * 500, now);
+        filter.Q.setValueAtTime(0.9 + Math.random() * 0.6, now);
+
+        osc.connect(filter);
+        filter.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc.start(now);
+        osc.stop(now + 0.2);
+    }
+
     function applyAction(row, col, button) {
         const key = `${row}:${col}`;
         if (changedThisDrag.has(key)) return;
-        changedThisDrag.add(key);
 
         let value;
         if (button === 2) {
@@ -156,8 +314,13 @@ function createMoundGrid(canvas, controls, initialData, onChange) {
             value = mode === 'mound' ? 1 : 0;
         }
 
+        const currentValue = moundData[row][col];
+        changedThisDrag.add(key);
+        if (currentValue === value) return;
+
         moundData[row][col] = value;
         draw();
+        playBumpSound();
 
         if (typeof onChange === 'function') {
             onChange(JSON.parse(JSON.stringify(moundData)));
@@ -294,6 +457,7 @@ function createMoundGrid(canvas, controls, initialData, onChange) {
 }
 
 function attachMoundGrid(uid, editorEl, existingData, options = {}) {
+    ensureGlyphEditorStyles();
     editorEl.innerHTML = '';
 
     const canvas = document.createElement('canvas');
@@ -326,9 +490,18 @@ function attachMoundGrid(uid, editorEl, existingData, options = {}) {
     editorEl.appendChild(canvas);
     editorEl.appendChild(controlsWrapper);
 
+    const soundToggle = document.createElement('button');
+    soundToggle.type = 'button';
+    soundToggle.className = 'glyph-sound-toggle';
+    soundToggle.setAttribute('aria-pressed', 'true');
+    soundToggle.title = 'Toggle sculpt sound';
+    soundToggle.innerHTML =
+        '<span class="glyph-sound-dot" aria-hidden="true"></span><span class="glyph-icon-label">Sound on</span>';
+    controlsWrapper.appendChild(soundToggle);
+
     const instance = createMoundGrid(
         canvas,
-        { flatBtn, moundBtn },
+        { flatBtn, moundBtn, soundToggle },
         existingData,
         (data) => {
             const glyphCopy = JSON.parse(JSON.stringify(data));
