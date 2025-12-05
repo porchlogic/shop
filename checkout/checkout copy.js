@@ -244,37 +244,48 @@ function renderShippingOptions(checkout, session) {
 
 // ---- main init ----
 
-// assume: const stripe = Stripe("pk_live_...");
-// assume: THIS_API_BASE is already defined
-
 async function initialize() {
-    console.log("🛒 Initializing embedded checkout…");
-    const cartItems = getCartItems();
+    console.log("🛒 Initializing checkout…");
+    console.log("🛒 Cart items (from sessionStorage):", getCartItems());
 
+    const cartItems = getCartItems(); // from cart.js
+
+    // If cart is empty, don't try to talk to Stripe at all
     if (!cartItems || cartItems.length === 0) {
         console.warn("🛒 No cart items, skipping checkout init.");
         return;
     }
 
-    const fetchClientSecret = async () => {
-        const res = await fetch(`${THIS_API_BASE}/create-checkout-session`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ cartItems }),
-        });
+    console.log(
+        "➡️ Sending POST to /create-checkout-session:",
+        JSON.stringify({ cartItems }, null, 2)
+    );
 
-        let data;
+    const promise = fetch(`${THIS_API_BASE}/create-checkout-session`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ cartItems }),
+    }).then(async (res) => {
+        let data = null;
         try {
             data = await res.json();
         } catch (e) {
-            console.error("❌ Non-JSON response from /create-checkout-session:", e);
-            showMessage("Server error. Please try again.");
+            console.error(
+                "❌ Non-JSON response from /create-checkout-session:",
+                e
+            );
             throw new Error("Server returned non-JSON response.");
         }
 
+        // If HTTP status is not OK, surface and throw
         if (!res.ok) {
-            console.error("❌ /create-checkout-session HTTP error:", res.status, data);
+            console.error(
+                "❌ /create-checkout-session HTTP error:",
+                res.status,
+                data
+            );
 
+            // Inventory special handling (matches your server.js)
             if (data && data.error === "InventoryError") {
                 const msg = data.message || "Not enough inventory.";
                 showInventoryError(data.itemId, msg);
@@ -285,12 +296,17 @@ async function initialize() {
             const msg =
                 (data && (data.message || data.error)) ||
                 "Checkout session failed. Please try again.";
+
             showMessage(msg);
             throw new Error(msg);
         }
 
+        // Happy path: ensure clientSecret exists
         if (!data || typeof data.clientSecret !== "string") {
-            console.error("❌ No clientSecret in successful response:", data);
+            console.error(
+                "❌ No clientSecret in successful response:",
+                data
+            );
             showMessage(
                 "Checkout session error. Please try again or contact support."
             );
@@ -298,62 +314,66 @@ async function initialize() {
         }
 
         return data.clientSecret;
-    };
-
-    const onShippingDetailsChange = async ({ checkoutSessionId, shippingDetails }) => {
-        try {
-            const res = await fetch(`${THIS_API_BASE}/calculate-shipping-options`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    checkout_session_id: checkoutSessionId,
-                    shipping_details: shippingDetails,
-                }),
-            });
-
-            const data = await res.json();
-
-            if (data.type === "error") {
-                return { type: "reject", errorMessage: data.message };
-            }
-
-            return { type: "accept" };
-        } catch (err) {
-            console.error("❌ /calculate-shipping-options error:", err);
-            return {
-                type: "reject",
-                errorMessage: "We couldn't validate your address. Please try again.",
-            };
-        }
-    };
-
-    // 🔑 No elementsOptions / appearance here
-    checkout = await stripe.initEmbeddedCheckout({
-        fetchClientSecret,
-        onShippingDetailsChange,
-        onComplete: (event) => {
-            if (event?.status === "complete") {
-                if (typeof clearCart === "function") {
-                    clearCart();
-                } else {
-                    try {
-                        sessionStorage.removeItem("porchlogic_cart");
-                    } catch (err) {
-                        console.warn("Could not clear cart after checkout complete:", err);
-                    }
-                }
-            }
-        },
     });
 
-    checkout.mount("#checkout");
+    const appearance = {
+        theme: "stripe",
+        variables: {
+            colorPrimary: "#111111",
+            colorText: "#111111",
+            colorBackground: "#f8f8f8",
+            colorDanger: "#c0392b",
+            borderRadius: "10px",
+        },
+    };
 
-    // OPTIONAL: external summary if you still want it
-    // const session = checkout.session();
-    // updateSummaryFromSession(session);
-    // checkout.on("change", (updatedSession) => {
-    //   updateSummaryFromSession(updatedSession);
-    // });
+    // Hand the promise to Stripe's Custom Checkout
+    checkout = await stripe.initCheckout({
+        fetchClientSecret: () => promise,
+        elementsOptions: { appearance },
+    });
+
+    const session = checkout.session();
+    console.log("🔍 checkout.session():", session);
+
+    // Initial render of shipping UI + summary based on current session
+    renderShippingOptions(checkout, session);
+    updateSummaryFromSession(session);
+
+    // Keep UI in sync with Stripe when anything material changes (address, shipping, tax, etc.)
+    checkout.on("change", (updatedSession) => {
+        console.log("🔁 checkout change:", updatedSession);
+        renderShippingOptions(checkout, updatedSession);
+        updateSummaryFromSession(updatedSession);
+    });
+
+    // Email validation wiring
+    const emailInput = document.getElementById("email");
+    const emailErrors = document.getElementById("email-errors");
+
+    if (emailInput && emailErrors) {
+        emailInput.addEventListener("input", () => {
+            emailErrors.textContent = "";
+        });
+
+        emailInput.addEventListener("blur", async () => {
+            const newEmail = emailInput.value;
+            if (!newEmail) return;
+
+            const { isValid, message } = await validateEmail(newEmail);
+            if (!isValid && message) {
+                emailErrors.textContent = message;
+            }
+        });
+    }
+
+    // Stripe UI elements
+    const paymentElement = checkout.createPaymentElement();
+    paymentElement.mount("#payment-element");
+
+    const shippingAddressElement = checkout.createShippingAddressElement();
+    shippingAddressElement.mount("#shipping-address-element");
+    // No custom logic needed here; address changes will trigger the checkout.on("change") handler.
 }
 
 

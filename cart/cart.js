@@ -1,5 +1,6 @@
 // Cart data is stored in sessionStorage
 const CART_STORAGE_KEY = 'porchlogic_cart';
+const LIVE_OPTION_ENABLED = false;
 
 // ---------- helpers: storage ----------
 
@@ -10,6 +11,20 @@ function getCartItems() {
 
 function saveCartItems(items) {
     sessionStorage.setItem(CART_STORAGE_KEY, JSON.stringify(items || []));
+}
+
+function clearCart() {
+    // Empties storage and refreshes any cart UI currently rendered
+    saveCartItems([]);
+    updateCartIconCount();
+
+    if (document.getElementById('cart-items-container')) {
+        renderCartItems();
+    }
+
+    if (document.getElementById('checkout-summary-items')) {
+        renderCheckoutSummary();
+    }
 }
 
 function ensureItemUid(item) {
@@ -576,13 +591,17 @@ function createGlyphControls(item) {
         <input type="checkbox" class="live-checkbox" data-item-uid="${uid}">
         <span>Show on live stream</span>
     `;
-    wrapper.appendChild(liveLabel);
+    if (LIVE_OPTION_ENABLED) {
+        wrapper.appendChild(liveLabel);
+    }
 
     const liveInfo = document.createElement('p');
     liveInfo.className = 'live-info';
     liveInfo.textContent =
         'Live overlay placement is added after purchase; we will contact you with setup details.';
-    wrapper.appendChild(liveInfo);
+    if (LIVE_OPTION_ENABLED) {
+        wrapper.appendChild(liveInfo);
+    }
 
     return { wrapper, glyphLabel, glyphThumb, liveLabel, liveInfo };
 }
@@ -651,7 +670,7 @@ function renderCartItems() {
                 if (thumbCanvas) renderGlyphThumbnail(thumbCanvas, item.glyphData);
             }
 
-            if (item.showOnLive) {
+            if (item.showOnLive && liveCheckbox) {
                 liveCheckbox.checked = true;
             }
 
@@ -675,18 +694,20 @@ function renderCartItems() {
                 }
             });
 
-            liveCheckbox.addEventListener('change', () => {
-                const items = getCartItems();
-                const it = items.find((i) => i.uid === uid);
-                if (!it) return;
+            if (liveCheckbox) {
+                liveCheckbox.addEventListener('change', () => {
+                    const items = getCartItems();
+                    const it = items.find((i) => i.uid === uid);
+                    if (!it) return;
 
-                it.showOnLive = liveCheckbox.checked;
-                saveCartItems(items);
+                    it.showOnLive = liveCheckbox.checked;
+                    saveCartItems(items);
 
-                if (liveInfo) {
-                    liveInfo.classList.toggle('hidden', !liveCheckbox.checked);
-                }
-            });
+                    if (liveInfo) {
+                        liveInfo.classList.toggle('hidden', !liveCheckbox.checked);
+                    }
+                });
+            }
 
             glyphThumb.addEventListener('click', () => {
                 openGlyphModal(uid);

@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Product Layout</title>
+    <style>
+        :root {
+            /* 
+				How tall the whole stack is relative to the hero width.
+				Tune this if your real content is taller/shorter.
+				~1.8–2.2 is a reasonable range.
+			*/
+            --card-vertical-factor: 1.9;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: #111;
+            color: #eee;
+        }
+
+        .page {
+            /* Center the card and keep it off the edges a bit */
+            min-height: 100vh;
+            width: 100vw;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .product-card {
+            /* 
+				Best-fit width:
+				- Can't be wider than the viewport minus padding (100vw - 2rem)
+				- Can't be so wide that the whole stack becomes taller than viewport
+				  (we approximate that with card-vertical-factor)
+			*/
+            width: min(100vw - 2rem,
+                    calc((100vh - 2rem) / var(--card-vertical-factor)));
+
+            max-width: 480px;
+            /* optional cap on very large screens */
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            gap: 0.75rem;
+        }
+
+        .product-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header-left {
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+        }
+
+        .product-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .product-subtitle {
+            font-size: 0.85rem;
+            opacity: 0.8;
+            margin: 0.2rem 0 0;
+        }
+
+        .cart-button {
+            background: rgba(255, 255, 255, 0.06);
+            border: none;
+            padding: 0.4rem 0.5rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 120ms ease, transform 120ms ease;
+        }
+
+        .cart-button:hover {
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .cart-button:active {
+            transform: scale(0.96);
+        }
+
+
+        .hero {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            /* square */
+            border-radius: 0.75rem;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at 30% 20%, #555 0, #222 40%, #050505 100%);
+        }
+
+        .hero img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+
+        .attributes {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
+        }
+
+        .attribute {
+            border-radius: 0.5rem;
+            padding: 0.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.15rem;
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .attribute-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            opacity: 0.7;
+        }
+
+        .attribute-value {
+            font-size: 0.9rem;
+        }
+
+        .cta {
+            margin-top: 0.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+        }
+
+        .price {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .button {
+            flex: 1;
+            padding: 0.6rem 0.9rem;
+            border-radius: 999px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            background: #0f0;
+            color: #000;
+            transition: transform 120ms ease, box-shadow 120ms ease, background 120ms ease;
+        }
+
+        .button:active {
+            transform: translateY(1px) scale(0.99);
+            box-shadow: none;
+        }
+
+        .button:hover {
+            background: #9f9;
+        }
+
+        /* Tiny screens: stack CTA vertically if needed */
+        @media (max-width: 360px) {
+            .cta {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .price {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page">
+        <div class="product-card">
+            <header class="product-header">
+                <div class="header-left">
+                    <h1 class="product-title">Product Name</h1>
+                    <p class="product-subtitle">Short tagline or variant</p>
+                </div>
+            
+                <button class="cart-button" aria-label="Cart">
+                    <!-- Inline SVG icon (simple cart) -->
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 12.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                </button>
+            </header>
+
+
+            <div class="hero">
+                <!-- Replace with your real image; the hero stays square -->
+                <img src="https://via.placeholder.com/800x800.png?text=Hero" alt="Hero image">
+            </div>
+
+            <section class="attributes">
+                <div class="attribute">
+                    <div class="attribute-label">Material</div>
+                    <div class="attribute-value">Anodized Aluminum</div>
+                </div>
+                <div class="attribute">
+                    <div class="attribute-label">Finish</div>
+                    <div class="attribute-value">Desert Gray</div>
+                </div>
+                <div class="attribute">
+                    <div class="attribute-label">Weight</div>
+                    <div class="attribute-value">120 g</div>
+                </div>
+                <div class="attribute">
+                    <div class="attribute-label">Version</div>
+                    <div class="attribute-value">Founders Edition</div>
+                </div>
+            </section>
+
+            <section class="cta">
+                <div class="price">$42.00</div>
+                <button class="button">Buy Now</button>
+            </section>
+        </div>
+    </div>
+</body>
+
+</html>

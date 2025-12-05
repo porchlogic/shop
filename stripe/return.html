@@ -447,6 +447,11 @@
                     case "complete":
                         setStatus("Payment complete", "We received your payment and your order is in the queue.", "success");
                         nextSteps.textContent = "Check your email for the receipt and fulfillment updates. Codes, if any, are listed above.";
+                        try {
+                            sessionStorage.removeItem("porchlogic_cart");
+                        } catch (err) {
+                            console.warn("Could not clear cart after completion:", err);
+                        }
                         break;
                     case "processing":
                         setStatus("Payment processing", "Stripe is finishing up. This can take a minute.", "neutral");

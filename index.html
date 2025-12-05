@@ -88,9 +88,8 @@
             padding: 0.5rem;
             display: flex;
             flex-direction: column;
-            gap: 1rem;
+
             position: relative;
-            min-height: min(45vh, 450px);
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -101,6 +100,15 @@
             color: inherit;
             transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
 
+        }
+
+        .product-card h2 {
+            text-align: center;
+            margin-top: 15px;
+            margin-bottom: 2px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            letter-spacing: 0.04em;
         }
 
         @media (hover: hover) {
@@ -513,10 +521,7 @@
         </header>
         <section class="product-grid">
             <a class="product-card" href="/m8-plate/?color=smoke">
-                <header>
-                    <h1>M8 PLATE</h1>
-                    
-                </header>
+ 
             
                 <section class="hero">
                     <div class="pl-carousel__slide is-active">
@@ -525,18 +530,15 @@
 
                 </section>
             
-
+                <h2>M8 PLATE - Smoke</h2>
             
                 <section class="cta">
                     <span class="price">$32.00</span>
-                    <span class="price-note">View product details</span>
+                    <!-- <span class="price-note">View product details</span> -->
                 </section>
             </a>
             <a class="product-card" href="/m8-plate/?color=clear">
-                <header>
-                    <h1>M8 PLATE</h1>
-            
-                </header>
+
             
                 <section class="hero">
                     <div class="pl-carousel__slide is-active">
@@ -545,11 +547,11 @@
             
                 </section>
             
-            
+                <h2>M8 PLATE - Clear</h2>
             
                 <section class="cta">
                     <span class="price">$32.00</span>
-                    <span class="price-note">View product details</span>
+                    <!-- <span class="price-note">View product details</span> -->
                 </section>
             </a>
         </section>

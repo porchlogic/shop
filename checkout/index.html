@@ -69,6 +69,7 @@
             background-position: center;
             background-repeat: no-repeat;
             box-shadow: 0 10px 50px rgba(0, 0, 0, 0.15);
+            background-color: rgb(255, 255, 255);
         }
 
         header {
@@ -532,7 +533,10 @@
             </a>
         </header>
 
-        <form id="payment-form" class="checkout-shell">
+        <div id="checkout"></div>
+
+
+        <!-- <form id="payment-form" class="checkout-shell">
             <section class="checkout-panels">
                 <div class="checkout-panel checkout-summary">
                     <h2 class="summary-label">Order</h2>
@@ -581,39 +585,16 @@
                     </div>
 
                     <div class="field-group">
-                        <h2 class="field-group__label">Shipping</h2>
-
-                        <div class="shipping-methods" id="shipping-methods">
-                            <p class="shipping-hint" data-shipping-hint>Enter a shipping address to see available options.</p>
-
-                            <label class="shipping-option hidden" data-shipping-option data-region="US">
-                                <input type="radio" name="shipping_method" value="us_economy" data-shipping-amount="6" data-shipping-label="US Economy (3–7 days)">
-                                <span class="shipping-option__info">
-                                    <span class="shipping-option__name">US Economy</span>
-                                    <span class="shipping-option__meta">3–7 days</span>
-                                </span>
-                                <span class="shipping-option__price">$6</span>
-                            </label>
-                            <label class="shipping-option hidden" data-shipping-option data-region="US">
-                                <input type="radio" name="shipping_method" value="us_priority" data-shipping-amount="10" data-shipping-label="US Priority (2–3 days)">
-                                <span class="shipping-option__info">
-                                    <span class="shipping-option__name">US Priority</span>
-                                    <span class="shipping-option__meta">2–3 days</span>
-                                </span>
-                                <span class="shipping-option__price">$10</span>
-                            </label>
-                            <label class="shipping-option hidden" data-shipping-option data-region="INTL">
-                                <input type="radio" name="shipping_method" value="intl_economy" data-shipping-amount="20" data-shipping-label="International Economy (2–4 weeks)">
-                                <span class="shipping-option__info">
-                                    <span class="shipping-option__name">International Economy</span>
-                                    <span class="shipping-option__meta">2–4 weeks</span>
-                                </span>
-                                <span class="shipping-option__price">$20</span>
-                            </label>
-                        </div>
+                        <h2 class="field-group__label">Shipping</h2>                        
 
                         <div class="field-row">
                             <div id="shipping-address-element" class="stripe-element-placeholder"></div>
+                        </div>
+
+                        <div id="shipping-options-container" class="shipping-methods">
+                            <p class="shipping-hint">
+                                Enter your shipping address, then pick a shipping option.
+                            </p>
                         </div>
                     </div>
 
@@ -634,7 +615,7 @@
                 </button>
                 <a href="../cart/" class="back-button">Back to cart</a>
             </section>
-        </form>
+        </form> -->
     </main>
 
     <script src="https://js.stripe.com/basil/stripe.js"></script>
