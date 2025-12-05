@@ -6,7 +6,6 @@
     <title>M8 PLATE Layout</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="carousel.css" />
-    <link rel="stylesheet" href="/porch-logic.css" />
     <style>
         :root {
             --bg: #e3e3e3;
@@ -17,7 +16,6 @@
             --base1: #d3cbbf;
             --base2: #b8b0a6;
             --base3: #8e8983;
-            --card-vertical-factor: 1.9;
         }
 
         *,
@@ -46,9 +44,9 @@
             color: var(--text-main);
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start;
             min-height: 100vh;
-            padding: 2.25rem 1.25rem 1.75rem 2.4rem;
+            padding: 1rem;
             background:
                 radial-gradient(ellipse at center,
                     rgba(40, 40, 40, 0.15) 0%,
@@ -63,15 +61,14 @@
         }
 
         main {
-            width: min(100vw - 2rem,
-                    calc((100vh - 2rem) / var(--card-vertical-factor)));
-            max-width: 480px;
+            width: min(100vw, 768px);
             border-radius: 0.75rem;
             padding: 0.5rem;
             display: flex;
             flex-direction: column;
-            gap: 0.75rem;
+            gap: 1rem;
             position: relative;
+            min-height: min(95vh, 960px);
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -79,25 +76,11 @@
 
         }
 
-        @supports (height: 100dvh) {
-            main {
-                width: min(100vw - 2rem,
-                        calc((100dvh - 2rem) / var(--card-vertical-factor)));
-            }
-        }
-
         header {
             display: flex;
-            align-items: flex-start;
+            align-items: center;
             justify-content: space-between;
             padding-inline: 0.25rem;
-        }
-
-        .header-left {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 0.25rem;
         }
 
         header h1 {
@@ -106,23 +89,27 @@
             letter-spacing: 0.12em;
             font-family: "stealth57", sans-serif;
             color: var(--text-muted);
-            text-align: left;
+            text-align: center;
             white-space: nowrap;
-            padding: 0.5rem 0 0.25rem;
+            padding: 1rem;
         }
 
         .shop-link {
-            display: inline-block;
-            padding: 0.1rem 0;
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            padding: 0.45rem 1rem;
+            border-radius: 999px;
+            border: 1px solid var(--border);
             text-decoration: none;
-            text-decoration-thickness: 1px;
-            letter-spacing: 0.14em;
+            letter-spacing: 0.18em;
             text-transform: uppercase;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             color: var(--text-main);
-            background: transparent;
-            border: none;
-            box-shadow: none;
+            background: rgba(243, 243, 243, 0.9);
+            box-shadow: inset 0 0 0 1px #fff;
         }
 
         .shop-link__icon {
@@ -189,9 +176,6 @@
             flex-direction: row;
             align-items: center;
             gap: 0.6rem;
-            flex-wrap: wrap;
-            justify-content: flex-start;
-            width: 100%;
         }
 
         .chip {
@@ -216,15 +200,9 @@
         .attribute__value--glyph {
             flex-direction: row;
             align-items: center;
-            gap: 0.75rem 1rem;
-            justify-content: flex-start;
+            gap: 1rem;
+            justify-content: space-between;
             width: 100%;
-            flex-wrap: wrap;
-        }
-
-        .attribute__value--choices > *,
-        .attribute__value--glyph > * {
-            flex: 0 0 auto;
         }
 
         .toggle {
@@ -240,7 +218,6 @@
             cursor: pointer;
             transition: background 0.2s ease, border-color 0.2s ease;
             box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.6);
-            flex-shrink: 0;
         }
 
         .toggle.is-on {
@@ -301,12 +278,6 @@
             gap: 0.55rem;
             text-align: center;
             padding: 0.6rem 0.25rem 0.25rem;
-        }
-
-        .cta__price {
-            display: flex;
-            flex-direction: column;
-            gap: 0.2rem;
         }
 
         .price {
@@ -496,7 +467,7 @@
 
         @media (max-width: 480px) {
             body {
-                padding: 1.25rem 0.75rem 1.35rem 1.65rem;
+                padding: 0;
                 overflow-y: auto;
                 height: 100svh;
                 min-height: 100svh;
@@ -505,11 +476,10 @@
             main {
                 padding: 0.75rem;
                 gap: 0.75rem;
-                height: auto;
-                min-height: 0;
-                max-height: none;
+                height: 100%;
+                min-height: 100%;
+                max-height: 100%;
                 width: 100vw;
-                max-width: 100vw;
                 border-radius: 0;
                 box-shadow: none;
             }
@@ -521,20 +491,6 @@
             .buy {
                 width: 100%;
             }
-
-            .cta__price {
-                align-items: center;
-            }
-        }
-
-        @media (max-height: 820px) {
-            body {
-                align-items: flex-start;
-            }
-
-            main {
-                margin-top: 0.5rem;
-            }
         }
     </style>
 </head>
@@ -542,12 +498,14 @@
 <body>
     <main>
         <header>
-            <div class="header-left">
-                <a href="../" class="shop-link" aria-label="Back to shop">
-                    &lt; Shop
-                </a>
-                <h1>M8 PLATE</h1>
-            </div>
+            <a href="../" class="shop-link" aria-label="Back to shop">
+                <svg class="shop-link__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none"
+                    stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14.5 6.5 8 12l6.5 5.5" />
+                </svg>
+                Shop
+            </a>
+            <h1>M8 PLATE</h1>
             <a href="../cart/" class="cart-icon" aria-label="View cart">
                 <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                     <path
@@ -623,15 +581,12 @@
         </section>
 
         <section class="cta">
-            <div class="cta__price">
-                <span class="price">$32.00</span>
-                <span class="price-note">Includes half-off one future model.</span>
-            </div>
+            <span class="price">$32.00</span>
+            <span class="price-note">Includes half-off one future model.</span>
             <button type="button" class="buy" id="add-to-cart">
                 Add to cart
             </button>
         </section>
-        <div class="porch-logic-mark">porchLogic</div>
     </main>
 
     <!-- <footer class="page-footer">

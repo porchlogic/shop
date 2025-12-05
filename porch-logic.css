@@ -1,0 +1,27 @@
+.porch-logic-mark {
+    position: absolute;
+    top: 8.75rem;
+    left: -1.75rem;
+    font-family: "stealth57", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #de148a;
+    opacity: 0.9;
+    transform: translateY(100%) rotate(-90deg);
+    transform-origin: top left;
+    text-shadow:
+        0 0 4px rgba(0, 0, 0, 0.18),
+        0 0 10px rgba(0, 0, 0, 0.12);
+    pointer-events: none;
+    z-index: 20;
+}
+
+@media (max-width: 480px) {
+    .porch-logic-mark {
+        font-size: 0.78rem;
+        letter-spacing: 0.16em;
+        top: 8.75rem;
+        left: -0.6rem;
+    }
+}
