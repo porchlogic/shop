@@ -64,188 +64,13 @@ document.addEventListener("keydown", (event) => {
 
 initTestMode();
 
-// ---- helpers that depend on checkout (guarded) ----
 
-const validateEmail = async (email) => {
-    if (!checkout) {
-        return { isValid: false, message: "Checkout not initialized yet." };
-    }
-    const updateResult = await checkout.updateEmail(email);
-    const isValid = updateResult.type !== "error";
-    return { isValid, message: !isValid ? updateResult.error.message : null };
-};
-
-const paymentFormEl = document.querySelector("#payment-form");
-if (paymentFormEl) {
-    paymentFormEl.addEventListener("submit", handleSubmit);
-}
 
 // Kick off once this file is loaded (on checkout page)
 initialize().catch(err => {
     console.error("❌ Failed to initialize checkout:", err);
 });
-// ---- shipping ----
-function formatCurrencyFromMinor(amountMinor, divisor) {
-    if (typeof amountMinor !== "number") return "$0.00";
-    const value = amountMinor / (divisor || 100);
-    return `$${value.toFixed(2)}`;
-}
 
-// Simple label mapping based on the cents amount we configured server-side.
-function getFriendlyShippingName(amountMinor) {
-    switch (amountMinor) {
-        case 600:
-            return "US Economy (3–7 days)";
-        case 1000:
-            return "US Priority (2–3 days)";
-        case 2000:
-            return "International Economy (2–4 weeks)";
-        default:
-            return "Shipping";
-    }
-}
-
-// Update the order summary + button label from Stripe's session totals
-function updateSummaryFromSession(session) {
-    const divisor = session.minorUnitsAmountDivisor || 100;
-
-    const subtotalMinor = session.total?.subtotal?.amount ?? 0;
-    const totalMinor = session.total?.total?.amount ?? subtotalMinor;
-    const shippingOption = session.shipping?.shippingOption || null;
-
-    const subtotalEl = document.querySelector("[data-cart-subtotal]");
-    const shippingAmountEl = document.querySelector("[data-cart-shipping]");
-    const shippingLabelEl = document.querySelector("[data-shipping-label]");
-    const totalEl = document.querySelector("[data-cart-total]");
-    const btnTextNode = document.querySelector("#button-text");
-    const submitBtn = document.querySelector("#submit");
-
-    if (subtotalEl) {
-        subtotalEl.textContent = formatCurrencyFromMinor(subtotalMinor, divisor);
-    }
-
-    if (shippingAmountEl) {
-        if (shippingOption?.minorUnitsAmount != null) {
-            shippingAmountEl.textContent = formatCurrencyFromMinor(
-                shippingOption.minorUnitsAmount,
-                divisor
-            );
-        } else {
-            shippingAmountEl.textContent = "$0.00";
-        }
-    }
-
-    if (shippingLabelEl) {
-        if (shippingOption) {
-            const label = getFriendlyShippingName(
-                shippingOption.minorUnitsAmount ?? 0
-            );
-            shippingLabelEl.textContent = label;
-        } else {
-            shippingLabelEl.textContent = "Choose option";
-        }
-    }
-
-    if (totalEl) {
-        totalEl.textContent = formatCurrencyFromMinor(totalMinor, divisor);
-    }
-
-    if (btnTextNode) {
-        btnTextNode.textContent = `Pay ${formatCurrencyFromMinor(
-            totalMinor,
-            divisor
-        )}`;
-    }
-
-    // Enable/disable the button based on Stripe's canConfirm flag
-    if (submitBtn) {
-        submitBtn.disabled = !session.canConfirm;
-    }
-}
-
-// Render radio buttons for shipping options and wire them to Stripe
-function renderShippingOptions(checkout, session) {
-    const container = document.getElementById("shipping-options-container");
-    if (!container) return;
-
-    const options = session.shippingOptions || [];
-    const divisor = session.minorUnitsAmountDivisor || 100;
-    const selectedId = session.shipping?.shippingOption?.id || null;
-
-    container.innerHTML = "";
-
-    if (!options.length) {
-        const hint = document.createElement("p");
-        hint.className = "shipping-hint";
-        hint.textContent = "Enter your shipping address to see options.";
-        container.appendChild(hint);
-        return;
-    }
-
-    const hint = document.createElement("p");
-    hint.className = "shipping-hint";
-    hint.textContent = "Choose a shipping option:";
-    container.appendChild(hint);
-
-    options.forEach((opt, index) => {
-        const id = opt.id;
-        const amountMinor = opt.minorUnitsAmount;
-        const amountLabel = opt.amount || formatCurrencyFromMinor(amountMinor, divisor);
-        const friendlyName = getFriendlyShippingName(amountMinor);
-
-        const row = document.createElement("label");
-        row.className = "shipping-option";
-
-        const input = document.createElement("input");
-        input.type = "radio";
-        input.name = "shipping-option";
-        input.value = id;
-        input.checked = selectedId
-            ? selectedId === id
-            : index === 0;
-
-        input.addEventListener("change", async () => {
-            try {
-                await checkout.updateShippingOption(id);  // ✅ pass string, not object
-            } catch (err) {
-                console.error("Failed to update shipping option", err);
-                showMessage("Could not update shipping. Please try again.");
-            }
-        });
-
-
-        const info = document.createElement("div");
-        info.className = "shipping-option__info";
-
-        const nameSpan = document.createElement("span");
-        nameSpan.className = "shipping-option__name";
-        nameSpan.textContent = friendlyName;
-
-        const metaSpan = document.createElement("span");
-        metaSpan.className = "shipping-option__meta";
-        metaSpan.textContent = "Rate applied at checkout";
-
-        info.appendChild(nameSpan);
-        info.appendChild(metaSpan);
-
-        const priceSpan = document.createElement("span");
-        priceSpan.className = "shipping-option__price";
-        priceSpan.textContent = amountLabel;
-
-        row.appendChild(input);
-        row.appendChild(info);
-        row.appendChild(priceSpan);
-
-        container.appendChild(row);
-    });
-}
-
-
-
-// ---- main init ----
-
-// assume: const stripe = Stripe("pk_live_...");
-// assume: THIS_API_BASE is already defined
 
 async function initialize() {
     console.log("🛒 Initializing embedded checkout…");
@@ -260,7 +85,9 @@ async function initialize() {
         const res = await fetch(`${THIS_API_BASE}/create-checkout-session`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ cartItems }),
+            body: JSON.stringify({
+                cartItems
+            }),
         });
 
         let data;
@@ -296,12 +123,16 @@ async function initialize() {
             );
             throw new Error("Missing clientSecret");
         }
+        
+        // store session id so that newsletter signup can inform the backend
+        window.activeCheckoutSessionId = data.sessionId;
 
         return data.clientSecret;
     };
 
     const onShippingDetailsChange = async ({ checkoutSessionId, shippingDetails }) => {
         try {
+            console.log('trying');
             const res = await fetch(`${THIS_API_BASE}/calculate-shipping-options`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -312,6 +143,8 @@ async function initialize() {
             });
 
             const data = await res.json();
+
+            console.log(data);
 
             if (data.type === "error") {
                 return { type: "reject", errorMessage: data.message };
@@ -331,8 +164,13 @@ async function initialize() {
     checkout = await stripe.initEmbeddedCheckout({
         fetchClientSecret,
         onShippingDetailsChange,
-        onComplete: (event) => {
+        onComplete: async (event) => {
+            console.log("🔔 Stripe checkout complete event:", event);
+
             if (event?.status === "complete") {
+                
+
+                
                 if (typeof clearCart === "function") {
                     clearCart();
                 } else {
@@ -348,73 +186,36 @@ async function initialize() {
 
     checkout.mount("#checkout");
 
-    // OPTIONAL: external summary if you still want it
-    // const session = checkout.session();
-    // updateSummaryFromSession(session);
-    // checkout.on("change", (updatedSession) => {
-    //   updateSummaryFromSession(updatedSession);
-    // });
 }
 
-
-// ---- submit handler ----
-
-async function handleSubmit(e) {
-    e.preventDefault();
-
-    if (!checkout) {
-        showMessage("Checkout is not ready yet. Please reload the page.");
-        return;
-    }
-
-    setLoading(true);
-
-    const emailInput = document.getElementById("email");
-    const email = emailInput ? emailInput.value : "";
-
-    const { isValid, message } = await validateEmail(email);
-    if (!isValid) {
-        if (message) showMessage(message);
-        setLoading(false);
-        return;
-    }
-
-    // Newsletter opt-in
+async function syncNewsletterPreference() {
     const subscribeCheckbox = document.getElementById("subscribe-checkbox");
-    const subscribe = subscribeCheckbox ? subscribeCheckbox.checked : false;
+    if (!subscribeCheckbox || !window.activeCheckoutSessionId) return;
 
-    if (subscribe && email) {
-        try {
-            await fetch(`${THIS_API_BASE}/newsletter-signup`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email })
-            });
-        } catch (err) {
-            console.warn("Newsletter signup failed:", err);
-        }
+    const subscribe = !!subscribeCheckbox.checked;
+
+    try {
+        await fetch(`${THIS_API_BASE}/newsletter-checkout-opt-in`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                session_id: window.activeCheckoutSessionId,
+                subscribe
+            }),
+        });
+    } catch (err) {
+        console.error("Failed to sync newsletter preference:", err);
     }
-
-    // const shippingMethod = getSelectedShippingMethod();
-    // if (!shippingMethod) {
-    //     showMessage("Select a shipping option after entering your address.");
-    //     setLoading(false);
-    //     return;
-    // }
-
-    // Confirm with Stripe
-    const { error } = await checkout.confirm();
-
-    if (error) {
-        showMessage(error.message);
-        setLoading(false);
-        return;
-    }
-
-    // On success, Stripe will redirect to YOUR_DOMAIN/stripe/return.html
 }
 
-// ---- shipping ----
+
+const subscribeCheckbox = document.getElementById("subscribe-checkbox");
+subscribeCheckbox.addEventListener("change", () => {
+    if (window.activeCheckoutSessionId) {
+        syncNewsletterPreference();
+    }
+});
+
 
 
 // ---- inventory + UI helpers ----
@@ -450,24 +251,4 @@ function showMessage(messageText) {
         messageContainer.classList.add("hidden");
         messageContainer.textContent = "";
     }, 4000);
-}
-
-function setLoading(isLoading) {
-    const submitBtn = document.querySelector("#submit");
-    const spinner = document.querySelector("#spinner");
-    const btnText = document.querySelector("#button-text");
-
-    if (!submitBtn || !spinner || !btnText) return;
-
-    if (isLoading) {
-        submitBtn.disabled = true;
-        submitBtn.dataset.locked = "true";
-        spinner.classList.remove("hidden");
-        btnText.classList.add("hidden");
-    } else {
-        submitBtn.disabled = false;
-        submitBtn.dataset.locked = "";
-        spinner.classList.add("hidden");
-        btnText.classList.remove("hidden");
-    }
 }
