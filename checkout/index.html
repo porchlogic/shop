@@ -285,6 +285,8 @@
             align-items: center;
             gap: 0.45rem;
             font-size: 0.85rem;
+            margin-top: 50px;
+            margin-bottom: 50px;
         }
 
         .subscribe-field input {
@@ -498,6 +500,113 @@
             display: none !important;
         }
 
+        .policy-footer {
+            margin-top: auto;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.65rem;
+            flex-wrap: wrap;
+            padding: 0.25rem 0.5rem 0.35rem;
+            letter-spacing: 0.04em;
+        }
+
+        .policy-footer__link {
+            background: none;
+            border: none;
+            padding: 0;
+            color: inherit;
+            text-decoration: underline;
+            text-underline-offset: 0.18em;
+            cursor: pointer;
+            font: inherit;
+        }
+
+        .policy-modal {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 1.5rem 1.25rem;
+            z-index: 20;
+        }
+
+        .policy-modal__backdrop {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.38);
+        }
+
+        .policy-modal__dialog {
+            position: relative;
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 0.75rem;
+            max-width: min(720px, 100%);
+            width: min(720px, 100%);
+            padding: 1.1rem 1.15rem 1.25rem;
+            box-shadow: 0 18px 48px rgba(0, 0, 0, 0.18);
+            display: flex;
+            flex-direction: column;
+            gap: 0.65rem;
+            z-index: 1;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .policy-modal__header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .policy-modal__title {
+            margin: 0;
+            font-size: 1rem;
+            letter-spacing: 0.06em;
+        }
+
+        .policy-modal__close {
+            border: 1px solid var(--border);
+            background: #f7f7f7;
+            border-radius: 0.4rem;
+            padding: 0.35rem 0.55rem;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+
+        .policy-content h3 {
+            margin: 0 0 0.35rem;
+            font-size: 0.95rem;
+        }
+
+        .policy-content p {
+            margin: 0 0 0.6rem;
+            line-height: 1.4;
+        }
+
+        .policy-content ol {
+            margin: 0.35rem 0 0.85rem 1.2rem;
+            padding: 0;
+            line-height: 1.45;
+        }
+
+        .policy-content li+li {
+            margin-top: 0.35rem;
+        }
+
+        .policy-content strong {
+            font-weight: 600;
+        }
+
+        body.modal-open {
+            overflow: hidden;
+        }
+
         @media (max-width: 540px) {
             body {
                 padding: 1.35rem 0.85rem 1.35rem 1.7rem;
@@ -551,12 +660,166 @@
             </label>
         </div>
 
-        
+        <footer class="policy-footer">
+            
+            <button type="button" class="policy-footer__link" data-policy-link="privacy">Privacy Policy</button>
+            <button type="button" class="policy-footer__link" data-policy-link="refund">Refund Policy</button>
+            <button type="button" class="policy-footer__link" data-policy-link="terms">Terms of Service</button>
+        </footer>
+    </main>
 
-        
+    <div class="policy-modal hidden" id="policy-modal" role="dialog" aria-modal="true" aria-labelledby="policy-modal-title">
+        <div class="policy-modal__backdrop" data-close-policy aria-label="Close policy"></div>
+        <div class="policy-modal__dialog" tabindex="-1">
+            <div class="policy-modal__header">
+                <h2 class="policy-modal__title" id="policy-modal-title">Policy</h2>
+                <button class="policy-modal__close" type="button" data-close-policy>Close</button>
+            </div>
+            <article class="policy-content" id="policy-content-privacy">
+                <h3>Privacy Policy</h3>
+                <p><strong>Last updated:</strong> <span data-policy-date></span></p>
+                <p>We collect only the information needed to process your order and operate this website.</p>
+                <ol>
+                    <li><strong>Information We Collect</strong><br>
+                        Name, email address, and shipping address<br>
+                        Payment details (processed securely by Stripe; we do not store card numbers)<br>
+                        Order history and basic site usage data (e.g., server logs)
+                    </li>
+                    <li><strong>How We Use This Information</strong><br>
+                        We use your information to: process and ship orders; communicate about your purchase; maintain internal records and prevent fraud. We do not sell or share your personal information with third parties, except for essential service providers such as Stripe and shipping carriers.
+                    </li>
+                    <li><strong>Data Retention</strong><br>
+                        Order information is kept for business records, accounting, and legal compliance. We retain only what is necessary.
+                    </li>
+                    <li><strong>Cookies</strong><br>
+                        We may use basic session cookies to support site functionality. We do not use ad tracking cookies unless otherwise noted.
+                    </li>
+                    <li><strong>Your Rights</strong><br>
+                        If you want to access, update, or delete your personal information, contact us and we’ll assist where legally permitted.
+                    </li>
+                    <li><strong>Contact</strong><br>
+                        For questions about this policy, email: support@porchlogic.com
+                    </li>
+                </ol>
+            </article>
+            <article class="policy-content hidden" id="policy-content-refund">
+                <h3>Refund &amp; Return Policy</h3>
+                <p><strong>Last updated:</strong> <span data-policy-date></span></p>
+                <p>We aim to make sure our products reach you in good condition. Because we produce small-batch items, we keep returns simple and minimal.</p>
+                <ol>
+                    <li><strong>All Sales Final</strong><br>
+                        All purchases are final unless the item arrives defective or damaged.
+                    </li>
+                    <li><strong>Defective or Damaged Items</strong><br>
+                        If your order arrives damaged or isn’t functioning as expected: contact us within 7 days of delivery and include your order number and a description of the issue. If approved, we may offer a replacement, repair, or refund at our discretion.
+                    </li>
+                    <li><strong>Return Shipping</strong><br>
+                        For defective or damaged items, we will cover return shipping if a return is required. For any other reason, customers are responsible for shipping costs.
+                    </li>
+                    <li><strong>Non-Returnable Items</strong><br>
+                        Custom or personalized items; digital products (if applicable); items showing signs of modification or misuse.
+                    </li>
+                    <li><strong>How to Start a Return</strong><br>
+                        Email support@porchlogic.com with your order number and details about the issue. We’ll guide you through the process if a return is authorized.
+                    </li>
+                </ol>
+            </article>
+            <article class="policy-content hidden" id="policy-content-terms">
+                <h3>Terms of Service</h3>
+                <p><strong>Last updated:</strong> <span data-policy-date></span></p>
+                <ol>
+                    <li><strong>Use of This Website</strong><br>
+                        This site and its content are provided on an “as is” basis. We may update products, pricing, or site features at any time without notice.
+                    </li>
+                    <li><strong>Orders and Payment</strong><br>
+                        Orders are processed after successful payment. We reserve the right to refuse or cancel an order if an item is unavailable or if there is a pricing or listing error.
+                    </li>
+                    <li><strong>Returns and Refunds</strong><br>
+                        Our return and refund policy is described on the Returns page. By purchasing from this site, you agree to those terms.
+                    </li>
+                    <li><strong>Shipping</strong><br>
+                        Shipping timelines and methods are described on the Shipping page. Once a package is handed to the carrier, risk of loss transfers to the customer. International customers are responsible for any import taxes or duties.
+                    </li>
+                    <li><strong>Product Use</strong><br>
+                        Products must be used responsibly and in accordance with local laws. We are not liable for damage resulting from misuse, modification, or improper handling.
+                    </li>
+                    <li><strong>Limitation of Liability</strong><br>
+                        To the fullest extent permitted by law, we are not responsible for any indirect, incidental, or consequential damages arising from use of our products or website. Our total liability for any claim will not exceed the amount paid for the product in question.
+                    </li>
+                    <li><strong>Privacy</strong><br>
+                        Our Privacy Policy explains what information we collect and how it is used. By using this site, you consent to those practices.
+                    </li>
+                    <li><strong>Changes to These Terms</strong><br>
+                        We may update these Terms from time to time. Continued use of the site constitutes acceptance of the updated Terms.
+                    </li>
+                    <li><strong>Contact</strong><br>
+                        If you have questions about these Terms, contact us at: support@porchlogic.com
+                    </li>
+                </ol>
+            </article>
+        </div>
+    </div>
 
-        </main>
+    <script>
+        (() => {
+            const modal = document.getElementById("policy-modal");
+            if (!modal) return;
 
+            const dialog = modal.querySelector(".policy-modal__dialog");
+            const titleEl = document.getElementById("policy-modal-title");
+            const policies = {
+                privacy: document.getElementById("policy-content-privacy"),
+                refund: document.getElementById("policy-content-refund"),
+                terms: document.getElementById("policy-content-terms")
+            };
+            const policyNames = {
+                privacy: "Privacy Policy",
+                refund: "Refund Policy",
+                terms: "Terms of Service"
+            };
+
+            const dateString = new Date().toLocaleDateString("en-US", {
+                month: "long",
+                day: "numeric",
+                year: "numeric"
+            });
+            modal.querySelectorAll("[data-policy-date]").forEach((el) => {
+                el.textContent = dateString;
+            });
+
+            const closeModal = () => {
+                modal.classList.add("hidden");
+                document.body.classList.remove("modal-open");
+            };
+
+            const openModal = (key) => {
+                const active = policies[key];
+                if (!active) return;
+
+                Object.values(policies).forEach((el) => el.classList.add("hidden"));
+                active.classList.remove("hidden");
+
+                if (titleEl) titleEl.textContent = policyNames[key] || "Policy";
+                modal.classList.remove("hidden");
+                document.body.classList.add("modal-open");
+                dialog?.focus();
+            };
+
+            document.querySelectorAll("[data-policy-link]").forEach((button) => {
+                button.addEventListener("click", () => openModal(button.dataset.policyLink));
+            });
+
+            modal.querySelectorAll("[data-close-policy]").forEach((el) => {
+                el.addEventListener("click", closeModal);
+            });
+
+            document.addEventListener("keydown", (event) => {
+                if (event.key === "Escape" && !modal.classList.contains("hidden")) {
+                    closeModal();
+                }
+            });
+        })();
+    </script>
     <script src="https://js.stripe.com/basil/stripe.js"></script>
     <script src="../cart/cart.js"></script>
     <script src="./checkout.js"></script>
