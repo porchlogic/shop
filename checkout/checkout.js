@@ -9,7 +9,7 @@ const TEST_MODE_KEY = "porchlogic_checkout_test_mode";
 let stripe = null;
 let checkout = null;
 let selectedShipping = null;
-let testModeEnabled = true;
+let testModeEnabled = false;
 const testModeBanner = document.getElementById("test-mode-banner");
 
 function getStripeKey() {
@@ -52,15 +52,15 @@ function initTestMode() {
     }
 }
 
-document.addEventListener("keydown", (event) => {
-    const isToggle =
-        (event.key === "t" || event.key === "T") &&
-        // event.ctrlKey &&
-        event.shiftKey;
-    if (!isToggle) return;
-    event.preventDefault();
-    setTestMode(!testModeEnabled);
-});
+// document.addEventListener("keydown", (event) => {
+//     const isToggle =
+//         (event.key === "t" || event.key === "T") &&
+//         // event.ctrlKey &&
+//         event.shiftKey;
+//     if (!isToggle) return;
+//     event.preventDefault();
+//     setTestMode(!testModeEnabled);
+// });
 
 initTestMode();
 
