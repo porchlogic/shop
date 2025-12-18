@@ -13,6 +13,7 @@
             --border: #bababa;
             --text-main: #111;
             --text-muted: #777;
+            --text-link: rgb(97, 144, 160);
             --accent: #ff9a2c;
             --base1: #d3cbbf;
             --base2: #b8b0a6;
@@ -135,6 +136,25 @@
             aspect-ratio: 1 / 1;
             border-radius: 0.5rem;
             overflow: hidden;
+        }
+
+        .video-link {
+            align-self: flex-end;
+            margin-right: 0.25rem;
+            font-size: 0.8rem;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            text-decoration: none;
+            color: var(--text-link);
+            display: inline-flex;
+            gap: 0.35rem;
+            align-items: center;
+        }
+
+        .video-link::after {
+            content: "›";
+            font-size: 1rem;
+            line-height: 1;
         }
 
         section.attributes {
@@ -594,6 +614,11 @@
             </div>
         </section>
 
+        <a class="video-link" href="https://www.youtube.com/watch?v=RU58WwQE1nQ&t=2s" target="_blank"
+            rel="noreferrer noopener">
+            video
+        </a>
+
         <section class="attributes">
             <div class="attribute attribute--material">
                 <h2 class="attribute__label">Material</h2>
@@ -639,9 +664,9 @@
 
         <section class="cta">
             <div class="cta__price">
-                <span class="price-note">🎄 25% OFF!</span>
+                <!-- <span class="price-note">🎄 25% OFF!</span> -->
                 <div class="price-row">
-                    <span class="price price--original">$32</span>
+                    <!-- <span class="price price--original">$32</span> -->
                     <span class="price">$24</span>
                 </div>
             </div>
