@@ -5,6 +5,13 @@ const STRIPE_KEYS = {
 };
 
 const THIS_API_BASE = "https://api.porchlogic.com";
+// const isLocal =
+//     location.hostname === "localhost" ||
+//     location.hostname === "127.0.0.1";
+// const THIS_API_BASE = isLocal
+//     ? "http://localhost:4242"
+//     : "https://api.porchlogic.com";
+
 const TEST_MODE_KEY = "porchlogic_checkout_test_mode";
 let stripe = null;
 let checkout = null;

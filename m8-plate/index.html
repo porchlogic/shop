@@ -39,7 +39,7 @@
             margin: 0;
             padding: 0;
             width: 100%;
-            height: 100%;
+            /* height: 100%; */
         }
 
         body {
@@ -105,11 +105,20 @@
             margin: 0;
             font-size: clamp(1.5rem, 6vw, 2.75rem);
             letter-spacing: 0.12em;
-            font-family: "stealth57", sans-serif;
+            /* font-family: "stealth57", sans-serif; */
             color: var(--text-muted);
             text-align: left;
             white-space: nowrap;
             padding: 0.5rem 0 0.25rem;
+        }
+
+        .page-footer {
+            position: fixed;
+            bottom: 8px;
+            left: 3px;
+            transform: translateY(100%) rotate(-90deg);
+            transform-origin: top left;
+            font-size: 0.75rem;
         }
 
         .shop-link {
@@ -320,7 +329,118 @@
             justify-content: center;
             gap: 0.55rem;
             text-align: center;
-            padding: 0.6rem 0.25rem 0.25rem;
+            padding: 0.6rem 0.25rem 1.25rem 0.25rem;
+        }
+
+        section.keycaps {
+            border: 1px solid var(--border);
+            padding: 0.75rem 1rem 0.65rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.55rem;
+        }
+
+        .keycaps__header {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .keycaps__label {
+            margin: 0;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+            color: var(--text-muted);
+        }
+
+        .keycaps__note {
+            margin: 0;
+            font-size: 0.65rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+
+        .keycaps__rows {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        .keycaps__row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            padding: 0.45rem 0.2rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .keycaps__row:first-child {
+            border-top: none;
+        }
+
+        .keycaps__row.is-zero {
+            opacity: 0.5;
+        }
+
+        .keycaps__name {
+            font-size: 0.9rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--text-main);
+        }
+
+        .keycaps__meta {
+            font-size: 0.65rem;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+
+        .stepper {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            padding: 0.15rem 0.45rem;
+            background: rgba(255, 255, 255, 0.35);
+        }
+
+        .stepper__btn {
+            border: none;
+            background: transparent;
+            color: var(--text-main);
+            font-size: 0.7rem;
+            cursor: pointer;
+            padding: 0.2rem 0.35rem;
+        }
+
+        .stepper__btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.35;
+        }
+
+        .stepper__input {
+            width: 2.1rem;
+            border: none;
+            background: transparent;
+            text-align: center;
+            font-size: 0.8rem;
+            letter-spacing: 0.12em;
+            color: var(--text-main);
+            font-variant-numeric: tabular-nums;
+            outline: none;
+        }
+
+        .stepper__input::-webkit-outer-spin-button,
+        .stepper__input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
         }
 
         .cta__price {
@@ -662,6 +782,51 @@
             </div>
         </section>
 
+        <section class="keycaps" aria-label="Keycaps add-on">
+            <div class="keycaps__header">
+                <h2 class="keycaps__label">Add keycaps</h2>
+                <p class="keycaps__note">$1 each · max 8 per color</p>
+            </div>
+            <div class="keycaps__rows">
+                <div class="keycaps__row is-zero" data-keycap-row="Smoke">
+                    <div>
+                        <div class="keycaps__name">Smoke</div>
+                        <div class="keycaps__meta">Keycaps</div>
+                    </div>
+                    <div class="stepper" data-keycap="Smoke">
+                        <button type="button" class="stepper__btn" data-step="-1"
+                            aria-label="Decrease smoke keycaps">
+                            ▼
+                        </button>
+                        <input type="number" class="stepper__input" min="0" max="8" value="0" inputmode="numeric"
+                            aria-label="Smoke keycaps quantity">
+                        <button type="button" class="stepper__btn" data-step="1"
+                            aria-label="Increase smoke keycaps">
+                            ▲
+                        </button>
+                    </div>
+                </div>
+                <div class="keycaps__row is-zero" data-keycap-row="Clear">
+                    <div>
+                        <div class="keycaps__name">Clear</div>
+                        <div class="keycaps__meta">Keycaps</div>
+                    </div>
+                    <div class="stepper" data-keycap="Clear">
+                        <button type="button" class="stepper__btn" data-step="-1"
+                            aria-label="Decrease clear keycaps">
+                            ▼
+                        </button>
+                        <input type="number" class="stepper__input" min="0" max="8" value="0" inputmode="numeric"
+                            aria-label="Clear keycaps quantity">
+                        <button type="button" class="stepper__btn" data-step="1"
+                            aria-label="Increase clear keycaps">
+                            ▲
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <section class="cta">
             <div class="cta__price">
                 <!-- <span class="price-note">🎄 25% OFF!</span> -->
@@ -677,9 +842,9 @@
         <div class="porch-logic-mark">porchLogic</div>
     </main>
 
-    <!-- <footer class="page-footer">
-        &copy; 2024 Porch Logic. All rights reserved.
-    </footer> -->
+    <footer class="page-footer">
+        &copy; 2025 Porch Logic
+    </footer>
 
     <!-- Full-screen glyph editor modal -->
     <div id="glyph-modal" class="glyph-modal hidden">
@@ -841,12 +1006,28 @@
                 const glyphThumb = document.getElementById('glyph-thumb');
                 const glyphCanvas = document.getElementById('glyph-thumb-canvas');
                 const buyButton = document.getElementById('add-to-cart');
+                const keycapSteppers = Array.from(
+                    document.querySelectorAll('.stepper[data-keycap]')
+                );
+                const priceDisplay = document.querySelector('.cta__price .price');
 
                 const state = {
                     color: '',
                     customGlyphEnabled: false,
                     glyphData: null,
                     showOnLive: false,
+                    keycaps: {
+                        Smoke: 0,
+                        Clear: 0,
+                    },
+                };
+
+                const updatePriceDisplay = () => {
+                    if (!priceDisplay) return;
+                    const keycapTotal =
+                        (state.keycaps.Smoke || 0) + (state.keycaps.Clear || 0);
+                    const total = PRODUCT.price + keycapTotal * 1.0;
+                    priceDisplay.textContent = `$${total.toFixed(2)}`;
                 };
 
                 const setColor = (color) => {
@@ -932,6 +1113,58 @@
                     });
                 }
 
+                const clampKeycaps = (value) => {
+                    const parsed = Number(value);
+                    if (!Number.isFinite(parsed)) return 0;
+                    return Math.min(8, Math.max(0, Math.floor(parsed)));
+                };
+
+                const syncKeycapUI = (color) => {
+                    const count = state.keycaps[color] || 0;
+                    const stepper = keycapSteppers.find(
+                        (el) => el.dataset.keycap === color
+                    );
+                    if (!stepper) return;
+                    const row = document.querySelector(`[data-keycap-row="${color}"]`);
+                    const input = stepper.querySelector('.stepper__input');
+                    const down = stepper.querySelector('[data-step="-1"]');
+                    const up = stepper.querySelector('[data-step="1"]');
+                    if (input) input.value = String(count);
+                    if (down) down.disabled = count <= 0;
+                    if (up) up.disabled = count >= 8;
+                    if (row) row.classList.toggle('is-zero', count === 0);
+                };
+
+                const setKeycapCount = (color, value) => {
+                    state.keycaps[color] = clampKeycaps(value);
+                    syncKeycapUI(color);
+                    updatePriceDisplay();
+                };
+
+                keycapSteppers.forEach((stepper) => {
+                    const color = stepper.dataset.keycap;
+                    const input = stepper.querySelector('.stepper__input');
+                    const buttons = stepper.querySelectorAll('[data-step]');
+
+                    buttons.forEach((btn) => {
+                        btn.addEventListener('click', () => {
+                            const step = Number(btn.dataset.step || 0);
+                            setKeycapCount(color, (state.keycaps[color] || 0) + step);
+                        });
+                    });
+
+                    if (input) {
+                        input.addEventListener('change', () => {
+                            setKeycapCount(color, input.value);
+                        });
+                        input.addEventListener('blur', () => {
+                            setKeycapCount(color, input.value);
+                        });
+                    }
+
+                    setKeycapCount(color, state.keycaps[color] || 0);
+                });
+
                 if (buyButton) {
                     buyButton.addEventListener('click', () => {
                         const item = {
@@ -945,14 +1178,44 @@
                         if (typeof addItemToCart === 'function') {
                             addItemToCart(item);
                         }
+
+                        const keycapItems = [];
+                        const keycapConfigs = [
+                            { color: 'Smoke', id: 'm8_keycap_smoke' },
+                            { color: 'Clear', id: 'm8_keycap_clear' },
+                        ];
+
+                        keycapConfigs.forEach((cfg) => {
+                            const count = state.keycaps[cfg.color] || 0;
+                            if (count <= 0) return;
+                            const keycapItem = {
+                                id: cfg.id,
+                                name: 'M8 Keycap',
+                                price: 1.0,
+                                quantity: count,
+                                color: cfg.color,
+                            };
+                            keycapItems.push(keycapItem);
+                            if (typeof addItemToCart === 'function') {
+                                addItemToCart(keycapItem);
+                            }
+                        });
+
                         if (typeof showCartPopup === 'function') {
-                            showCartPopup(`${item.name} added to cart.`);
+                            const keycapLine = keycapItems
+                                .map((k) => `${k.quantity} ${k.color.toLowerCase()} keycaps`)
+                                .join(', ');
+                            const message = keycapLine
+                                ? `${item.name} added to cart. + ${keycapLine}.`
+                                : `${item.name} added to cart.`;
+                            showCartPopup(message);
                         }
                     });
                 }
 
                 setColor(initialColor);
                 syncGlyphUI();
+                updatePriceDisplay();
             }
 
             function wireCartPopup() {
