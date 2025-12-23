@@ -107,6 +107,22 @@
             box-shadow: inset 0 0 0 1px #fff;
         }
 
+        .shipping-banner {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            font-size: 0.7rem;
+            padding: 0.65rem 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 0.55rem;
+            background: #f5efe3;
+            color: #5b3a00;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75);
+            text-align: center;
+        }
+
         .cart-shell {
             flex: 1;
             display: flex;
@@ -489,6 +505,7 @@
 
 <body class="cart-page">
     <main>
+        <div class="shipping-banner">Orders shipping December 29th</div>
         <header>
             <h1>CART</h1>
             <a href="../" class="shop-link" aria-label="Back to shop">
