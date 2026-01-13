@@ -82,8 +82,14 @@ initialize().catch(err => {
 async function initialize() {
     console.log("🛒 Initializing embedded checkout…");
     const cartItems = getCartItems();
+    // Normalize glyph flags so backend receives an explicit true/false per item
+    const preparedCartItems = (cartItems || []).map((item) => ({
+        ...item,
+        customGlyphEnabled: !!item.customGlyphEnabled,
+        showOnLive: !!item.showOnLive,
+    }));
 
-    if (!cartItems || cartItems.length === 0) {
+    if (!preparedCartItems || preparedCartItems.length === 0) {
         console.warn("🛒 No cart items, skipping checkout init.");
         return;
     }
@@ -93,7 +99,7 @@ async function initialize() {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-                cartItems
+                cartItems: preparedCartItems
             }),
         });
 
