@@ -1,0 +1,785 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Hamiltonian Path – Safe Drag Deform (2×2 Flips)</title>
+    <style>
+        :root {
+            color-scheme: dark;
+            --bg: #0b0f14;
+            --panel: #111827;
+            --muted: #94a3b8;
+            --text: #e5e7eb;
+            --accent: #60a5fa;
+            --accent2: #34d399;
+            --warn: #fb7185;
+            --border: #243244;
+        }
+
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            background: var(--bg);
+            color: var(--text);
+            font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+        }
+
+        #app {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            height: 100%;
+        }
+
+        #panel {
+            padding: 14px 14px 10px;
+            border-right: 1px solid var(--border);
+            background: linear-gradient(180deg, rgba(17, 24, 39, .95), rgba(17, 24, 39, .75));
+            overflow: auto;
+        }
+
+        h1 {
+            font-size: 14px;
+            margin: 0 0 10px;
+            letter-spacing: .02em;
+            font-weight: 700;
+        }
+
+        .p {
+            font-size: 12px;
+            color: var(--muted);
+            line-height: 1.35;
+            margin: 0 0 12px;
+        }
+
+        .row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin: 10px 0;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        label {
+            font-size: 11px;
+            color: var(--muted);
+        }
+
+        input[type="number"],
+        input[type="range"],
+        button,
+        select {
+            font: inherit;
+        }
+
+        input[type="number"] {
+            background: #0b1220;
+            border: 1px solid var(--border);
+            color: var(--text);
+            border-radius: 10px;
+            padding: 10px 10px;
+            outline: none;
+        }
+
+        input[type="number"]:focus {
+            border-color: rgba(96, 165, 250, .6);
+            box-shadow: 0 0 0 3px rgba(96, 165, 250, .18);
+        }
+
+        input[type="range"] {
+            width: 100%;
+        }
+
+        .btnrow {
+            display: flex;
+            gap: 10px;
+            margin: 10px 0 12px;
+        }
+
+        button {
+            flex: 1;
+            border: 1px solid var(--border);
+            background: #0b1220;
+            color: var(--text);
+            border-radius: 12px;
+            padding: 10px 10px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            border-color: rgba(96, 165, 250, .55);
+        }
+
+        button:active {
+            transform: translateY(1px);
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            color: var(--muted);
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            padding: 6px 10px;
+            background: rgba(11, 18, 32, .6);
+        }
+
+        .badge b {
+            color: var(--text);
+            font-weight: 700;
+        }
+
+        hr {
+            border: 0;
+            border-top: 1px solid var(--border);
+            margin: 12px 0;
+        }
+
+        #stage {
+            position: relative;
+            overflow: hidden;
+        }
+
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        #hint {
+            position: absolute;
+            left: 14px;
+            bottom: 14px;
+            background: rgba(11, 18, 32, .68);
+            border: 1px solid var(--border);
+            color: var(--muted);
+            border-radius: 14px;
+            padding: 10px 12px;
+            font-size: 12px;
+            max-width: min(520px, calc(100% - 28px));
+            backdrop-filter: blur(6px);
+        }
+
+        #hint b {
+            color: var(--text);
+        }
+
+        .small {
+            font-size: 11px;
+            color: var(--muted);
+        }
+
+        .kpi {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .kpi .line {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .kpi .line span:last-child {
+            color: var(--text);
+        }
+
+        .toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 10px 10px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: rgba(11, 18, 32, .6);
+        }
+
+        .toggle label {
+            margin: 0;
+            font-size: 12px;
+            color: var(--text);
+        }
+
+        .toggle input {
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div id="panel">
+            <h1>Hamiltonian Path Editor (safe “2×2 flips”)</h1>
+            <p class="p">
+                Click + drag to locally bias the path. This demo only applies edits that can be <b>proven safe</b>
+                by testing candidate 2×2 flips and rejecting anything that breaks the “single path hits every cell once”
+                rule.
+            </p>
+
+            <div class="row">
+                <div class="field">
+                    <label>Grid width (cells)</label>
+                    <input id="w" type="number" min="4" max="200" step="1" value="40" />
+                </div>
+                <div class="field">
+                    <label>Grid height (cells)</label>
+                    <input id="h" type="number" min="4" max="200" step="1" value="28" />
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="field">
+                    <label>Cell size (px)</label>
+                    <input id="cell" type="number" min="6" max="40" step="1" value="18" />
+                </div>
+                <div class="field">
+                    <label>Scramble flips</label>
+                    <input id="scrambleN" type="number" min="0" max="500000" step="100" value="6000" />
+                </div>
+            </div>
+
+            <div class="btnrow">
+                <button id="reset">Reset (serpentine)</button>
+                <button id="scramble">Scramble</button>
+            </div>
+
+            <div class="toggle">
+                <label for="showGrid">Show grid</label>
+                <input id="showGrid" type="checkbox" checked />
+            </div>
+            <div class="toggle" style="margin-top:10px;">
+                <label for="showNodes">Show endpoints</label>
+                <input id="showNodes" type="checkbox" checked />
+            </div>
+
+            <hr />
+
+            <div class="badge"><b>Brush:</b> drag mostly ↔ = horizontal bias, mostly ↕ = vertical bias</div>
+
+            <div class="kpi">
+                <div class="line"><span>Cells</span><span id="kCells">–</span></div>
+                <div class="line"><span>Valid Hamiltonian path</span><span id="kValid">–</span></div>
+                <div class="line"><span>Last flip</span><span id="kFlip">–</span></div>
+            </div>
+
+            <hr />
+            <div class="small">
+                Notes:
+                <ul>
+                    <li>This is intentionally constrained: arbitrary dragging would sometimes be impossible to repair.
+                    </li>
+                    <li>The only edit primitive is a 2×2 “plaquette flip” (swap two parallel edges).</li>
+                    <li>Every attempted flip is validated; invalid ones are reverted.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="stage">
+            <canvas id="cv"></canvas>
+            <div id="hint">
+                <b>Try this:</b> scramble, then click+drag across an area. You should see the path locally re-orient
+                while still visiting every cell once.
+            </div>
+        </div>
+    </div>
+
+    <script>
+	(() => {
+		// ---------- Utilities ----------
+		const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+		const now = () => performance.now();
+
+		// ---------- Graph representation: each node has up to 2 neighbors ----------
+		// adj0[id], adj1[id] are neighbor IDs or -1.
+		let W = 40, H = 28, CELL = 18;
+		let N = 0;
+		let adj0 = [], adj1 = [];
+		let endpoints = {a:-1, b:-1};
+
+		function idOf(x, y){ return y * W + x; }
+		function xyOf(id){ return {x: id % W, y: Math.floor(id / W)}; }
+
+		function deg(id){
+			let d = 0;
+			if(adj0[id] !== -1) d++;
+			if(adj1[id] !== -1) d++;
+			return d;
+		}
+		function hasEdge(a, b){
+			return (adj0[a] === b || adj1[a] === b);
+		}
+		function addEdge(a, b){
+			if(a === b) return false;
+			if(hasEdge(a,b)) return false;
+			// add to a
+			if(adj0[a] === -1) adj0[a] = b;
+			else if(adj1[a] === -1) adj1[a] = b;
+			else return false;
+			// add to b
+			if(adj0[b] === -1) adj0[b] = a;
+			else if(adj1[b] === -1) adj1[b] = a;
+			else{
+				// rollback
+				if(adj0[a] === b) adj0[a] = -1;
+				else if(adj1[a] === b) adj1[a] = -1;
+				return false;
+			}
+			return true;
+		}
+		function removeEdge(a, b){
+			let ok = false;
+			if(adj0[a] === b){ adj0[a] = -1; ok = true; }
+			else if(adj1[a] === b){ adj1[a] = -1; ok = true; }
+
+			if(adj0[b] === a){ adj0[b] = -1; ok = true; }
+			else if(adj1[b] === a){ adj1[b] = -1; ok = true; }
+
+			return ok;
+		}
+		function neighbors(id){
+			const out = [];
+			if(adj0[id] !== -1) out.push(adj0[id]);
+			if(adj1[id] !== -1) out.push(adj1[id]);
+			return out;
+		}
+
+		function clearGraph(){
+			N = W * H;
+			adj0 = new Array(N).fill(-1);
+			adj1 = new Array(N).fill(-1);
+			endpoints = {a:-1, b:-1};
+		}
+
+		// Build the serpentine Hamiltonian path over cell centers.
+		function buildSerpentine(){
+			clearGraph();
+			const order = [];
+			for(let x = 0; x < W; x++){
+				if((x & 1) === 0){
+					for(let y = 0; y < H; y++) order.push(idOf(x,y));
+				}else{
+					for(let y = H-1; y >= 0; y--) order.push(idOf(x,y));
+				}
+			}
+			for(let i = 0; i < order.length - 1; i++){
+				addEdge(order[i], order[i+1]);
+			}
+			endpoints.a = order[0];
+			endpoints.b = order[order.length - 1];
+		}
+
+		// Validate: must be a single simple path visiting all nodes exactly once.
+		function validatePath(){
+			// degree constraints + exactly two degree-1 endpoints
+			let d1 = 0;
+			let start = -1;
+			for(let i = 0; i < N; i++){
+				const d = deg(i);
+				if(d === 1){ d1++; start = i; }
+				else if(d === 2) {}
+				else return {ok:false, reason:"bad-degree"};
+			}
+			if(d1 !== 2) return {ok:false, reason:"need-2-endpoints"};
+
+			// walk from one endpoint, ensure visits all exactly once
+			const seen = new Uint8Array(N);
+			let prev = -1;
+			let cur = start;
+			let count = 0;
+
+			while(true){
+				if(seen[cur]) return {ok:false, reason:"cycle/revisit"};
+				seen[cur] = 1;
+				count++;
+
+				const ns = neighbors(cur);
+				let nxt = -1;
+				if(ns.length === 0) return {ok:false, reason:"isolated"};
+				if(ns.length === 1){
+					nxt = ns[0];
+					if(nxt === prev) break; // reached the other endpoint
+				}else{ // 2
+					nxt = (ns[0] !== prev) ? ns[0] : ns[1];
+				}
+				prev = cur;
+				cur = nxt;
+			}
+
+			if(count !== N) return {ok:false, reason:"disconnected"};
+			return {ok:true, reason:"ok"};
+		}
+
+		// Find endpoints (degree-1 nodes)
+		function findEndpoints(){
+			let a = -1, b = -1;
+			for(let i = 0; i < N; i++){
+				if(deg(i) === 1){
+					if(a === -1) a = i;
+					else { b = i; break; }
+				}
+			}
+			endpoints.a = a;
+			endpoints.b = b;
+		}
+
+		// Try a safe 2×2 flip at top-left (x,y).
+		// "PreferHorizontal" means: if block currently has vertical-pair edges, flip to horizontals.
+		function tryPlaquetteFlip(x, y, preferHorizontal){
+			if(x < 0 || y < 0 || x >= W-1 || y >= H-1) return {did:false, why:"oob"};
+
+			const A = idOf(x,y);
+			const B = idOf(x+1,y);
+			const C = idOf(x,y+1);
+			const D = idOf(x+1,y+1);
+
+			// Keep it simple: don't flip if any cell is an endpoint.
+			if(deg(A) !== 2 || deg(B) !== 2 || deg(C) !== 2 || deg(D) !== 2) return {did:false, why:"endpoint/deg"};
+
+			const vPair = hasEdge(A,C) && hasEdge(B,D) && !hasEdge(A,B) && !hasEdge(C,D);
+			const hPair = hasEdge(A,B) && hasEdge(C,D) && !hasEdge(A,C) && !hasEdge(B,D);
+
+			let mode = "";
+			if(vPair) mode = "V";
+			else if(hPair) mode = "H";
+			else return {did:false, why:"no-pair"};
+
+			// decide whether we actually want to flip
+			if(preferHorizontal && mode === "H") return {did:false, why:"already-H"};
+			if(!preferHorizontal && mode === "V") return {did:false, why:"already-V"};
+
+			// apply candidate
+			const removed = [];
+			const added = [];
+
+			if(mode === "V"){
+				removed.push([A,C],[B,D]);
+				added.push([A,B],[C,D]);
+			}else{ // mode === "H"
+				removed.push([A,B],[C,D]);
+				added.push([A,C],[B,D]);
+			}
+
+			for(const [u,v] of removed) removeEdge(u,v);
+			let okAdd = true;
+			for(const [u,v] of added){
+				if(!addEdge(u,v)){ okAdd = false; break; }
+			}
+			if(!okAdd){
+				// rollback hard: rebuild removed, remove added
+				for(const [u,v] of added) removeEdge(u,v);
+				for(const [u,v] of removed) addEdge(u,v);
+				return {did:false, why:"add-failed"};
+			}
+
+			const val = validatePath();
+			if(!val.ok){
+				// rollback
+				for(const [u,v] of added) removeEdge(u,v);
+				for(const [u,v] of removed) addEdge(u,v);
+				return {did:false, why:"invalid:"+val.reason};
+			}
+
+			findEndpoints();
+			return {did:true, why:"flip-"+mode+"->"+(mode==="V"?"H":"V")};
+		}
+
+		// Scramble by attempting random valid plaquette flips.
+		function scramble(flips){
+			const t0 = now();
+			let done = 0;
+			let tries = 0;
+			const maxTries = flips * 20 + 2000;
+
+			while(done < flips && tries < maxTries){
+				tries++;
+				const x = (Math.random() * (W-1)) | 0;
+				const y = (Math.random() * (H-1)) | 0;
+				const preferH = Math.random() < 0.5;
+				const r = tryPlaquetteFlip(x, y, preferH);
+				if(r.did) done++;
+			}
+			const t1 = now();
+			return {done, tries, ms:(t1-t0)};
+		}
+
+		// ---------- Canvas + Rendering ----------
+		const cv = document.getElementById("cv");
+		const ctx = cv.getContext("2d", {alpha:false});
+
+		let showGrid = true;
+		let showNodes = true;
+
+		function resizeCanvas(){
+			const stage = document.getElementById("stage");
+			const rect = stage.getBoundingClientRect();
+			cv.width = Math.floor(rect.width * devicePixelRatio);
+			cv.height = Math.floor(rect.height * devicePixelRatio);
+			ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
+			draw();
+		}
+
+		function cellToPx(x, y){
+			// Center the grid in the canvas
+			const pad = 20;
+			const gw = W * CELL;
+			const gh = H * CELL;
+			const ox = (cv.clientWidth - gw) * 0.5;
+			const oy = (cv.clientHeight - gh) * 0.5;
+			return {
+				x: ox + x * CELL + CELL * 0.5,
+				y: oy + y * CELL + CELL * 0.5
+			};
+		}
+
+		function pxToCell(px, py){
+			const gw = W * CELL;
+			const gh = H * CELL;
+			const ox = (cv.clientWidth - gw) * 0.5;
+			const oy = (cv.clientHeight - gh) * 0.5;
+			const x = (px - ox) / CELL;
+			const y = (py - oy) / CELL;
+			return {x, y};
+		}
+
+		function draw(){
+			// background
+			ctx.fillStyle = "#070b10";
+			ctx.fillRect(0,0,cv.clientWidth, cv.clientHeight);
+
+			// optional grid
+			if(showGrid){
+				const gw = W * CELL;
+				const gh = H * CELL;
+				const ox = (cv.clientWidth - gw) * 0.5;
+				const oy = (cv.clientHeight - gh) * 0.5;
+
+				ctx.strokeStyle = "rgba(148,163,184,0.12)";
+				ctx.lineWidth = 1;
+
+				ctx.beginPath();
+				for(let x = 0; x <= W; x++){
+					const xx = ox + x * CELL;
+					ctx.moveTo(xx, oy);
+					ctx.lineTo(xx, oy + gh);
+				}
+				for(let y = 0; y <= H; y++){
+					const yy = oy + y * CELL;
+					ctx.moveTo(ox, yy);
+					ctx.lineTo(ox + gw, yy);
+				}
+				ctx.stroke();
+			}
+
+			// draw the path by walking it from an endpoint
+			const val = validatePath();
+
+			let start = endpoints.a;
+			if(start === -1){
+				findEndpoints();
+				start = endpoints.a;
+			}
+
+			ctx.lineJoin = "round";
+			ctx.lineCap = "round";
+			ctx.lineWidth = Math.max(2, Math.floor(CELL * 0.18));
+			ctx.strokeStyle = "rgba(96,165,250,0.95)";
+
+			if(val.ok && start !== -1){
+				ctx.beginPath();
+				const seen = new Uint8Array(N);
+				let prev = -1;
+				let cur = start;
+
+				while(true){
+					const p = xyOf(cur);
+					const c = cellToPx(p.x, p.y);
+					if(prev === -1) ctx.moveTo(c.x, c.y);
+					else ctx.lineTo(c.x, c.y);
+
+					seen[cur] = 1;
+					const ns = neighbors(cur);
+					let nxt = -1;
+
+					if(ns.length === 1){
+						nxt = ns[0];
+						if(nxt === prev) break;
+					}else{
+						nxt = (ns[0] !== prev) ? ns[0] : ns[1];
+					}
+					prev = cur;
+					cur = nxt;
+					if(seen[cur]) break;
+				}
+				ctx.stroke();
+			}
+
+			// endpoints
+			if(showNodes){
+				const a = endpoints.a, b = endpoints.b;
+				if(a !== -1){
+					const p = xyOf(a);
+					const c = cellToPx(p.x, p.y);
+					ctx.fillStyle = "rgba(52,211,153,0.95)";
+					ctx.beginPath();
+					ctx.arc(c.x, c.y, Math.max(3, CELL * 0.22), 0, Math.PI*2);
+					ctx.fill();
+				}
+				if(b !== -1){
+					const p = xyOf(b);
+					const c = cellToPx(p.x, p.y);
+					ctx.fillStyle = "rgba(251,113,133,0.95)";
+					ctx.beginPath();
+					ctx.arc(c.x, c.y, Math.max(3, CELL * 0.22), 0, Math.PI*2);
+					ctx.fill();
+				}
+			}
+
+			// KPIs
+			document.getElementById("kCells").textContent = `${N} (${W}×${H})`;
+			document.getElementById("kValid").textContent = val.ok ? "yes" : `no (${val.reason})`;
+		}
+
+		// ---------- Interaction: drag to apply flips ----------
+		let dragging = false;
+		let dragStart = {x:0, y:0};
+		let lastPos = {x:0, y:0};
+		let lastFlipMsg = "—";
+
+		function attemptBrush(px, py, preferHorizontal){
+			// Consider 2×2 blocks around the pointer and try a few flips.
+			const c = pxToCell(px, py);
+			const cx = Math.floor(c.x);
+			const cy = Math.floor(c.y);
+
+			// Try a small neighborhood; order matters (closest first).
+			const candidates = [
+				[cx, cy],
+				[cx-1, cy],
+				[cx, cy-1],
+				[cx-1, cy-1],
+				[cx+1, cy],
+				[cx, cy+1],
+				[cx+1, cy+1],
+				[cx-2, cy],
+				[cx, cy-2],
+			];
+
+			let didAny = false;
+			for(const [x,y] of candidates){
+				const r = tryPlaquetteFlip(x, y, preferHorizontal);
+				if(r.did){
+					didAny = true;
+					lastFlipMsg = r.why;
+					document.getElementById("kFlip").textContent = lastFlipMsg;
+					// allow multiple flips per move to “flow” better
+				}
+			}
+			return didAny;
+		}
+
+		function onPointerDown(e){
+			const rect = cv.getBoundingClientRect();
+			const px = e.clientX - rect.left;
+			const py = e.clientY - rect.top;
+			dragging = true;
+			dragStart = {x:px, y:py};
+			lastPos = {x:px, y:py};
+			cv.setPointerCapture(e.pointerId);
+		}
+
+		function onPointerMove(e){
+			if(!dragging) return;
+			const rect = cv.getBoundingClientRect();
+			const px = e.clientX - rect.left;
+			const py = e.clientY - rect.top;
+
+			const dx = px - dragStart.x;
+			const dy = py - dragStart.y;
+			const preferHorizontal = Math.abs(dx) >= Math.abs(dy);
+
+			// throttle by distance moved (so we don't over-work on tiny jitter)
+			const mdx = px - lastPos.x;
+			const mdy = py - lastPos.y;
+			const dist2 = mdx*mdx + mdy*mdy;
+			if(dist2 < 8) return;
+			lastPos = {x:px, y:py};
+
+			// apply brush
+			const did = attemptBrush(px, py, preferHorizontal);
+			if(did) draw();
+		}
+
+		function onPointerUp(e){
+			dragging = false;
+			try{ cv.releasePointerCapture(e.pointerId); }catch(_){}
+		}
+
+		// ---------- UI wiring ----------
+		const elW = document.getElementById("w");
+		const elH = document.getElementById("h");
+		const elCell = document.getElementById("cell");
+		const elScrambleN = document.getElementById("scrambleN");
+
+		function rebuild(){
+			W = clamp(parseInt(elW.value, 10) || 40, 4, 200);
+			H = clamp(parseInt(elH.value, 10) || 28, 4, 200);
+			CELL = clamp(parseInt(elCell.value, 10) || 18, 6, 40);
+
+			buildSerpentine();
+			findEndpoints();
+			lastFlipMsg = "—";
+			document.getElementById("kFlip").textContent = lastFlipMsg;
+			draw();
+		}
+
+		document.getElementById("reset").addEventListener("click", () => {
+			buildSerpentine();
+			findEndpoints();
+			lastFlipMsg = "reset";
+			document.getElementById("kFlip").textContent = lastFlipMsg;
+			draw();
+		});
+
+		document.getElementById("scramble").addEventListener("click", () => {
+			const flips = clamp(parseInt(elScrambleN.value, 10) || 0, 0, 500000);
+			const res = scramble(flips);
+			lastFlipMsg = `scramble: ${res.done}/${flips} (tries ${res.tries}, ${res.ms.toFixed(0)}ms)`;
+			document.getElementById("kFlip").textContent = lastFlipMsg;
+			draw();
+		});
+
+		elW.addEventListener("change", rebuild);
+		elH.addEventListener("change", rebuild);
+		elCell.addEventListener("change", () => { CELL = clamp(parseInt(elCell.value,10)||18,6,40); draw(); });
+
+		document.getElementById("showGrid").addEventListener("change", (e) => { showGrid = !!e.target.checked; draw(); });
+		document.getElementById("showNodes").addEventListener("change", (e) => { showNodes = !!e.target.checked; draw(); });
+
+		cv.addEventListener("pointerdown", onPointerDown);
+		cv.addEventListener("pointermove", onPointerMove);
+		cv.addEventListener("pointerup", onPointerUp);
+		cv.addEventListener("pointercancel", onPointerUp);
+		window.addEventListener("resize", resizeCanvas);
+
+		// boot
+		rebuild();
+		resizeCanvas();
+	})();
+    </script>
+</body>
+
+</html>

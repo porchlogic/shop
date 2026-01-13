@@ -70,6 +70,10 @@ function normalizeCartItems() {
             item.color = null;
             mutated = true;
         }
+        if (item.batterySize === undefined) {
+            item.batterySize = null;
+            mutated = true;
+        }
     });
 
     if (mutated) saveCartItems(items);
@@ -92,9 +96,14 @@ function formatMoney(amount) {
     return `$${amount.toFixed(2)}`;
 }
 
+function isGlyphProductId(id) {
+    return id === 'm8_plate_1';
+}
+
 // ---------- glyph editor + preview ----------
 
 const moundGridInstances = new Map(); // uid -> { getData, setData }
+const pipeGridInstances = new Map(); // uid -> { getData, setData }
 let activeGlyphUid = null;
 let glyphAudioContext = null;
 const GLYPH_STYLE_TAG_ID = 'glyph-editor-styles';
@@ -456,6 +465,292 @@ function createMoundGrid(canvas, controls, initialData, onChange) {
     };
 }
 
+function isPipeGlyphData(data) {
+    return (
+        data &&
+        typeof data === 'object' &&
+        data.type === 'pipe' &&
+        Array.isArray(data.data)
+    );
+}
+
+function computePipeSegments(width, height) {
+    const safeWidth = Number(width);
+    const safeHeight = Number(height);
+    if (!Number.isFinite(safeWidth) || !Number.isFinite(safeHeight) || safeWidth <= 0) {
+        return 10;
+    }
+    return Math.max(4, Math.round((safeHeight * 8) / safeWidth));
+}
+
+function normalizePipeGlyphData(incoming, segments, meta = {}) {
+    const COLS = 8;
+    const ROWS = Math.max(2, Math.floor(segments || 0));
+    const data = Array.from({ length: COLS }, () =>
+        Array.from({ length: ROWS }, () => 0)
+    );
+
+    if (isPipeGlyphData(incoming)) {
+        const incomingData = incoming.data;
+        for (let c = 0; c < Math.min(COLS, incomingData.length); c++) {
+            const col = incomingData[c];
+            if (!Array.isArray(col)) continue;
+            for (let r = 0; r < Math.min(ROWS, col.length); r++) {
+                data[c][r] = col[r] ? 1 : 0;
+            }
+        }
+    }
+
+    return {
+        type: 'pipe',
+        columns: COLS,
+        segments: ROWS,
+        data,
+        width: meta.width ?? (incoming && incoming.width) ?? null,
+        height: meta.height ?? (incoming && incoming.height) ?? null,
+    };
+}
+
+function createPipeGrid(canvas, controls, initialData, segments, meta, onChange) {
+    const COLS = 8;
+    const ROWS = Math.max(2, Math.floor(segments || 0));
+
+    const WIDTH = canvas.width;
+    const HEIGHT = canvas.height;
+
+    let pipeData = normalizePipeGlyphData(initialData, ROWS, meta);
+
+    const ctx = canvas.getContext('2d');
+
+    let isDragging = false;
+    let dragButton = 0;
+    let changedThisDrag = new Set();
+    let mode = 'shrink';
+    let soundEnabled = true;
+
+    const flatBtn = controls?.flatBtn || null;
+    const moundBtn = controls?.moundBtn || null;
+    const soundToggleBtn = controls?.soundToggle || null;
+
+    function setMode(newMode) {
+        mode = newMode;
+        if (flatBtn) flatBtn.classList.toggle('active', mode === 'flat');
+        if (moundBtn) moundBtn.classList.toggle('active', mode === 'shrink');
+    }
+
+    if (flatBtn) flatBtn.addEventListener('click', () => setMode('flat'));
+    if (moundBtn) moundBtn.addEventListener('click', () => setMode('bulge'));
+
+    function setSoundEnabled(enabled) {
+        soundEnabled = enabled;
+        if (soundToggleBtn) {
+            soundToggleBtn.setAttribute('aria-pressed', String(soundEnabled));
+            const labelEl = soundToggleBtn.querySelector('.glyph-icon-label');
+            if (labelEl) labelEl.textContent = soundEnabled ? 'Sound on' : 'Sound off';
+        }
+    }
+
+    if (soundToggleBtn) {
+        soundToggleBtn.addEventListener('click', () => {
+            setSoundEnabled(!soundEnabled);
+            if (soundEnabled) {
+                getGlyphAudioContext();
+            }
+        });
+        setSoundEnabled(soundEnabled);
+    }
+
+    setMode('shrink');
+
+    function getHitInfo(x, y) {
+        const colWidth = WIDTH / COLS;
+        const rowHeight = HEIGHT / ROWS;
+
+        const col = Math.floor(x / colWidth);
+        const row = Math.floor(y / rowHeight);
+
+        if (row < 0 || row >= ROWS || col < 0 || col >= COLS) return null;
+        return { row, col };
+    }
+
+    function applyAction(row, col, button) {
+        const key = `${row}:${col}`;
+        if (changedThisDrag.has(key)) return;
+
+        let value;
+        if (button === 2) {
+            value = 0;
+        } else {
+            value = mode === 'shrink' ? 1 : 0;
+        }
+
+        const currentValue = pipeData.data[col][row];
+        changedThisDrag.add(key);
+        if (currentValue === value) return;
+
+        pipeData.data[col][row] = value;
+        draw();
+        if (soundEnabled) {
+            const ctx = getGlyphAudioContext();
+            if (ctx) playPipeSound(ctx);
+        }
+
+        if (typeof onChange === 'function') {
+            onChange(JSON.parse(JSON.stringify(pipeData)));
+        }
+    }
+
+    function playPipeSound(ctx) {
+        const now = ctx.currentTime;
+        const osc = ctx.createOscillator();
+        osc.type = 'triangle';
+
+        const baseFreq = 140 + Math.random() * 70;
+        const endFreq = baseFreq * (0.4 + Math.random() * 0.12);
+        osc.frequency.setValueAtTime(baseFreq, now);
+        osc.frequency.exponentialRampToValueAtTime(endFreq, now + 0.12);
+
+        const gain = ctx.createGain();
+        const peak = 0.2 + Math.random() * 0.06;
+        gain.gain.setValueAtTime(0.0001, now);
+        gain.gain.exponentialRampToValueAtTime(peak, now + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.00001, now + 0.18);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc.start(now);
+        osc.stop(now + 0.2);
+    }
+
+    function drawPipe(ctx, centerX, rowHeight, colWidth, colData) {
+        const baseHalf = colWidth * 0.42;
+        const shrinkAmount = colWidth * 0.18;
+        const minHalf = colWidth * 0.18;
+
+        ctx.beginPath();
+        for (let r = 0; r < ROWS; r++) {
+            const shrunk = colData[r] === 1;
+            const half = Math.max(baseHalf - (shrunk ? shrinkAmount : 0), minHalf);
+            const y = r * rowHeight + rowHeight / 2;
+            const x = centerX - half;
+            if (r === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+
+        ctx.beginPath();
+        for (let r = 0; r < ROWS; r++) {
+            const shrunk = colData[r] === 1;
+            const half = Math.max(baseHalf - (shrunk ? shrinkAmount : 0), minHalf);
+            const y = r * rowHeight + rowHeight / 2;
+            const x = centerX + half;
+            if (r === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+    }
+
+    function draw() {
+        ctx.clearRect(0, 0, WIDTH, HEIGHT);
+        ctx.lineWidth = 6;
+        ctx.strokeStyle = '#cdd5e3';
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+
+        const colWidth = WIDTH / COLS;
+        const rowHeight = HEIGHT / ROWS;
+
+        for (let c = 0; c < COLS; c++) {
+            const centerX = c * colWidth + colWidth / 2;
+            drawPipe(ctx, centerX, rowHeight, colWidth, pipeData.data[c]);
+        }
+    }
+
+    function getCanvasCoords(evt) {
+        const rect = canvas.getBoundingClientRect();
+        return {
+            x: (evt.clientX - rect.left) * (canvas.width / rect.width),
+            y: (evt.clientY - rect.top) * (canvas.height / rect.height),
+        };
+    }
+
+    canvas.addEventListener('contextmenu', (e) => e.preventDefault());
+
+    function beginDrag(button, clientX, clientY) {
+        isDragging = true;
+        dragButton = button;
+        changedThisDrag.clear();
+        const { x, y } = getCanvasCoords({ clientX, clientY });
+        const hit = getHitInfo(x, y);
+        if (hit) applyAction(hit.row, hit.col, dragButton);
+    }
+
+    function continueDrag(clientX, clientY) {
+        if (!isDragging) return;
+        const { x, y } = getCanvasCoords({ clientX, clientY });
+        const hit = getHitInfo(x, y);
+        if (hit) applyAction(hit.row, hit.col, dragButton);
+    }
+
+    function endDrag() {
+        isDragging = false;
+        changedThisDrag.clear();
+    }
+
+    canvas.addEventListener('mousedown', (evt) => {
+        if (evt.button !== 0 && evt.button !== 2) return;
+        beginDrag(evt.button, evt.clientX, evt.clientY);
+    });
+
+    canvas.addEventListener('mousemove', (evt) => {
+        continueDrag(evt.clientX, evt.clientY);
+    });
+
+    canvas.addEventListener('mouseup', endDrag);
+    document.addEventListener('mouseup', endDrag);
+
+    canvas.addEventListener(
+        'touchstart',
+        (evt) => {
+            const touch = evt.touches && evt.touches[0];
+            if (!touch) return;
+            evt.preventDefault();
+            beginDrag(0, touch.clientX, touch.clientY);
+        },
+        { passive: false }
+    );
+
+    canvas.addEventListener(
+        'touchmove',
+        (evt) => {
+            const touch = evt.touches && evt.touches[0];
+            if (!touch) return;
+            evt.preventDefault();
+            continueDrag(touch.clientX, touch.clientY);
+        },
+        { passive: false }
+    );
+
+    canvas.addEventListener(
+        'touchend',
+        () => {
+            endDrag();
+        },
+        { passive: true }
+    );
+
+    draw();
+
+    return {
+        getData: () => JSON.parse(JSON.stringify(pipeData)),
+        setData: (d) => {
+            pipeData = normalizePipeGlyphData(d, ROWS, meta);
+            draw();
+        },
+    };
+}
+
 function attachMoundGrid(uid, editorEl, existingData, options = {}) {
     ensureGlyphEditorStyles();
     editorEl.innerHTML = '';
@@ -527,7 +822,93 @@ function attachMoundGrid(uid, editorEl, existingData, options = {}) {
     moundGridInstances.set(uid, instance);
 }
 
+function attachPipeGrid(uid, editorEl, existingData, options = {}) {
+    ensureGlyphEditorStyles();
+    editorEl.innerHTML = '';
+
+    const width = Number(options.width) || 90;
+    const height = Number(options.height) || 120;
+    const segments = computePipeSegments(width, height);
+    const ratio = height / width;
+    const baseSize = 640;
+    let canvasHeight = Math.round(baseSize * ratio);
+    canvasHeight = Math.max(360, Math.min(900, canvasHeight));
+
+    const canvas = document.createElement('canvas');
+    canvas.width = baseSize;
+    canvas.height = canvasHeight;
+    canvas.style.border = '1px solid #313945';
+    canvas.style.width = '100%';
+    canvas.style.maxWidth = '640px';
+    canvas.style.display = 'block';
+    canvas.style.margin = 'auto';
+
+    const controlsWrapper = document.createElement('div');
+    controlsWrapper.className = 'glyph-mode-wrapper';
+
+    const flatBtn = document.createElement('button');
+    flatBtn.type = 'button';
+    flatBtn.className = 'glyph-mode-btn';
+    flatBtn.title = 'Flat pipe';
+    flatBtn.innerHTML = '<span class="glyph-icon glyph-icon-flat"></span><span class="glyph-icon-label">Flat</span>';
+
+    const moundBtn = document.createElement('button');
+    moundBtn.type = 'button';
+    moundBtn.className = 'glyph-mode-btn';
+    moundBtn.title = 'Shrink';
+    moundBtn.innerHTML = '<span class="glyph-icon glyph-icon-mound"></span><span class="glyph-icon-label">Shrink</span>';
+
+    controlsWrapper.appendChild(flatBtn);
+    controlsWrapper.appendChild(moundBtn);
+
+    editorEl.appendChild(canvas);
+    editorEl.appendChild(controlsWrapper);
+
+    const soundToggle = document.createElement('button');
+    soundToggle.type = 'button';
+    soundToggle.className = 'glyph-sound-toggle';
+    soundToggle.setAttribute('aria-pressed', 'true');
+    soundToggle.title = 'Toggle sculpt sound';
+    soundToggle.innerHTML =
+        '<span class="glyph-sound-dot" aria-hidden="true"></span><span class="glyph-icon-label">Sound on</span>';
+    controlsWrapper.appendChild(soundToggle);
+
+    const instance = createPipeGrid(
+        canvas,
+        { flatBtn, moundBtn, soundToggle },
+        existingData,
+        segments,
+        { width, height },
+        (data) => {
+            const glyphCopy = JSON.parse(JSON.stringify(data));
+
+            if (typeof options.onDataChange === 'function') {
+                options.onDataChange(glyphCopy);
+            } else {
+                const items = getCartItems();
+                const it = items.find((i) => i.uid === uid);
+                if (!it) return;
+                it.glyphData = glyphCopy;
+                saveCartItems(items);
+            }
+
+            if (typeof options.onThumbnailUpdate === 'function') {
+                options.onThumbnailUpdate(glyphCopy);
+            } else {
+                updateGlyphThumbnail(uid, glyphCopy);
+            }
+        }
+    );
+
+    pipeGridInstances.set(uid, instance);
+}
+
 function renderGlyphThumbnail(canvas, glyphData) {
+    if (isPipeGlyphData(glyphData)) {
+        renderPipeGlyphThumbnail(canvas, glyphData);
+        return;
+    }
+
     const ROWS = 8;
     const COLS = 16;
 
@@ -591,6 +972,55 @@ function renderGlyphThumbnail(canvas, glyphData) {
     }
 }
 
+function renderPipeGlyphThumbnail(canvas, glyphData) {
+    const COLS = 8;
+    const data = isPipeGlyphData(glyphData)
+        ? glyphData.data
+        : Array.from({ length: COLS }, () => []);
+    const ROWS = Array.isArray(data[0]) ? data[0].length : 0;
+
+    const ctx = canvas.getContext('2d');
+    const WIDTH = canvas.width;
+    const HEIGHT = canvas.height;
+
+    ctx.clearRect(0, 0, WIDTH, HEIGHT);
+    ctx.lineWidth = 2.5;
+    ctx.strokeStyle = '#bfc7d5';
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+
+    const colWidth = WIDTH / COLS;
+    const rowHeight = ROWS > 0 ? HEIGHT / ROWS : HEIGHT;
+    const baseHalf = colWidth * 0.42;
+    const shrinkAmount = colWidth * 0.18;
+    const minHalf = colWidth * 0.18;
+
+    for (let c = 0; c < COLS; c++) {
+        const centerX = c * colWidth + colWidth / 2;
+        ctx.beginPath();
+        for (let r = 0; r < ROWS; r++) {
+            const shrunk = data[c] && data[c][r] === 1;
+            const half = Math.max(baseHalf - (shrunk ? shrinkAmount : 0), minHalf);
+            const y = r * rowHeight + rowHeight / 2;
+            const x = centerX - half;
+            if (r === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+
+        ctx.beginPath();
+        for (let r = 0; r < ROWS; r++) {
+            const shrunk = data[c] && data[c][r] === 1;
+            const half = Math.max(baseHalf - (shrunk ? shrinkAmount : 0), minHalf);
+            const y = r * rowHeight + rowHeight / 2;
+            const x = centerX + half;
+            if (r === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+    }
+}
+
 function updateGlyphThumbnail(uid, glyphData) {
     const canvas = document.querySelector(
         `.glyph-icon-canvas[data-item-uid="${uid}"]`
@@ -609,8 +1039,9 @@ function addItemToCart(item) {
     const incomingShowOnLive = !!item.showOnLive;
     const incomingMaterial = item.material || null;
     const incomingColor = item.color || null;
+    const incomingBatterySize = item.batterySize || null;
 
-    if (item.id === 'm8_plate_1') {
+    if (isGlyphProductId(item.id)) {
         const qty = Math.max(1, Math.floor(item.quantity || 1));
         for (let i = 0; i < qty; i++) {
             const lineItem = {
@@ -621,6 +1052,7 @@ function addItemToCart(item) {
                 showOnLive: incomingShowOnLive,
                 material: incomingMaterial,
                 color: incomingColor,
+                batterySize: incomingBatterySize,
             };
             ensureItemUid(lineItem);
             cartItems.push(lineItem);
@@ -637,6 +1069,7 @@ function addItemToCart(item) {
             existing.showOnLive = incomingShowOnLive;
             existing.material = incomingMaterial;
             existing.color = incomingColor;
+            existing.batterySize = incomingBatterySize;
         } else {
             const lineItem = {
                 ...item,
@@ -646,6 +1079,7 @@ function addItemToCart(item) {
                 showOnLive: incomingShowOnLive,
                 material: incomingMaterial,
                 color: incomingColor,
+                batterySize: incomingBatterySize,
             };
             ensureItemUid(lineItem);
             cartItems.push(lineItem);
@@ -732,6 +1166,10 @@ function buildItemSubtitle(item) {
     const parts = [];
     if (item.material) parts.push(item.material);
     if (item.color) parts.push(item.color);
+    if (item.id === 'm8_backpack_1') {
+        const battery = formatBatterySize(item.batterySize);
+        if (battery) parts.push(`Battery ${battery}`);
+    }
     return parts.join(' \u2022 ');
 }
 
@@ -829,7 +1267,7 @@ function renderCartItems() {
         const optionsCell = document.createElement('div');
         optionsCell.className = 'cart-cell cart-cell--options';
 
-        if (item.id === 'm8_plate_1') {
+        if (isGlyphProductId(item.id)) {
             const { wrapper, glyphThumb, liveInfo } = createGlyphControls(item);
             optionsCell.appendChild(wrapper);
 
@@ -943,10 +1381,14 @@ function renderCheckoutSummary() {
         const metaParts = [];
         if (item.material) metaParts.push(item.material);
         if (item.color) metaParts.push(item.color);
-        if (item.id === 'm8_plate_1' && item.customGlyphEnabled) {
+        if (item.id === 'm8_backpack_1') {
+            const battery = formatBatterySize(item.batterySize);
+            if (battery) metaParts.push(`Battery ${battery}`);
+        }
+        if (isGlyphProductId(item.id) && item.customGlyphEnabled) {
             metaParts.push('Custom glyph');
         }
-        if (item.id === 'm8_plate_1' && item.showOnLive) {
+        if (isGlyphProductId(item.id) && item.showOnLive) {
             metaParts.push('Live overlay');
         }
 
@@ -996,6 +1438,50 @@ function hideCartPopup() {
     }
 }
 
+function formatBatterySize(size) {
+    if (!size || typeof size !== 'object') return '';
+    const width = Number(size.width);
+    const height = Number(size.height);
+    const thickness = Number(size.thickness);
+    if (!Number.isFinite(width) || !Number.isFinite(height) || !Number.isFinite(thickness)) {
+        return '';
+    }
+    const format = (value) => {
+        const str = String(value);
+        return str.endsWith('.0') ? str.slice(0, -2) : str;
+    };
+    return `${format(width)}x${format(height)}x${format(thickness)}mm`;
+}
+
+function isEditableTarget(target) {
+    if (!target) return false;
+    if (target.isContentEditable) return true;
+    const tag = target.tagName;
+    return tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT';
+}
+
+function copyTextToClipboard(text) {
+    if (!text) return false;
+    if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).catch(() => {});
+        return true;
+    }
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    textarea.setAttribute('readonly', 'true');
+    textarea.style.position = 'fixed';
+    textarea.style.top = '-9999px';
+    document.body.appendChild(textarea);
+    textarea.select();
+    try {
+        document.execCommand('copy');
+    } catch (err) {
+        // Swallow copy failures silently.
+    }
+    document.body.removeChild(textarea);
+    return true;
+}
+
 // ---------- glyph modal wiring ----------
 
 function openGlyphModal(uid) {
@@ -1012,7 +1498,15 @@ function openGlyphModal(uid) {
     modal.classList.remove('hidden');
     modal.classList.add('visible');
 
-    attachMoundGrid(uid, editorEl, item.glyphData || null);
+    if (item.id === 'm8_backpack_1') {
+        const battery = item.batterySize || {};
+        attachPipeGrid(uid, editorEl, item.glyphData || null, {
+            width: battery.width,
+            height: battery.height,
+        });
+    } else {
+        attachMoundGrid(uid, editorEl, item.glyphData || null);
+    }
 }
 
 function closeGlyphModal() {
@@ -1060,6 +1554,17 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('keydown', (event) => {
         if (event.key === 'Escape') {
             closeGlyphModal();
+        }
+        if (event.ctrlKey && event.shiftKey && event.code === 'KeyE') {
+            if (isEditableTarget(event.target)) return;
+            const glyphModal = document.getElementById('glyph-modal');
+            if (!glyphModal || !glyphModal.classList.contains('visible')) return;
+            if (!activeGlyphUid) return;
+            const items = normalizeCartItems();
+            const item = items.find((i) => i.uid === activeGlyphUid);
+            if (!item || !item.glyphData) return;
+            event.preventDefault();
+            copyTextToClipboard(JSON.stringify(item.glyphData));
         }
     });
 });
