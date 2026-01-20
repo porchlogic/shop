@@ -1,4 +1,7 @@
 ## ToDo
+- [ ] create a new product "M8-Kit" which is basically a package of both M8-Plate and M8-Backpack.
+  - [ ] the product page will need all the configurable options for both components
+  - [ ] the price should be $36 (there will be a separate stripe price id for it)
 
 ## Done
 - [x] read checkout/ as well as backend/backend-server_backup1-11-26.js,

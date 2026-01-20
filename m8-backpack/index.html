@@ -423,11 +423,11 @@
             padding: 0.4rem 1.2rem;
             border-radius: 999px;
             border: 1px solid var(--border);
-            background: rgba(255, 255, 255, 0.75);
+            background: var(--accent);
             font-size: 0.65rem;
             letter-spacing: 0.18em;
             text-transform: uppercase;
-            color: var(--text-main);
+            color: #fff;
             cursor: pointer;
         }
 
@@ -1033,24 +1033,27 @@
             <h2 class="inquiry__title">Have a different battery bank?</h2>
             <form class="inquiry__form">
                 <div class="inquiry__field">
-                    <label class="inquiry__label" for="battery-brand">Brand</label>
+                    <label class="visually-hidden" for="battery-brand">Brand</label>
                     <input class="inquiry__input" id="battery-brand" name="battery-brand" type="text"
+                        placeholder="Brand"
                         autocomplete="organization" />
                 </div>
                 <div class="inquiry__field">
-                    <label class="inquiry__label" for="battery-model-name">Model</label>
+                    <label class="visually-hidden" for="battery-model-name">Model</label>
                     <input class="inquiry__input" id="battery-model-name" name="battery-model-name" type="text"
+                        placeholder="Model"
                         autocomplete="off" />
                 </div>
                 <div class="inquiry__field">
-                    <label class="inquiry__label" for="battery-email">Email</label>
+                    <label class="visually-hidden" for="battery-email">Email</label>
                     <input class="inquiry__input" id="battery-email" name="battery-email" type="email"
+                        placeholder="Email"
                         autocomplete="email" />
                 </div>
                 <p class="inquiry__note">
                     I'll let you know if M8-Backpack can be made for your model.
                 </p>
-                <button class="inquiry__button" type="button" id="inquiry-submit">Notify me</button>
+                <button class="inquiry__button" type="button" id="inquiry-submit">Request</button>
                 <p class="inquiry__status" id="inquiry-status" aria-live="polite"></p>
             </form>
         </section>
@@ -1118,7 +1121,7 @@
             // const THIS_API_BASE = isLocal
             //     ? "http://localhost:4242"
             //     : "https://api.porchlogic.com";
-            
+
             function initCarousel(root) {
                 if (!root) return null;
 
@@ -1281,6 +1284,7 @@
                 if (batteryModelSelect) {
                     batteryModelSelect.addEventListener('change', () => {
                         state.batteryModel = batteryModelSelect.value;
+                        updateBatteryState();
                     });
                 }
 
@@ -1330,16 +1334,20 @@
 
                     state.batterySize = { width, height, thickness };
 
-                    const isValid =
-                        Number.isFinite(width) &&
-                        Number.isFinite(height) &&
-                        Number.isFinite(thickness) &&
-                        width > 0 &&
-                        height > 0 &&
-                        thickness > 0 &&
-                        width <= MAX_BATTERY.width &&
-                        height <= MAX_BATTERY.height &&
-                        thickness <= MAX_BATTERY.thickness;
+                    const hasDimensionInputs = Boolean(
+                        batteryWidthInput || batteryHeightInput || batteryThicknessInput
+                    );
+                    const isValid = hasDimensionInputs
+                        ? Number.isFinite(width) &&
+                          Number.isFinite(height) &&
+                          Number.isFinite(thickness) &&
+                          width > 0 &&
+                          height > 0 &&
+                          thickness > 0 &&
+                          width <= MAX_BATTERY.width &&
+                          height <= MAX_BATTERY.height &&
+                          thickness <= MAX_BATTERY.thickness
+                        : Boolean(batteryModelSelect && batteryModelSelect.value);
 
                     if (batteryError) {
                         batteryError.classList.toggle('hidden', isValid);
