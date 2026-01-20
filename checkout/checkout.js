@@ -59,15 +59,15 @@ function initTestMode() {
     }
 }
 
-// document.addEventListener("keydown", (event) => {
-//     const isToggle =
-//         (event.key === "t" || event.key === "T") &&
-//         // event.ctrlKey &&
-//         event.shiftKey;
-//     if (!isToggle) return;
-//     event.preventDefault();
-//     setTestMode(!testModeEnabled);
-// });
+document.addEventListener("keydown", (event) => {
+    const isToggle =
+        (event.key === "t" || event.key === "T") &&
+        // event.ctrlKey &&
+        event.shiftKey;
+    if (!isToggle) return;
+    event.preventDefault();
+    setTestMode(!testModeEnabled);
+});
 
 initTestMode();
 
