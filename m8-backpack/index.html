@@ -965,7 +965,7 @@
                         <img src="/images/m8-backpack-hero1.png" alt="M8 BACKPACK photo 1">
                     </div>
                     <div class="pl-carousel__slide">
-                        <img src="/images/m8-backpack-hero1.png" alt="M8 BACKPACK photo 2">
+                        <img src="/images/m8-backpack-hero2.png" alt="M8 BACKPACK photo 2">
                     </div>
                 </div>
 
@@ -1111,6 +1111,14 @@
                 wireBatteryInquiry();
             });
 
+            const THIS_API_BASE = "https://api.porchlogic.com";
+            // const isLocal =
+            //     location.hostname === "localhost" ||
+            //     location.hostname === "127.0.0.1";
+            // const THIS_API_BASE = isLocal
+            //     ? "http://localhost:4242"
+            //     : "https://api.porchlogic.com";
+            
             function initCarousel(root) {
                 if (!root) return null;
 
@@ -1450,7 +1458,7 @@
                     setStatus('Sending request...', false);
 
                     try {
-                        const response = await fetch('/battery-model-inquiry', {
+                        const response = await fetch(`${THIS_API_BASE}/battery-model-inquiry`, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify(payload),
