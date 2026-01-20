@@ -347,6 +347,98 @@
             flex: 0 0 auto;
         }
 
+        .attribute__value--select {
+            align-items: flex-start;
+            gap: 0.4rem;
+        }
+
+        .attribute__select {
+            width: 100%;
+            padding: 0.35rem 0.5rem;
+            border-radius: 0.4rem;
+            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.75);
+            font-size: 0.75rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--text-main);
+        }
+
+        .inquiry {
+            border: 1px solid var(--border);
+            padding: 0.85rem 1rem 0.95rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.65rem;
+        }
+
+        .inquiry__title {
+            margin: 0;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+            color: var(--text-muted);
+        }
+
+        .inquiry__form {
+            display: grid;
+            gap: 0.6rem;
+        }
+
+        .inquiry__field {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        .inquiry__label {
+            font-size: 0.6rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+
+        .inquiry__input {
+            width: 100%;
+            padding: 0.4rem 0.5rem;
+            border-radius: 0.4rem;
+            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.75);
+            font-size: 0.8rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--text-main);
+        }
+
+        .inquiry__note {
+            margin: 0;
+            font-size: 0.7rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+
+        .inquiry__button {
+            align-self: flex-start;
+            padding: 0.4rem 1.2rem;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.75);
+            font-size: 0.65rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--text-main);
+            cursor: pointer;
+        }
+
+        .inquiry__status {
+            margin: 0;
+            font-size: 0.65rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+
         .toggle {
             position: relative;
             width: 3rem;
@@ -913,46 +1005,14 @@
                 </div>
             </div>
 
-            <div class="attribute attribute--limits">
-                <h2 class="attribute__label">Battery Size Limits:</h2>
-                <div class="attribute__value attribute__value--limits">
-                    <button class="limits-thumb" type="button" id="limits-thumb"
-                        aria-label="View battery bank size limits">
-                        <img src="/images/battery_dimensions.png" alt="Battery bank size limits diagram">
-                    </button>
-                </div>
-            </div>
-
-            <div class="attribute attribute--battery">
-                <h2 class="attribute__label">Battery Bank Size</h2>
-                <div class="attribute__value attribute__value--battery">
-                    <div class="battery-inputs">
-                        <label class="battery-field" for="battery-width">
-                            <span class="battery-label">Width</span>
-                            <span class="battery-input-row">
-                                <input class="battery-input" type="number" id="battery-width" name="battery-width"
-                                    min="64" max="86" step="1" inputmode="numeric" value="86">
-                                <span class="battery-unit">mm</span>
-                            </span>
-                        </label>
-                        <label class="battery-field" for="battery-height">
-                            <span class="battery-label">Height</span>
-                            <span class="battery-input-row">
-                                <input class="battery-input" type="number" id="battery-height" name="battery-height"
-                                    min="110" max="124" step="1" inputmode="numeric" value="110">
-                                <span class="battery-unit">mm</span>
-                            </span>
-                        </label>
-                        <label class="battery-field" for="battery-thickness">
-                            <span class="battery-label">Thickness</span>
-                            <span class="battery-input-row">
-                                <input class="battery-input" type="number" id="battery-thickness"
-                                    name="battery-thickness" min="1" max="15" step="1" inputmode="numeric"
-                                    value="15">
-                                <span class="battery-unit">mm</span>
-                            </span>
-                        </label>
-                    </div>
+            <div class="attribute attribute--battery-model">
+                <h2 class="attribute__label">For battery model</h2>
+                <div class="attribute__value attribute__value--select">
+                    <label class="visually-hidden" for="battery-model">Battery model</label>
+                    <select id="battery-model" class="attribute__select">
+                        <option value="model-01">Attom Tech 0.35" x 2.1" x 3.3"</option>
+                        <option value="model-02">Custom (see below)</option>
+                    </select>
                 </div>
             </div>
 
@@ -963,6 +1023,36 @@
                     <span class="attribute__secondary-text">model:01</span>
                 </div>
             </div>
+
+            
+
+            
+        </section>
+
+        <section class="inquiry" aria-label="Battery bank compatibility">
+            <h2 class="inquiry__title">Have a different battery bank?</h2>
+            <form class="inquiry__form">
+                <div class="inquiry__field">
+                    <label class="inquiry__label" for="battery-brand">Brand</label>
+                    <input class="inquiry__input" id="battery-brand" name="battery-brand" type="text"
+                        autocomplete="organization" />
+                </div>
+                <div class="inquiry__field">
+                    <label class="inquiry__label" for="battery-model-name">Model</label>
+                    <input class="inquiry__input" id="battery-model-name" name="battery-model-name" type="text"
+                        autocomplete="off" />
+                </div>
+                <div class="inquiry__field">
+                    <label class="inquiry__label" for="battery-email">Email</label>
+                    <input class="inquiry__input" id="battery-email" name="battery-email" type="email"
+                        autocomplete="email" />
+                </div>
+                <p class="inquiry__note">
+                    I'll let you know if M8-Backpack can be made for your model.
+                </p>
+                <button class="inquiry__button" type="button" id="inquiry-submit">Notify me</button>
+                <p class="inquiry__status" id="inquiry-status" aria-live="polite"></p>
+            </form>
         </section>
 
         <section class="cta">
@@ -1018,6 +1108,7 @@
                 initProduct(carousel);
                 wireLimitsModal();
                 wireCartPopup();
+                wireBatteryInquiry();
             });
 
             function initCarousel(root) {
@@ -1140,6 +1231,7 @@
                 const batteryHeightInput = document.getElementById('battery-height');
                 const batteryThicknessInput = document.getElementById('battery-thickness');
                 const batteryError = document.getElementById('battery-error');
+                const batteryModelSelect = document.getElementById('battery-model');
                 const buyButton = document.getElementById('add-to-cart');
                 const priceDisplay = document.querySelector('.cta__price .price');
 
@@ -1150,6 +1242,7 @@
                         height: null,
                         thickness: null,
                     },
+                    batteryModel: batteryModelSelect ? batteryModelSelect.value : 'model-01',
                 };
 
                 const updatePriceDisplay = () => {
@@ -1176,6 +1269,12 @@
                         setColor(btn.dataset.color || 'Smoke');
                     });
                 });
+
+                if (batteryModelSelect) {
+                    batteryModelSelect.addEventListener('change', () => {
+                        state.batteryModel = batteryModelSelect.value;
+                    });
+                }
 
                 const MAX_BATTERY = {
                     width: 86,
@@ -1263,6 +1362,7 @@
                             quantity: 1,
                             color: state.color,
                             batterySize: { ...state.batterySize },
+                            batteryModel: state.batteryModel,
                         };
                         if (typeof addItemToCart === 'function') {
                             addItemToCart(item);
@@ -1317,8 +1417,70 @@
                     });
                 }
             }
+
+            function wireBatteryInquiry() {
+                const brandInput = document.getElementById('battery-brand');
+                const modelInput = document.getElementById('battery-model-name');
+                const emailInput = document.getElementById('battery-email');
+                const submitBtn = document.getElementById('inquiry-submit');
+                const statusEl = document.getElementById('inquiry-status');
+
+                if (!brandInput || !modelInput || !emailInput || !submitBtn || !statusEl) {
+                    return;
+                }
+
+                const setStatus = (message, isError) => {
+                    statusEl.textContent = message;
+                    statusEl.style.color = isError ? '#9a2f2f' : '';
+                };
+
+                submitBtn.addEventListener('click', async () => {
+                    const payload = {
+                        brand: brandInput.value.trim(),
+                        model: modelInput.value.trim(),
+                        email: emailInput.value.trim(),
+                    };
+
+                    if (!payload.brand || !payload.model || !payload.email) {
+                        setStatus('Please fill out brand, model, and email.', true);
+                        return;
+                    }
+
+                    submitBtn.disabled = true;
+                    setStatus('Sending request...', false);
+
+                    try {
+                        const response = await fetch('/battery-model-inquiry', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload),
+                        });
+
+                        if (!response.ok) {
+                            throw new Error('Request failed');
+                        }
+
+                        setStatus('Thanks! We will email you soon.', false);
+                        brandInput.value = '';
+                        modelInput.value = '';
+                        emailInput.value = '';
+                    } catch (err) {
+                        setStatus('Could not send. Please try again.', true);
+                    } finally {
+                        submitBtn.disabled = false;
+                    }
+                });
+            }
         })();
     </script>
+
+    
+    
+    
+    
+    
+
+
 </body>
 
 </html>
