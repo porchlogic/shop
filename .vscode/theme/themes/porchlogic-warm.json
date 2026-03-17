@@ -1,0 +1,116 @@
+{
+    "name": "Arrakis — Spice & Sand",
+    "type": "light",
+    "colors": {
+        "editor.background": "#F1E8D8",
+        "editor.foreground": "#2E2A25",
+        "editorLineNumber.foreground": "#9C927F",
+        "editorLineNumber.activeForeground": "#3A342C",
+        "editorCursor.foreground": "#C96A2C",
+        "editor.selectionBackground": "#E8C892",
+        "editor.inactiveSelectionBackground": "#E0D2B8",
+        "editor.selectionHighlightBackground": "#F1D9A8",
+        "editorLineHighlightBackground": "#E9DFC9",
+        "editorWhitespace.foreground": "#CFC4AE",
+        "editorIndentGuide.background": "#D6CBB4",
+        "editorIndentGuide.activeBackground": "#BFAF92",
+        "editorBracketMatch.background": "#E6C17C",
+        "editorBracketMatch.border": "#C29A55",
+        "sideBar.background": "#ECE2CF",
+        "sideBar.foreground": "#3A342C",
+        "sideBar.border": "#D4C8AF",
+        "activityBar.background": "#E6DBC5",
+        "activityBar.foreground": "#2E2A25",
+        "activityBar.inactiveForeground": "#8E846F",
+        "activityBar.border": "#D1C5AC",
+        "statusBar.background": "#D9C9A6",
+        "statusBar.foreground": "#2E2A25",
+        "statusBar.border": "#C3B08A",
+        "tab.activeBackground": "#F1E8D8",
+        "tab.inactiveBackground": "#E3D8C2",
+        "tab.activeForeground": "#2E2A25",
+        "tab.inactiveForeground": "#7C725E",
+        "tab.border": "#D2C6AD",
+        "panel.background": "#ECE2CF",
+        "panel.border": "#D2C6AD",
+        "input.background": "#F6EFE2",
+        "input.foreground": "#2E2A25",
+        "input.border": "#CDBF9F",
+        "focusBorder": "#C96A2C",
+        "errorForeground": "#9E3D2C",
+        "warningForeground": "#B0792A",
+        "infoForeground": "#7A6A4A"
+    },
+    "tokenColors": [
+        {
+            "scope": [
+                "comment",
+                "punctuation.definition.comment"
+            ],
+            "settings": {
+                "foreground": "#8A806C",
+                "fontStyle": "italic"
+            }
+        },
+        {
+            "scope": [
+                "string"
+            ],
+            "settings": {
+                "foreground": "#7A4E2D"
+            }
+        },
+        {
+            "scope": [
+                "constant.numeric"
+            ],
+            "settings": {
+                "foreground": "#A45A2A"
+            }
+        },
+        {
+            "scope": [
+                "keyword",
+                "storage.type"
+            ],
+            "settings": {
+                "foreground": "#5C3E1B",
+                "fontStyle": "bold"
+            }
+        },
+        {
+            "scope": [
+                "entity.name.function"
+            ],
+            "settings": {
+                "foreground": "#3F4A4F"
+            }
+        },
+        {
+            "scope": [
+                "variable"
+            ],
+            "settings": {
+                "foreground": "#3A342C"
+            }
+        },
+        {
+            "scope": [
+                "type",
+                "entity.name.type"
+            ],
+            "settings": {
+                "foreground": "#6A5A3A"
+            }
+        },
+        {
+            "scope": [
+                "invalid"
+            ],
+            "settings": {
+                "foreground": "#FFFFFF",
+                "background": "#9E3D2C"
+            }
+        }
+    ]
+}

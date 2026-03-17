@@ -1,0 +1,405 @@
+# SITE SOURCE OF TRUTH
+# 1/26/2026
+# shop.porchlogic.com
+
+
+
+# ------------------------------
+meta:
+  # anything official about the site
+
+  site_name: Porch Logic Shop
+  currency: USD
+  images_base_url: /images
+  api_base_url: https://api.porchlogic.com
+  support_email: support@porchlogic.com
+  checkout_test_mode_key: porchlogic_checkout_test_mode
+  year: 2025
+
+
+# ------------------------------
+content:
+  
+  products:
+    m8_plate_1:
+      name: M8 Plate
+      price: 24
+      status: active
+      variants:
+        - smoke
+        - clear
+      images:
+        - m8-plate-3.png
+        - m8-plate-4.png      
+      attributes:
+        material: PETG
+        color_options:
+          - smoke
+          - clear
+        custom_glyph: true
+        compatible_device:
+          name: M8 Tracker
+          model: "model:01"
+      add_ons:
+        keycaps:
+          price_each: 1
+          colors:
+            - smoke
+            - clear
+          product_ids:
+            - m8_keycap_smoke
+            - m8_keycap_clear
+      links:
+        page: /m8-plate/
+        video: "https://www.youtube.com/watch?v=RU58WwQE1nQ&t=2s"
+      stripe:
+        price_id: price_1SVwbWABTHjSuIhXrqbogAH3
+   
+    m8_backpack_1:
+      id: m8_backpack_1
+      name: M8 Backpack
+      price: 28
+      status: active
+      images:
+        - m8-backpack-hero1.png
+        - m8-backpack-hero2.png
+      card_images:
+        smoke: m8-backpack-hero1_smoke.png
+      variants:
+        smoke:
+          images:
+            - m8-backpack-hero1_smoke.png
+            - m8-backpack-hero2_smoke.png
+      attributes:
+        material: PETG
+        color_options:
+          - smoke
+          - clear
+        custom_glyph_upload: true
+        compatible_device:
+          name: M8 Tracker
+          model: "model:01"
+        battery:
+          models:
+            - id: model-01
+              label: Attom Tech 0.35" x 2.1" x 3.3"
+            - id: model-02
+              label: Custom (see below)
+          max_size_mm:
+            width: 86
+            height: 124
+            thickness: 15
+          inquiry:
+            endpoint: /battery-model-inquiry
+            ! add a hidden honeypot field (e.g., `website`) and reject submissions when it is non-empty to quietly deter bots
+            fields:
+              - brand
+              - model
+              - email
+            note: I'll let you know if M8-Backpack can be made for your model.
+          limits_image: battery_dimensions.png
+      stripe:
+        price_id: price_1SoQmqABTHjSuIhX705tECHZ
+    
+    m8_kit_1:
+      id: m8_kit_1
+      name: M8 Kit
+      price: 36
+      status: active
+      images:
+        - m8-plate-3.png
+        - m8-backpack-hero1.png
+      attributes:
+        material: PETG
+        includes:
+          - m8_plate_1 # was: m8-plate_1
+          - m8_backpack_1 # was: m8-backpack_1
+        plate_color_options:
+          - smoke
+          - clear
+        backpack_color_options:
+          - smoke
+          - clear
+        custom_glyph: true
+        compatible_device:
+          name: M8 Tracker
+          model: "model:01"
+        battery:
+          models:
+            - id: model-01
+              label: Attom Tech 0.35" x 2.1" x 3.3"
+            - id: model-02
+              label: Custom (see below)
+          max_size_mm:
+            width: 86
+            height: 124
+            thickness: 15
+          inquiry:
+            endpoint: /battery-model-inquiry
+            fields:
+              - brand
+              - model
+              - email
+            note: I'll let you know if M8-Backpack can be made for your model.
+          limits_image: battery_dimensions.png
+        keycaps:
+          price_each: 1
+          colors:
+            - smoke
+            - clear
+          product_ids:
+            - m8_keycap_smoke
+            - m8_keycap_clear
+      stripe:
+        price_id: price_REPLACE_ME
+
+    keycap_smoke:
+      id: m8_keycap_smoke
+      name: M8 Keycap
+      price: 1
+      status: addon
+      attributes:
+        color: smoke
+      stripe:
+        price_id: price_1Sg3UEABTHjSuIhXhgK5hV9U
+
+    keycap_clear:
+      id: m8_keycap_clear
+      name: M8 Keycap
+      price: 1
+      status: addon
+      attributes:
+        color: clear
+      stripe:
+        price_id: price_1Sg3zWABTHjSuIhX0PjRd9YX
+
+  checkout:
+    subscribe_label: Subscribe to updates from porchLogic
+    policy_links:
+      - privacy
+      - refund
+      - terms
+    policy_date_source: client_locale_date
+    stripe_js_url: https://js.stripe.com/basil/stripe.js
+  
+  policies:
+    #todo review our policies and find one or two points that are dangerous (if any)
+
+    privacy:
+      title: Privacy Policy
+      intro: We collect only the information needed to process your order and operate this website.
+      sections:
+        - title: Information We Collect
+          items:
+            - Name, email address, and shipping address.
+            - Payment details (processed securely by Stripe; we do not store card numbers).
+            - Order history and basic site usage data (for example, server logs).
+        - title: How We Use This Information
+          items:
+            - Process and ship orders.
+            - Communicate about purchases.
+            - Maintain internal records and prevent fraud.
+            - We do not sell or share personal information with third parties, except for essential service providers such as Stripe and shipping carriers.
+        - title: Data Retention
+          items:
+            - Order information is kept for business records, accounting, and legal compliance.
+            - We retain only what is necessary.
+        - title: Cookies
+          items:
+            - We may use basic session cookies to support site functionality.
+            - We do not use ad tracking cookies unless otherwise noted.
+        - title: Your Rights
+          items:
+            - Contact us to access, update, or delete personal information where legally permitted.
+        - title: Contact
+          items:
+            - Email support@porchlogic.com with questions about this policy.
+
+    refund:
+      title: Refund and Return Policy
+      intro: We aim to make sure our products reach you in good condition. Because we produce small-batch items, we keep returns simple and minimal.
+      sections:
+        - title: All Sales Final
+          items:
+            - All purchases are final unless the item arrives defective or damaged.
+        - title: Defective or Damaged Items
+          items:
+            - Contact us within 7 days of delivery with your order number and a description of the issue.
+            - Approved cases may receive a replacement, repair, or refund at our discretion.
+        - title: Return Shipping
+          items:
+            - We cover return shipping for defective or damaged items when a return is required.
+            - Customers are responsible for shipping costs for other reasons.
+        - title: Non-Returnable Items
+          items:
+            - Custom or personalized items.
+            - Digital products (if applicable).
+            - Items showing signs of modification or misuse.
+        - title: How to Start a Return
+          items:
+            - Email support@porchlogic.com with your order number and details about the issue.
+
+    terms:
+      title: Terms of Service
+      sections:
+        - title: Use of This Website
+          items:
+            - This site and its content are provided on an "as is" basis.
+            - We may update products, pricing, or site features at any time without notice.
+        - title: Orders and Payment
+          items:
+            - Orders are processed after successful payment.
+            - We reserve the right to refuse or cancel an order if an item is unavailable or there is a pricing or listing error.
+        - title: Returns and Refunds
+          items:
+            - Our return and refund policy is described in the Refund and Return Policy.
+            - By purchasing from this site, you agree to those terms.
+        - title: Shipping
+          items:
+            - Shipping timelines and methods are described on the Shipping page.
+            - Once a package is handed to the carrier, risk of loss transfers to the customer.
+            - International customers are responsible for import taxes or duties.
+        - title: Product Use
+          items:
+            - Products are intended for personal use.
+            - You agree not to misuse products or attempt unsafe modifications.
+        - title: Account and Contact
+          items:
+            - If you have questions about these Terms, contact support@porchlogic.com.
+            - We may update these Terms from time to time. Continued use of the site constitutes acceptance of the updated Terms.
+
+  integrations:
+    api:
+      base_url: https://api.porchlogic.com
+      endpoints:
+        create_checkout_session: /create-checkout-session
+        calculate_shipping_options: /calculate-shipping-options
+        newsletter_checkout_opt_in: /newsletter-checkout-opt-in
+        battery_model_inquiry: /battery-model-inquiry
+        session_status: /session-status
+    stripe:
+      return_path: /stripe/return.html
+
+# ------------------------------
+modules:
+
+  # element modules
+  h1:
+    -  # no value here means it passes the value, and the html is defined in the script (or maybe in a html module file?)
+  h2:
+  p:
+  a:
+
+  # block modules
+  header:
+    h1: # no value here means it uses the value passed to it
+    nav: [] # no values here means it uses the values passed to it
+  nav:
+    options:
+      shop:
+        a: "/" # means a simple html a element with href "/" will be output
+      cart_icon: # make a cart_icon html chunk in the src folder which defines the rest
+        href: "/cart"
+        img: cart-icon.svg
+    # no module or html element means it must be defined in script (or html module file?)
+  content:
+    - content here
+  footer:
+    - copyright porchlogic
+  attributes:
+    - flexbox of attribs
+
+  # page modules
+  product_page:
+    data: # define the expected data passed to us
+      product: content.products # means the value of data.product is used as lookup in content.products
+    modules:
+      - header: # header is a module
+          # so the resolved value of h1 below gets passed to the modules.header.h1
+          h1: data.product.name 
+          nav: [shop, cart_icon]
+      - carousel: product.images
+      - a: 
+        - text: "Video"
+        - href: product.links.video
+        - style: product-video-link
+      - attributes: product.attributes
+      - add_ons: product.add_ons
+      - row:
+          - price: product.price
+          - button: Add to cart
+      - page_footer
+
+
+# ------------------------------
+pages:
+
+  /:
+    - header: # is a module
+        h1: Shop # means pass "Shop" to the `h1` of the header module
+        nav: [cart_icon] # means pass a list of some items that are in the options of the nav module
+    - product_grid:
+        products:
+          - m8_plate_1
+          - m8_backpack_1
+          - m8_kit_1
+    - cart_block # is a string
+    - checkout_button
+    - site_footer
+
+  /m8-plate:
+    - product_page: # is a module
+        data: # data passed to the module
+          product: m8_plate_1
+          # for the editor UI,
+            # this will get the data definition from the module (product_page.data in this case)
+            # so that when you type 'product: ',
+            # it brings up the content.products as the options for the scalar value
+
+  /m8-backpack:
+    - product_page: m8_backpack_1
+
+  /m8-kit:
+    - product_page: m8_kit_1
+        
+  /cart:
+    - header:
+      h1: "Cart"
+      nav: [pages.shop]
+    - content:
+      - row:
+        - items
+        - summary
+      - row:
+        - checkout_button
+        - continue_shopping_button
+    - footer
+
+  /checkout:
+    body_class: checkout-page
+    modules: 
+      - checkout_page
+
+  /stripe/return.html:
+    body_class: return-page
+    modules: 
+      - stripe_return_page
+
+
+# ------------------------------
+parser:
+  parseSite():
+    for page in yaml.pages:
+      - parse each module in the page
+
+  parseModule(name, data):
+    - get the module from yaml.modules[name]
+    - if it is a list, try parseModule() on each item
+    - else if it has `modules` list, try parseModules() on each of those
+    - else:
+      - for each object in the module: #e.g. h1 and nav in header module
+        - check if data has a object of the same name
+        - try to output using html elements or html modules with the same name
+
+
+backend:

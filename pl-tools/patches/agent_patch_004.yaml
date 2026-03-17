@@ -1,0 +1,45 @@
+diff:
+  - op: replace
+    path: ["#styles", "one-line description of overall style"]
+    field: text
+    new: "overall style: minimal, airy product showcase with fine-line UI"
+  - op: replace
+    path: ["#styles", "overall style: minimal, airy product showcase with fine-line UI", "one-line description of layout"]
+    field: text
+    new: "layout: single-column stack, tight max-width, clear section rhythm"
+  - op: replace
+    path: ["#styles", "overall style: minimal, airy product showcase with fine-line UI", "layout: single-column stack, tight max-width, clear section rhythm", "further broken down descriptions"]
+    field: text
+    new: "page frame: centered column (max-width ~480px), 0.5rem padding, 0.75rem vertical gaps"
+  - op: insert
+    path: ["#styles", "overall style: minimal, airy product showcase with fine-line UI", "layout: single-column stack, tight max-width, clear section rhythm"]
+    field: text
+    new: "surfaces: cards with 1px var(--border), square hero media, stacked sections"
+  - op: insert
+    path: ["#styles", "overall style: minimal, airy product showcase with fine-line UI", "layout: single-column stack, tight max-width, clear section rhythm"]
+    field: text
+    new: "grids: attributes grid 2 columns with hairline dividers and label/value columns"
+  - op: replace
+    path: ["#styles", "overall style: minimal, airy product showcase with fine-line UI", "one-line description of colors"]
+    field: text
+    new: "colors: neutral base with muted text and sky accent"
+  - op: insert
+    path: ["#styles", "overall style: minimal, airy product showcase with fine-line UI", "colors: neutral base with muted text and sky accent"]
+    field: text
+    new: "base tokens: --text, --text-muted, --border on light background"
+  - op: insert
+    path: ["#styles", "overall style: minimal, airy product showcase with fine-line UI", "colors: neutral base with muted text and sky accent"]
+    field: text
+    new: "accents: c-sky links and product imagery"
+  - op: replace
+    path: ["#styles", "overall style: minimal, airy product showcase with fine-line UI", "one-line description of text styles"]
+    field: text
+    new: "text styles: spaced caps labels, restrained headers"
+  - op: insert
+    path: ["#styles", "overall style: minimal, airy product showcase with fine-line UI", "text styles: spaced caps labels, restrained headers"]
+    field: text
+    new: "h1: clamp(1.5rem, 6vw, 2.75rem), 0.12em letter-spacing, left-aligned, nowrap"
+  - op: insert
+    path: ["#styles", "overall style: minimal, airy product showcase with fine-line UI", "text styles: spaced caps labels, restrained headers"]
+    field: text
+    new: "labels/body: uppercase muted labels with compact body copy"

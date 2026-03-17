@@ -58,6 +58,10 @@ function normalizeCartItems() {
             item.glyphData = null;
             mutated = true;
         }
+        if (item.customGlyphImage === undefined) {
+            item.customGlyphImage = null;
+            mutated = true;
+        }
         if (item.showOnLive === undefined) {
             item.showOnLive = false;
             mutated = true;
@@ -70,8 +74,24 @@ function normalizeCartItems() {
             item.color = null;
             mutated = true;
         }
+        if (item.plateColor === undefined) {
+            item.plateColor = null;
+            mutated = true;
+        }
+        if (item.backpackColor === undefined) {
+            item.backpackColor = null;
+            mutated = true;
+        }
         if (item.batterySize === undefined) {
             item.batterySize = null;
+            mutated = true;
+        }
+        if (item.batteryModel === undefined) {
+            item.batteryModel = null;
+            mutated = true;
+        }
+        if (item.batteryModelLabel === undefined) {
+            item.batteryModelLabel = null;
             mutated = true;
         }
     });
@@ -97,7 +117,7 @@ function formatMoney(amount) {
 }
 
 function isGlyphProductId(id) {
-    return id === 'm8_plate_1';
+    return id === 'm8_plate_1' || id === 'm8_kit_1';
 }
 
 // ---------- glyph editor + preview ----------
@@ -1035,11 +1055,16 @@ function addItemToCart(item) {
     const cartItems = normalizeCartItems();
     const incomingGlyphData =
         item && item.glyphData !== undefined ? cloneGlyphData(item.glyphData) : null;
+    const incomingCustomGlyphImage = item.customGlyphImage || null;
     const incomingCustomGlyphEnabled = !!item.customGlyphEnabled;
     const incomingShowOnLive = !!item.showOnLive;
     const incomingMaterial = item.material || null;
     const incomingColor = item.color || null;
+    const incomingPlateColor = item.plateColor || null;
+    const incomingBackpackColor = item.backpackColor || null;
     const incomingBatterySize = item.batterySize || null;
+    const incomingBatteryModel = item.batteryModel || null;
+    const incomingBatteryModelLabel = item.batteryModelLabel || null;
 
     if (isGlyphProductId(item.id)) {
         const qty = Math.max(1, Math.floor(item.quantity || 1));
@@ -1049,10 +1074,15 @@ function addItemToCart(item) {
                 quantity: 1,
                 customGlyphEnabled: incomingCustomGlyphEnabled,
                 glyphData: incomingGlyphData,
+                customGlyphImage: incomingCustomGlyphImage,
                 showOnLive: incomingShowOnLive,
                 material: incomingMaterial,
                 color: incomingColor,
+                plateColor: incomingPlateColor,
+                backpackColor: incomingBackpackColor,
                 batterySize: incomingBatterySize,
+                batteryModel: incomingBatteryModel,
+                batteryModelLabel: incomingBatteryModelLabel,
             };
             ensureItemUid(lineItem);
             cartItems.push(lineItem);
@@ -1066,20 +1096,30 @@ function addItemToCart(item) {
             existing.quantity += item.quantity || 1;
             existing.customGlyphEnabled = incomingCustomGlyphEnabled;
             existing.glyphData = incomingGlyphData;
+            existing.customGlyphImage = incomingCustomGlyphImage;
             existing.showOnLive = incomingShowOnLive;
             existing.material = incomingMaterial;
             existing.color = incomingColor;
+            existing.plateColor = incomingPlateColor;
+            existing.backpackColor = incomingBackpackColor;
             existing.batterySize = incomingBatterySize;
+            existing.batteryModel = incomingBatteryModel;
+            existing.batteryModelLabel = incomingBatteryModelLabel;
         } else {
             const lineItem = {
                 ...item,
                 quantity: item.quantity || 1,
                 customGlyphEnabled: incomingCustomGlyphEnabled,
                 glyphData: incomingGlyphData,
+                customGlyphImage: incomingCustomGlyphImage,
                 showOnLive: incomingShowOnLive,
                 material: incomingMaterial,
                 color: incomingColor,
+                plateColor: incomingPlateColor,
+                backpackColor: incomingBackpackColor,
                 batterySize: incomingBatterySize,
+                batteryModel: incomingBatteryModel,
+                batteryModelLabel: incomingBatteryModelLabel,
             };
             ensureItemUid(lineItem);
             cartItems.push(lineItem);
@@ -1165,11 +1205,22 @@ function updateCheckoutButtonState(items) {
 function buildItemSubtitle(item) {
     const parts = [];
     if (item.material) parts.push(item.material);
-    if (item.color) parts.push(item.color);
-    if (item.id === 'm8_backpack_1') {
-        const battery = formatBatterySize(item.batterySize);
-        if (battery) parts.push(`Battery ${battery}`);
-    }
+    if (item.id === 'm8_kit_1') {
+        if (item.plateColor) parts.push(`Plate ${item.plateColor}`);
+        if (item.backpackColor) parts.push(`Backpack ${item.backpackColor}`);
+        const batteryLabel = formatBatterySize(item.batterySize) || item.batteryModelLabel || '';
+        if (batteryLabel) parts.push(`Battery ${batteryLabel}`);
+    } else {
+        if (item.color) parts.push(item.color);
+        if (item.id === 'm8_backpack_1') {
+            const battery = formatBatterySize(item.batterySize);
+                if (battery) {
+                    parts.push(`Battery ${battery}`);
+                } else if (item.batteryModelLabel) {
+                    parts.push(`Battery ${item.batteryModelLabel}`);
+                }
+            }
+        }
     return parts.join(' \u2022 ');
 }
 
@@ -1380,10 +1431,22 @@ function renderCheckoutSummary() {
 
         const metaParts = [];
         if (item.material) metaParts.push(item.material);
-        if (item.color) metaParts.push(item.color);
-        if (item.id === 'm8_backpack_1') {
-            const battery = formatBatterySize(item.batterySize);
-            if (battery) metaParts.push(`Battery ${battery}`);
+        if (item.id === 'm8_kit_1') {
+            if (item.plateColor) metaParts.push(`Plate ${item.plateColor}`);
+            if (item.backpackColor) metaParts.push(`Backpack ${item.backpackColor}`);
+            const batteryLabel =
+                formatBatterySize(item.batterySize) || item.batteryModelLabel || '';
+            if (batteryLabel) metaParts.push(`Battery ${batteryLabel}`);
+        } else {
+            if (item.color) metaParts.push(item.color);
+            if (item.id === 'm8_backpack_1') {
+                const battery = formatBatterySize(item.batterySize);
+                if (battery) {
+                    metaParts.push(`Battery ${battery}`);
+                } else if (item.batteryModelLabel) {
+                    metaParts.push(`Battery ${item.batteryModelLabel}`);
+                }
+            }
         }
         if (isGlyphProductId(item.id) && item.customGlyphEnabled) {
             metaParts.push('Custom glyph');

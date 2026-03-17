@@ -1,0 +1,1322 @@
+{
+  "id": "359efefc-ac20-0a09-a571-2f208a1a61ae",
+  "name": "<a href=\"http://shop.porchlogic.com\">shop.porchlogic.com</a>",
+  "note": "",
+  "parent_id": "29c99ff5-fea8-2404-766d-29357649d00d",
+  "priority": 1200,
+  "completed": false,
+  "data": {
+    "layoutMode": "bullets"
+  },
+  "createdAt": 1769114100,
+  "modifiedAt": 1769219728,
+  "completedAt": null,
+  "children": [
+    {
+      "id": "43858cd4-c1d9-31b4-3aec-adbc375a1a29",
+      "name": "#page <span class=\"colored c-sky\">/</span>",
+      "note": null,
+      "parent_id": "359efefc-ac20-0a09-a571-2f208a1a61ae",
+      "priority": 9,
+      "completed": false,
+      "data": {
+        "layoutMode": "bullets"
+      },
+      "createdAt": 1769218238,
+      "modifiedAt": 1769219925,
+      "completedAt": null,
+      "children": [
+        {
+          "id": "060f66ed-82d4-39b1-4b52-0e022456ecdf",
+          "name": "#section Welcome",
+          "note": null,
+          "parent_id": "43858cd4-c1d9-31b4-3aec-adbc375a1a29",
+          "priority": 100,
+          "completed": false,
+          "data": {
+            "layoutMode": "bullets"
+          },
+          "createdAt": 1769118020,
+          "modifiedAt": 1769218243,
+          "completedAt": null,
+          "children": [
+            {
+              "id": "b802dabe-dc88-3a60-8b73-9edc4182831d",
+              "name": "scroll our products and checkout below",
+              "note": null,
+              "parent_id": "060f66ed-82d4-39b1-4b52-0e022456ecdf",
+              "priority": 100,
+              "completed": false,
+              "data": {
+                "layoutMode": "bullets"
+              },
+              "createdAt": 1769118932,
+              "modifiedAt": 1769118941,
+              "completedAt": null,
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": "a79e1e4d-960a-b189-c176-ed1df381e581",
+          "name": "#section Products",
+          "note": "",
+          "parent_id": "43858cd4-c1d9-31b4-3aec-adbc375a1a29",
+          "priority": 200,
+          "completed": false,
+          "data": {
+            "layoutMode": "bullets"
+          },
+          "createdAt": 1769117422,
+          "modifiedAt": 1769218243,
+          "completedAt": null,
+          "children": [
+            {
+              "id": "b4be7d65-740e-fe29-2fbb-f744a93f3282",
+              "name": "#def #product #card",
+              "note": null,
+              "parent_id": "a79e1e4d-960a-b189-c176-ed1df381e581",
+              "priority": 25,
+              "completed": false,
+              "data": {
+                "layoutMode": "bullets"
+              },
+              "createdAt": 1769218822,
+              "modifiedAt": 1769218856,
+              "completedAt": null,
+              "children": [
+                {
+                  "id": "3ed95cd3-a205-db00-6467-00f5fda8d34f",
+                  "name": "name of product",
+                  "note": null,
+                  "parent_id": "b4be7d65-740e-fe29-2fbb-f744a93f3282",
+                  "priority": 100,
+                  "completed": false,
+                  "data": {
+                    "layoutMode": "bullets"
+                  },
+                  "createdAt": 1769218856,
+                  "modifiedAt": 1769218916,
+                  "completedAt": null,
+                  "children": []
+                },
+                {
+                  "id": "d4ad2d1e-f0e6-46f6-20ca-c031a9028ab9",
+                  "name": "carousel of hero images",
+                  "note": null,
+                  "parent_id": "b4be7d65-740e-fe29-2fbb-f744a93f3282",
+                  "priority": 150,
+                  "completed": false,
+                  "data": {
+                    "layoutMode": "bullets"
+                  },
+                  "createdAt": 1769218916,
+                  "modifiedAt": 1769218926,
+                  "completedAt": null,
+                  "children": []
+                },
+                {
+                  "id": "140c13e8-0994-c750-8f5e-5e202c2c9ecd",
+                  "name": "if #bundle, show included products",
+                  "note": null,
+                  "parent_id": "b4be7d65-740e-fe29-2fbb-f744a93f3282",
+                  "priority": 200,
+                  "completed": false,
+                  "data": {
+                    "layoutMode": "bullets"
+                  },
+                  "createdAt": 1769218892,
+                  "modifiedAt": 1769218969,
+                  "completedAt": null,
+                  "children": []
+                },
+                {
+                  "id": "c36a4bb5-2919-335f-2f55-e132e074c8fb",
+                  "name": "price and buy button",
+                  "note": null,
+                  "parent_id": "b4be7d65-740e-fe29-2fbb-f744a93f3282",
+                  "priority": 300,
+                  "completed": false,
+                  "data": {
+                    "layoutMode": "bullets"
+                  },
+                  "createdAt": 1769218972,
+                  "modifiedAt": 1769218980,
+                  "completedAt": null,
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": "3bbd96bb-c341-7944-6a00-11820bfeab4d",
+              "name": "#product #card #m8-kit_1 ",
+              "note": null,
+              "parent_id": "a79e1e4d-960a-b189-c176-ed1df381e581",
+              "priority": 50,
+              "completed": false,
+              "data": {
+                "layoutMode": "bullets"
+              },
+              "createdAt": 1769218733,
+              "modifiedAt": 1769218767,
+              "completedAt": null,
+              "children": []
+            },
+            {
+              "id": "592366c8-ae17-d878-0161-93174e5e0b50",
+              "name": "#product #card #m8-plate_1 ",
+              "note": null,
+              "parent_id": "a79e1e4d-960a-b189-c176-ed1df381e581",
+              "priority": 75,
+              "completed": false,
+              "data": {
+                "layoutMode": "bullets"
+              },
+              "createdAt": 1769218767,
+              "modifiedAt": 1769218777,
+              "completedAt": null,
+              "children": []
+            },
+            {
+              "id": "c9df57d8-9d7d-d51f-3995-d23e77fcfd22",
+              "name": "#product #card #m8-backpack_1 ",
+              "note": null,
+              "parent_id": "a79e1e4d-960a-b189-c176-ed1df381e581",
+              "priority": 88,
+              "completed": false,
+              "data": {
+                "layoutMode": "bullets"
+              },
+              "createdAt": 1769218779,
+              "modifiedAt": 1769218787,
+              "completedAt": null,
+              "children": []
+            },
+            {
+              "id": "c3ec9297-3afc-778e-638d-441de9d325c5",
+              "name": "#product #card #m8-kit_1_supporter ",
+              "note": null,
+              "parent_id": "a79e1e4d-960a-b189-c176-ed1df381e581",
+              "priority": 94,
+              "completed": false,
+              "data": {
+                "layoutMode": "bullets"
+              },
+              "createdAt": 1769218787,
+              "modifiedAt": 1769218798,
+              "completedAt": null,
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": "8dca24e3-3a4e-c6e0-f890-5c9322f995cc",
+          "name": "#section Cart",
+          "note": null,
+          "parent_id": "43858cd4-c1d9-31b4-3aec-adbc375a1a29",
+          "priority": 300,
+          "completed": false,
+          "data": {
+            "layoutMode": "bullets"
+          },
+          "createdAt": 1769117913,
+          "modifiedAt": 1769218243,
+          "completedAt": null,
+          "children": [
+            {
+              "id": "548b0f7b-570d-a414-5033-246c890d3ae9",
+              "name": "this should be a minimal row of items representing the items in the cart",
+              "note": null,
+              "parent_id": "8dca24e3-3a4e-c6e0-f890-5c9322f995cc",
+              "priority": 25,
+              "completed": false,
+              "data": {
+                "layoutMode": "bullets"
+              },
+              "createdAt": 1769218024,
+              "modifiedAt": 1769218063,
+              "completedAt": null,
+              "children": []
+            },
+            {
+              "id": "ab621ee1-2e9b-6e53-da2a-228a4db42d92",
+              "name": "and a total price to the right",
+              "note": null,
+              "parent_id": "8dca24e3-3a4e-c6e0-f890-5c9322f995cc",
+              "priority": 113,
+              "completed": false,
+              "data": {
+                "layoutMode": "bullets"
+              },
+              "createdAt": 1769219320,
+              "modifiedAt": 1769219337,
+              "completedAt": null,
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": "12714837-9449-1149-1005-eb133bec190f",
+          "name": "#section Checkout",
+          "note": null,
+          "parent_id": "43858cd4-c1d9-31b4-3aec-adbc375a1a29",
+          "priority": 400,
+          "completed": false,
+          "data": {
+            "layoutMode": "bullets"
+          },
+          "createdAt": 1769117974,
+          "modifiedAt": 1769218243,
+          "completedAt": null,
+          "children": [
+            {
+              "id": "fb784607-264c-a585-765c-453c252f810a",
+              "name": "there should be a small 'checkout' button at the bottom right (only if there are items in the cart)",
+              "note": null,
+              "parent_id": "12714837-9449-1149-1005-eb133bec190f",
+              "priority": 50,
+              "completed": false,
+              "data": {
+                "layoutMode": "bullets"
+              },
+              "createdAt": 1769218137,
+              "modifiedAt": 1769218192,
+              "completedAt": null,
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": "a5cd2ae3-8649-19af-fff0-4b0c8b05fd5b",
+          "name": "#section footer",
+          "note": null,
+          "parent_id": "43858cd4-c1d9-31b4-3aec-adbc375a1a29",
+          "priority": 500,
+          "completed": false,
+          "data": {
+            "layoutMode": "bullets"
+          },
+          "createdAt": 1769118011,
+          "modifiedAt": 1769218243,
+          "completedAt": null,
+          "children": [
+            {
+              "id": "b428a3a2-5e2d-689d-befd-7ca3ca23da79",
+              "name": "\u00a9 2025 Porch Logic",
+              "note": null,
+              "parent_id": "a5cd2ae3-8649-19af-fff0-4b0c8b05fd5b",
+              "priority": 100,
+              "completed": false,
+              "data": {
+                "layoutMode": "bullets"
+              },
+              "createdAt": 1769118014,
+              "modifiedAt": 1769118073,
+              "completedAt": null,
+              "children": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "6353f0e0-bf5a-f8ad-05b7-866ddf74b5fd",
+      "name": "#page <span class=\"colored c-sky\">/cart</span>",
+      "note": null,
+      "parent_id": "359efefc-ac20-0a09-a571-2f208a1a61ae",
+      "priority": 300,
+      "completed": false,
+      "data": {
+        "layoutMode": "bullets"
+      },
+      "createdAt": 1769219386,
+      "modifiedAt": 1769219933,
+      "completedAt": null,
+      "children": [
+        {
+          "id": "a152b2dc-f862-fc38-d76b-751cc258e184",
+          "name": "a minimal cart page to edit the cart items",
+          "note": null,
+          "parent_id": "6353f0e0-bf5a-f8ad-05b7-866ddf74b5fd",
+          "priority": 100,
+          "completed": false,
+          "data": {
+            "layoutMode": "bullets"
+          },
+          "createdAt": 1769219388,
+          "modifiedAt": 1769219408,
+          "completedAt": null,
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "67fc1b33-9a09-c4b9-f176-1bf7a947719b",
+      "name": "#page <span class=\"colored c-sky\">/checkout</span>",
+      "note": null,
+      "parent_id": "359efefc-ac20-0a09-a571-2f208a1a61ae",
+      "priority": 400,
+      "completed": false,
+      "data": {
+        "layoutMode": "bullets"
+      },
+      "createdAt": 1769218247,
+      "modifiedAt": 1769219934,
+      "completedAt": null,
+      "children": [
+        {
+          "id": "ffd0401d-0ed9-c411-56da-1918a410de9d",
+          "name": "(Stripe iframe)",
+          "note": null,
+          "parent_id": "67fc1b33-9a09-c4b9-f176-1bf7a947719b",
+          "priority": 50,
+          "completed": false,
+          "data": {
+            "layoutMode": "bullets"
+          },
+          "createdAt": 1769117979,
+          "modifiedAt": 1769218264,
+          "completedAt": null,
+          "children": []
+        },
+        {
+          "id": "dae91384-5394-4589-43ea-c4e2058e8d9e",
+          "name": "#checkbox #opt-in Receive updates when new products eligible for your supporter discount are released?",
+          "note": null,
+          "parent_id": "67fc1b33-9a09-c4b9-f176-1bf7a947719b",
+          "priority": 75,
+          "completed": false,
+          "data": {
+            "layoutMode": "bullets"
+          },
+          "createdAt": 1769123664,
+          "modifiedAt": 1769218301,
+          "completedAt": null,
+          "children": []
+        },
+        {
+          "id": "73957bcf-c0a0-0937-1f29-9fbda12303f8",
+          "name": ".",
+          "note": null,
+          "parent_id": "67fc1b33-9a09-c4b9-f176-1bf7a947719b",
+          "priority": 200,
+          "completed": false,
+          "data": {
+            "layoutMode": "bullets"
+          },
+          "createdAt": 1769118192,
+          "modifiedAt": 1769218303,
+          "completedAt": null,
+          "children": [
+            {
+              "id": "7343df6b-a5cf-951e-8f18-4d0a7cdfb5cd",
+              "name": "#private #apiBase <a href=\"https://api.porchlogic.com/\">https://api.porchlogic.com</a>",
+              "note": null,
+              "parent_id": "73957bcf-c0a0-0937-1f29-9fbda12303f8",
+              "priority": 100,
+              "completed": false,
+              "data": {
+                "layoutMode": "bullets"
+              },
+              "createdAt": 1769118156,
+              "modifiedAt": 1769118197,
+              "completedAt": null,
+              "children": []
+            },
+            {
+              "id": "a9953284-5d7b-bfdb-c980-5f3336c43a2c",
+              "name": "testModeKey",
+              "note": null,
+              "parent_id": "73957bcf-c0a0-0937-1f29-9fbda12303f8",
+              "priority": 200,
+              "completed": false,
+              "data": {
+                "layoutMode": "bullets"
+              },
+              "createdAt": 1769114101,
+              "modifiedAt": 1769118205,
+              "completedAt": null,
+              "children": [
+                {
+                  "id": "b4a2d954-77d1-e163-3eed-b2670dc1d413",
+                  "name": "porchlogic_checkout_test_mode",
+                  "note": null,
+                  "parent_id": "a9953284-5d7b-bfdb-c980-5f3336c43a2c",
+                  "priority": 0,
+                  "completed": false,
+                  "data": {
+                    "layoutMode": "bullets"
+                  },
+                  "createdAt": 1769114101,
+                  "modifiedAt": 1769114101,
+                  "completedAt": null,
+                  "children": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "c6ac180c-b988-ad99-dcd5-0662b2532fce",
+      "name": "#page #product <span class=\"colored c-sky\">/m8-plate-1</span>",
+      "note": null,
+      "parent_id": "359efefc-ac20-0a09-a571-2f208a1a61ae",
+      "priority": 420,
+      "completed": false,
+      "data": {
+        "layoutMode": "bullets"
+      },
+      "createdAt": 1769219590,
+      "modifiedAt": 1769219945,
+      "completedAt": null,
+      "children": []
+    },
+    {
+      "id": "f0c4a14e-7bca-135c-04d8-42f65d2b71bb",
+      "name": "#page #product <span class=\"colored c-sky\">/m8-backpack-1</span>",
+      "note": null,
+      "parent_id": "359efefc-ac20-0a09-a571-2f208a1a61ae",
+      "priority": 439,
+      "completed": false,
+      "data": {
+        "layoutMode": "bullets"
+      },
+      "createdAt": 1769219673,
+      "modifiedAt": 1769219947,
+      "completedAt": null,
+      "children": []
+    },
+    {
+      "id": "150b42d7-d352-45b6-0c09-4036c1b36ea9",
+      "name": "#page #product <span class=\"colored c-sky\">/m8-kit-1</span>",
+      "note": null,
+      "parent_id": "359efefc-ac20-0a09-a571-2f208a1a61ae",
+      "priority": 458,
+      "completed": false,
+      "data": {
+        "layoutMode": "bullets"
+      },
+      "createdAt": 1769219681,
+      "modifiedAt": 1769219948,
+      "completedAt": null,
+      "children": []
+    },
+    {
+      "id": "8f9fd844-fb39-85e6-c7fb-cdc0ef8f6ba8",
+      "name": "#page #product <span class=\"colored c-sky\">/m8-kit-supporter</span>",
+      "note": null,
+      "parent_id": "359efefc-ac20-0a09-a571-2f208a1a61ae",
+      "priority": 477,
+      "completed": false,
+      "data": {
+        "layoutMode": "bullets"
+      },
+      "createdAt": 1769219688,
+      "modifiedAt": 1769219949,
+      "completedAt": null,
+      "children": []
+    },
+    {
+      "id": "0287aba9-43c8-567c-8cbe-c8e953e2147c",
+      "name": "",
+      "note": "",
+      "parent_id": "359efefc-ac20-0a09-a571-2f208a1a61ae",
+      "priority": 500,
+      "completed": false,
+      "data": {
+        "layoutMode": "divider"
+      },
+      "createdAt": 1769185447,
+      "modifiedAt": 1769185448,
+      "completedAt": null,
+      "children": []
+    },
+    {
+      "id": "220a92be-5514-afdd-444b-b21e0bb32243",
+      "name": "#styles",
+      "note": "\n@agent define the overall hierarchy and design system of styles of our site in the children of this node, based on the current styles of the site. I added some placeholder nodes so you can see how I'm thinking about it. It should start as simple as possible, then progressively broken-down children nodes to eventually describe the entire style system.\n",
+      "parent_id": "359efefc-ac20-0a09-a571-2f208a1a61ae",
+      "priority": 550,
+      "completed": false,
+      "data": {
+        "layoutMode": "bullets"
+      },
+      "createdAt": 1769304196,
+      "modifiedAt": 1769304511,
+      "completedAt": null,
+      "children": [
+        {
+          "id": "74854d4c-b49c-956a-8298-195a06e1b3ee",
+          "name": "overall style: minimal, airy product showcase with fine-line UI",
+          "note": null,
+          "parent_id": "220a92be-5514-afdd-444b-b21e0bb32243",
+          "priority": 100,
+          "completed": false,
+          "data": {
+            "layoutMode": "bullets"
+          },
+          "createdAt": 1769304343,
+          "modifiedAt": 1769304375,
+          "completedAt": null,
+          "children": [
+            {
+              "id": "3713e543-2c0b-4e4c-851c-061a84ddb61c",
+              "name": "layout: single-column stack, tight max-width, clear section rhythm",
+              "note": null,
+              "parent_id": "74854d4c-b49c-956a-8298-195a06e1b3ee",
+              "priority": 100,
+              "completed": false,
+              "data": {
+                "layoutMode": "bullets"
+              },
+              "createdAt": 1769304375,
+              "modifiedAt": 1769304422,
+              "completedAt": null,
+              "children": [
+                {
+                  "id": "afe27874-f26a-d658-a291-7d01d274f2b5",
+                  "name": "page frame: centered column (max-width ~480px), 0.5rem padding, 0.75rem vertical gaps",
+                  "note": null,
+                  "parent_id": "3713e543-2c0b-4e4c-851c-061a84ddb61c",
+                  "priority": 100,
+                  "completed": false,
+                  "data": {
+                    "layoutMode": "bullets"
+                  },
+                  "createdAt": 1769304422,
+                  "modifiedAt": 1769304439,
+                  "completedAt": null,
+                  "children": []
+                },
+                {
+                  "id": "ff5cd334-4b3c-4fc7-bcac-713c07b59370",
+                  "name": "surfaces: cards with 1px var(--border), square hero media, stacked sections",
+                  "note": null,
+                  "parent_id": "3713e543-2c0b-4e4c-851c-061a84ddb61c",
+                  "priority": 101,
+                  "children": []
+                },
+                {
+                  "id": "653ea80b-ffe4-4712-9fb9-aadd26b80c5d",
+                  "name": "grids: attributes grid 2 columns with hairline dividers and label/value columns",
+                  "note": null,
+                  "parent_id": "3713e543-2c0b-4e4c-851c-061a84ddb61c",
+                  "priority": 102,
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": "7baf9e90-5c03-a51e-7a1d-253b8c1912c3",
+              "name": "colors: neutral base with muted text and sky accent",
+              "note": null,
+              "parent_id": "74854d4c-b49c-956a-8298-195a06e1b3ee",
+              "priority": 200,
+              "completed": false,
+              "data": {
+                "layoutMode": "bullets"
+              },
+              "createdAt": 1769304391,
+              "modifiedAt": 1769304401,
+              "completedAt": null,
+              "children": [
+                {
+                  "id": "506b899c-c45d-4442-8bd3-be763199d02a",
+                  "name": "base tokens: --text, --text-muted, --border on light background",
+                  "note": null,
+                  "parent_id": "7baf9e90-5c03-a51e-7a1d-253b8c1912c3",
+                  "priority": 0,
+                  "children": []
+                },
+                {
+                  "id": "775cb90f-49c9-490a-8433-f9c3eb788ccd",
+                  "name": "accents: c-sky links and product imagery",
+                  "note": null,
+                  "parent_id": "7baf9e90-5c03-a51e-7a1d-253b8c1912c3",
+                  "priority": 1,
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": "4cdf6f1b-1bad-2f41-0d30-9690efad177c",
+              "name": "text styles: spaced caps labels, restrained headers",
+              "note": null,
+              "parent_id": "74854d4c-b49c-956a-8298-195a06e1b3ee",
+              "priority": 300,
+              "completed": false,
+              "data": {
+                "layoutMode": "bullets"
+              },
+              "createdAt": 1769304397,
+              "modifiedAt": 1769304419,
+              "completedAt": null,
+              "children": [
+                {
+                  "id": "ae729587-d747-4187-9909-ec16c270b9f1",
+                  "name": "h1: clamp(1.5rem, 6vw, 2.75rem), 0.12em letter-spacing, left-aligned, nowrap",
+                  "note": null,
+                  "parent_id": "4cdf6f1b-1bad-2f41-0d30-9690efad177c",
+                  "priority": 0,
+                  "children": []
+                },
+                {
+                  "id": "e74af5e8-0149-4042-ac6f-fecba6df7045",
+                  "name": "labels/body: uppercase muted labels with compact body copy",
+                  "note": null,
+                  "parent_id": "4cdf6f1b-1bad-2f41-0d30-9690efad177c",
+                  "priority": 1,
+                  "children": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "c8ffbe23-24c7-5acf-d0db-2ed8ce863424",
+      "name": "#def ",
+      "note": null,
+      "parent_id": "359efefc-ac20-0a09-a571-2f208a1a61ae",
+      "priority": 600,
+      "completed": false,
+      "data": {
+        "layoutMode": "bullets"
+      },
+      "createdAt": 1769114680,
+      "modifiedAt": 1769184417,
+      "completedAt": null,
+      "children": [
+        {
+          "id": "1a135d85-0bc6-f818-857a-2c7a19f86211",
+          "name": "web components",
+          "note": null,
+          "parent_id": "c8ffbe23-24c7-5acf-d0db-2ed8ce863424",
+          "priority": 6,
+          "completed": false,
+          "data": {
+            "layoutMode": "bullets"
+          },
+          "createdAt": 1769115193,
+          "modifiedAt": 1769290945,
+          "completedAt": null,
+          "children": [
+            {
+              "id": "4f3bbe6a-ed34-7df3-f8af-cfb66a3c5fb2",
+              "name": "#page #product ",
+              "note": null,
+              "parent_id": "1a135d85-0bc6-f818-857a-2c7a19f86211",
+              "priority": 12,
+              "completed": false,
+              "data": {
+                "layoutMode": "bullets"
+              },
+              "createdAt": 1769116399,
+              "modifiedAt": 1769116409,
+              "completedAt": null,
+              "children": [
+                {
+                  "id": "01e73139-8381-275e-bcf1-e69520ceb05e",
+                  "name": "#h1 #name",
+                  "note": null,
+                  "parent_id": "4f3bbe6a-ed34-7df3-f8af-cfb66a3c5fb2",
+                  "priority": 100,
+                  "completed": false,
+                  "data": {
+                    "layoutMode": "bullets"
+                  },
+                  "createdAt": 1769116409,
+                  "modifiedAt": 1769116451,
+                  "completedAt": null,
+                  "children": []
+                },
+                {
+                  "id": "1ef31648-81e3-5a03-3a55-e2663b995332",
+                  "name": "#carousel",
+                  "note": null,
+                  "parent_id": "4f3bbe6a-ed34-7df3-f8af-cfb66a3c5fb2",
+                  "priority": 200,
+                  "completed": false,
+                  "data": {
+                    "layoutMode": "bullets"
+                  },
+                  "createdAt": 1769116417,
+                  "modifiedAt": 1769116423,
+                  "completedAt": null,
+                  "children": [
+                    {
+                      "id": "a0473a0a-7723-08b0-8710-3c9222b9c37c",
+                      "name": "/images/#name_0.png",
+                      "note": null,
+                      "parent_id": "1ef31648-81e3-5a03-3a55-e2663b995332",
+                      "priority": 100,
+                      "completed": false,
+                      "data": {
+                        "layoutMode": "bullets"
+                      },
+                      "createdAt": 1769116423,
+                      "modifiedAt": 1769116481,
+                      "completedAt": null,
+                      "children": []
+                    },
+                    {
+                      "id": "a8a25045-8877-d6fc-1968-ff46efade73c",
+                      "name": "/images/#name_1.png",
+                      "note": null,
+                      "parent_id": "1ef31648-81e3-5a03-3a55-e2663b995332",
+                      "priority": 200,
+                      "completed": false,
+                      "data": {
+                        "layoutMode": "bullets"
+                      },
+                      "createdAt": 1769116481,
+                      "modifiedAt": 1769116489,
+                      "completedAt": null,
+                      "children": []
+                    }
+                  ]
+                },
+                {
+                  "id": "a742503a-67da-cece-6c42-11484a17f6cf",
+                  "name": "#attributes ",
+                  "note": null,
+                  "parent_id": "4f3bbe6a-ed34-7df3-f8af-cfb66a3c5fb2",
+                  "priority": 300,
+                  "completed": false,
+                  "data": {
+                    "layoutMode": "bullets"
+                  },
+                  "createdAt": 1769116501,
+                  "modifiedAt": 1769116504,
+                  "completedAt": null,
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": "ecb95b6b-5f04-708f-132d-15e8a248a07a",
+              "name": "#card #product",
+              "note": null,
+              "parent_id": "1a135d85-0bc6-f818-857a-2c7a19f86211",
+              "priority": 19,
+              "completed": false,
+              "data": {
+                "layoutMode": "bullets"
+              },
+              "createdAt": 1769117047,
+              "modifiedAt": 1769290963,
+              "completedAt": null,
+              "children": [
+                {
+                  "id": "d26e1505-4ec8-9904-8343-4a62f088c2e9",
+                  "name": "#h1 ",
+                  "note": null,
+                  "parent_id": "ecb95b6b-5f04-708f-132d-15e8a248a07a",
+                  "priority": 100,
+                  "completed": false,
+                  "data": {
+                    "layoutMode": "bullets"
+                  },
+                  "createdAt": 1769117051,
+                  "modifiedAt": 1769117063,
+                  "completedAt": null,
+                  "children": []
+                },
+                {
+                  "id": "4b2649ab-e10c-17f2-595d-1acf36c3d2e1",
+                  "name": "#carousel ",
+                  "note": null,
+                  "parent_id": "ecb95b6b-5f04-708f-132d-15e8a248a07a",
+                  "priority": 200,
+                  "completed": false,
+                  "data": {
+                    "layoutMode": "bullets"
+                  },
+                  "createdAt": 1769117068,
+                  "modifiedAt": 1769117075,
+                  "completedAt": null,
+                  "children": []
+                },
+                {
+                  "id": "2b4ace87-cc7e-4bcd-79ef-0936d6778c0b",
+                  "name": "#price",
+                  "note": null,
+                  "parent_id": "ecb95b6b-5f04-708f-132d-15e8a248a07a",
+                  "priority": 300,
+                  "completed": false,
+                  "data": {
+                    "layoutMode": "bullets"
+                  },
+                  "createdAt": 1769117080,
+                  "modifiedAt": 1769117099,
+                  "completedAt": null,
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": "f3c1117b-6878-838c-78a4-6c135a1e9364",
+              "name": "#h1 ",
+              "note": null,
+              "parent_id": "1a135d85-0bc6-f818-857a-2c7a19f86211",
+              "priority": 25,
+              "completed": false,
+              "data": {
+                "layoutMode": "bullets"
+              },
+              "createdAt": 1769115444,
+              "modifiedAt": 1769115447,
+              "completedAt": null,
+              "children": []
+            },
+            {
+              "id": "b0587a18-ec28-fa53-d878-fba965a98cbf",
+              "name": "#includes : ",
+              "note": null,
+              "parent_id": "1a135d85-0bc6-f818-857a-2c7a19f86211",
+              "priority": 50,
+              "completed": false,
+              "data": {
+                "layoutMode": "bullets"
+              },
+              "createdAt": 1769115343,
+              "modifiedAt": 1769115402,
+              "completedAt": null,
+              "children": []
+            },
+            {
+              "id": "04e9c025-4971-ff39-adff-47c613ac0a11",
+              "name": "#carousel : a product hero image carousel slider",
+              "note": null,
+              "parent_id": "1a135d85-0bc6-f818-857a-2c7a19f86211",
+              "priority": 100,
+              "completed": false,
+              "data": {
+                "layoutMode": "bullets"
+              },
+              "createdAt": 1769115222,
+              "modifiedAt": 1769115269,
+              "completedAt": null,
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": "22792511-361e-471e-96df-aaba63e94c26",
+          "name": "web styles",
+          "note": null,
+          "parent_id": "c8ffbe23-24c7-5acf-d0db-2ed8ce863424",
+          "priority": 9,
+          "completed": false,
+          "data": {
+            "layoutMode": "bullets"
+          },
+          "createdAt": 1769115454,
+          "modifiedAt": 1769118236,
+          "completedAt": null,
+          "children": [
+            {
+              "id": "1e4a7198-b1f3-40ab-6ba6-c1de03996f5d",
+              "name": "Style references from /m8-plate",
+              "note": "&quot;Derived from /m8-plate styles.css and inline styles in /m8-plate/index.html; see notes under #h1/#grid/#product-grid. @_ag&quot;\n",
+              "parent_id": "22792511-361e-471e-96df-aaba63e94c26",
+              "priority": 50,
+              "completed": false,
+              "data": {
+                "layoutMode": "bullets"
+              },
+              "createdAt": 1769285658,
+              "modifiedAt": 1769303748,
+              "completedAt": null,
+              "children": []
+            },
+            {
+              "id": "c97b2245-590a-7ccb-7d13-0eb764a54d6c",
+              "name": "#h1 ",
+              "note": "&quot;Header h1 uses clamp(1.5rem, 6vw, 2.75rem), letter-spacing 0.12em, color var(--text-muted), padding 0.5rem 0 0.25rem, left-aligned, white-space nowrap. @_ag&quot;\n",
+              "parent_id": "22792511-361e-471e-96df-aaba63e94c26",
+              "priority": 100,
+              "completed": false,
+              "data": {
+                "layoutMode": "bullets"
+              },
+              "createdAt": 1769115458,
+              "modifiedAt": 1769303756,
+              "completedAt": null,
+              "children": []
+            },
+            {
+              "id": "c6e4fe92-de94-c6d9-6866-164b2dbbaec5",
+              "name": "#grid",
+              "note": "&quot;Attributes grid is 2 columns (repeat(2, minmax(0, 1fr))) with 1px var(--border) lines; cells are flex column with 0.75-1rem padding and uppercase muted labels. @_ag&quot;\n",
+              "parent_id": "22792511-361e-471e-96df-aaba63e94c26",
+              "priority": 150,
+              "completed": false,
+              "data": {
+                "layoutMode": "bullets"
+              },
+              "createdAt": 1769115536,
+              "modifiedAt": 1769303758,
+              "completedAt": null,
+              "children": []
+            },
+            {
+              "id": "b966831b-af9d-11ae-491a-b408fa4e0907",
+              "name": "#product-grid ",
+              "note": "&quot;Product page layout is a single-column stack: main is flex column with 0.75rem gap, 0.5rem padding, max-width 480px; hero is square (aspect 1/1) and full width; sections stack vertically. @_ag&quot;\n",
+              "parent_id": "22792511-361e-471e-96df-aaba63e94c26",
+              "priority": 200,
+              "completed": false,
+              "data": {
+                "layoutMode": "bullets"
+              },
+              "createdAt": 1769115470,
+              "modifiedAt": 1769303780,
+              "completedAt": null,
+              "children": []
+            },
+            {
+              "id": "a517bfbb-2ac2-30e1-1d51-b457b2abadda",
+              "name": "etc.",
+              "note": null,
+              "parent_id": "22792511-361e-471e-96df-aaba63e94c26",
+              "priority": 300,
+              "completed": false,
+              "data": {
+                "layoutMode": "bullets"
+              },
+              "createdAt": 1769115545,
+              "modifiedAt": 1769115547,
+              "completedAt": null,
+              "children": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "91d9f8a6-0ec7-01d9-76dc-214b9925be53",
+      "name": "backend",
+      "note": "",
+      "parent_id": "359efefc-ac20-0a09-a571-2f208a1a61ae",
+      "priority": 700,
+      "completed": false,
+      "data": {
+        "layoutMode": "bullets"
+      },
+      "createdAt": 1769184417,
+      "modifiedAt": 1769285641,
+      "completedAt": null,
+      "children": [
+        {
+          "id": "ed04f46b-6797-5215-a1c6-ce5e7a761b48",
+          "name": "overview",
+          "note": null,
+          "parent_id": "91d9f8a6-0ec7-01d9-76dc-214b9925be53",
+          "priority": 25,
+          "completed": false,
+          "data": {
+            "layoutMode": "bullets"
+          },
+          "createdAt": 1769184530,
+          "modifiedAt": 1769184604,
+          "completedAt": null,
+          "children": [
+            {
+              "id": "d4851aa2-1fb1-8b2f-4ee4-b865c33f3e0f",
+              "name": "server on digital ocean droplet",
+              "note": null,
+              "parent_id": "ed04f46b-6797-5215-a1c6-ce5e7a761b48",
+              "priority": 100,
+              "completed": false,
+              "data": {
+                "layoutMode": "bullets"
+              },
+              "createdAt": 1769184486,
+              "modifiedAt": 1769184532,
+              "completedAt": null,
+              "children": []
+            },
+            {
+              "id": "aae9c42b-2273-2fea-d9ce-39f967e450e0",
+              "name": "needs to be easy to test new products",
+              "note": null,
+              "parent_id": "ed04f46b-6797-5215-a1c6-ce5e7a761b48",
+              "priority": 200,
+              "completed": false,
+              "data": {
+                "layoutMode": "bullets"
+              },
+              "createdAt": 1769184421,
+              "modifiedAt": 1769184604,
+              "completedAt": null,
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": "55b34f28-ef5c-cfcf-c1ce-d2b56d749a36",
+          "name": "server",
+          "note": null,
+          "parent_id": "91d9f8a6-0ec7-01d9-76dc-214b9925be53",
+          "priority": 63,
+          "completed": false,
+          "data": {
+            "layoutMode": "bullets"
+          },
+          "createdAt": 1769184540,
+          "modifiedAt": 1769184544,
+          "completedAt": null,
+          "children": [
+            {
+              "id": "e9c59dba-b960-9942-b6ee-716492801351",
+              "name": "endpoints",
+              "note": null,
+              "parent_id": "55b34f28-ef5c-cfcf-c1ce-d2b56d749a36",
+              "priority": 50,
+              "completed": false,
+              "data": {
+                "layoutMode": "bullets"
+              },
+              "createdAt": 1769184564,
+              "modifiedAt": 1769184567,
+              "completedAt": null,
+              "children": [
+                {
+                  "id": "589e6900-826e-8b61-fae6-b14d184c594e",
+                  "name": "checkout: ",
+                  "note": null,
+                  "parent_id": "e9c59dba-b960-9942-b6ee-716492801351",
+                  "priority": 50,
+                  "completed": false,
+                  "data": {
+                    "layoutMode": "bullets"
+                  },
+                  "createdAt": 1769285428,
+                  "modifiedAt": 1769285428,
+                  "completedAt": null,
+                  "children": [
+                    {
+                      "id": "6962dc83-b3d2-8b04-1d27-77eddd634727",
+                      "name": "/create-checkout-session,",
+                      "note": null,
+                      "parent_id": "589e6900-826e-8b61-fae6-b14d184c594e",
+                      "priority": 50,
+                      "completed": false,
+                      "data": {
+                        "layoutMode": "bullets"
+                      },
+                      "createdAt": 1769285434,
+                      "modifiedAt": 1769285434,
+                      "completedAt": null,
+                      "children": []
+                    },
+                    {
+                      "id": "c77e6b7a-4996-6918-1ed7-5aab4684f2fc",
+                      "name": "/calculate-shipping-options,",
+                      "note": null,
+                      "parent_id": "589e6900-826e-8b61-fae6-b14d184c594e",
+                      "priority": 75,
+                      "completed": false,
+                      "data": {
+                        "layoutMode": "bullets"
+                      },
+                      "createdAt": 1769285438,
+                      "modifiedAt": 1769285438,
+                      "completedAt": null,
+                      "children": []
+                    },
+                    {
+                      "id": "6cab846a-39cb-4e53-c10a-63854c533c7b",
+                      "name": "/newsletter-checkout-opt-in",
+                      "note": null,
+                      "parent_id": "589e6900-826e-8b61-fae6-b14d184c594e",
+                      "priority": 100,
+                      "completed": false,
+                      "data": {
+                        "layoutMode": "bullets"
+                      },
+                      "createdAt": 1769184544,
+                      "modifiedAt": 1769285438,
+                      "completedAt": null,
+                      "children": []
+                    }
+                  ]
+                },
+                {
+                  "id": "c84e04cd-46d8-738c-44a0-87724df08e69",
+                  "name": "newsletter signup",
+                  "note": null,
+                  "parent_id": "e9c59dba-b960-9942-b6ee-716492801351",
+                  "priority": 200,
+                  "completed": false,
+                  "data": {
+                    "layoutMode": "bullets"
+                  },
+                  "createdAt": 1769184573,
+                  "modifiedAt": 1769184578,
+                  "completedAt": null,
+                  "children": []
+                },
+                {
+                  "id": "fce1600b-be3c-cab1-fcdb-f661d16dd9d4",
+                  "name": "etc.",
+                  "note": null,
+                  "parent_id": "e9c59dba-b960-9942-b6ee-716492801351",
+                  "priority": 300,
+                  "completed": false,
+                  "data": {
+                    "layoutMode": "bullets"
+                  },
+                  "createdAt": 1769184578,
+                  "modifiedAt": 1769184587,
+                  "completedAt": null,
+                  "children": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "18a7589c-600e-5f48-75ee-e439ebec433e",
+      "name": "#ideas",
+      "note": null,
+      "parent_id": "359efefc-ac20-0a09-a571-2f208a1a61ae",
+      "priority": 800,
+      "completed": false,
+      "data": {
+        "layoutMode": "bullets"
+      },
+      "createdAt": 1769128446,
+      "modifiedAt": 1769128456,
+      "completedAt": null,
+      "children": [
+        {
+          "id": "56a33b1e-9d23-8680-e7fa-f68b302825f4",
+          "name": "navigation peeks in and out of nodes",
+          "note": null,
+          "parent_id": "18a7589c-600e-5f48-75ee-e439ebec433e",
+          "priority": 100,
+          "completed": false,
+          "data": {
+            "layoutMode": "bullets"
+          },
+          "createdAt": 1769128455,
+          "modifiedAt": 1769128475,
+          "completedAt": null,
+          "children": []
+        },
+        {
+          "id": "2fbb57de-5828-9229-3539-8146bd1352e5",
+          "name": "up/down is parallel through the tree",
+          "note": null,
+          "parent_id": "18a7589c-600e-5f48-75ee-e439ebec433e",
+          "priority": 200,
+          "completed": false,
+          "data": {
+            "layoutMode": "bullets"
+          },
+          "createdAt": 1769128466,
+          "modifiedAt": 1769128466,
+          "completedAt": null,
+          "children": []
+        },
+        {
+          "id": "6303e5e8-b7de-54be-5095-a0d7d06378a0",
+          "name": "left/right is shallow/deep",
+          "note": null,
+          "parent_id": "18a7589c-600e-5f48-75ee-e439ebec433e",
+          "priority": 300,
+          "completed": false,
+          "data": {
+            "layoutMode": "bullets"
+          },
+          "createdAt": 1769128466,
+          "modifiedAt": 1769128466,
+          "completedAt": null,
+          "children": []
+        },
+        {
+          "id": "6c83e6ce-0699-9a35-ea9d-eea1aac93bc4",
+          "name": "It opens like a little jelly/bubbly group of petals on the left half of the screen (ooh maybe in other countries it could start on e.g. top?)",
+          "note": null,
+          "parent_id": "18a7589c-600e-5f48-75ee-e439ebec433e",
+          "priority": 400,
+          "completed": false,
+          "data": {
+            "layoutMode": "bullets"
+          },
+          "createdAt": 1769128466,
+          "modifiedAt": 1769128466,
+          "completedAt": null,
+          "children": []
+        },
+        {
+          "id": "c4aab69f-8582-fc3a-111b-e3ede85649e7",
+          "name": "if you tap the screen, they immediately react a bit and the second level of petals to the right fades in to halfway fast, and if you drag right, they will smoothly fill in, and so on down the hierarchy",
+          "note": null,
+          "parent_id": "18a7589c-600e-5f48-75ee-e439ebec433e",
+          "priority": 500,
+          "completed": false,
+          "data": {
+            "layoutMode": "bullets"
+          },
+          "createdAt": 1769128466,
+          "modifiedAt": 1769128466,
+          "completedAt": null,
+          "children": []
+        },
+        {
+          "id": "af4ac63a-9b32-cdcc-4353-31a62c23c933",
+          "name": "And it should be from the center of left, outward radially to the right and up and down",
+          "note": null,
+          "parent_id": "18a7589c-600e-5f48-75ee-e439ebec433e",
+          "priority": 600,
+          "completed": false,
+          "data": {
+            "layoutMode": "bullets"
+          },
+          "createdAt": 1769128466,
+          "modifiedAt": 1769128466,
+          "completedAt": null,
+          "children": []
+        },
+        {
+          "id": "c7362a56-68d0-35ed-a7b8-ac1be4cd430b",
+          "name": "Think a traditional parallel line hierarchy, and perfectly transform it mathematically/geometrically into a nice radial layout that is still readable. Think excellent video game menu design. It needs to feel super responsive on a phone visiting on the browser",
+          "note": null,
+          "parent_id": "18a7589c-600e-5f48-75ee-e439ebec433e",
+          "priority": 700,
+          "completed": false,
+          "data": {
+            "layoutMode": "bullets"
+          },
+          "createdAt": 1769128466,
+          "modifiedAt": 1769128466,
+          "completedAt": null,
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "2e7c9899-f554-26f3-e534-144206c8a3c0",
+      "name": "",
+      "note": null,
+      "parent_id": "359efefc-ac20-0a09-a571-2f208a1a61ae",
+      "priority": 900,
+      "completed": false,
+      "data": {
+        "layoutMode": "bullets"
+      },
+      "createdAt": 1769292141,
+      "modifiedAt": 1769292141,
+      "completedAt": null,
+      "children": []
+    }
+  ]
+}

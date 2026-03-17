@@ -1,0 +1,25 @@
+diff:
+  - op: replace
+    path: ["#def","web styles","@agent fill out these nodes with information from our current styles on /m8-plate"]
+    field: text
+    new: "Style references from /m8-plate"
+  - op: insert
+    path: ["#def","web styles","Style references from /m8-plate"]
+    field: note
+    new: |
+      "Derived from /m8-plate styles.css and inline styles in /m8-plate/index.html; see notes under #h1/#grid/#product-grid. @_ag"
+  - op: insert
+    path: ["#def","web styles","#h1"]
+    field: note
+    new: |
+      "Header h1 uses clamp(1.5rem, 6vw, 2.75rem), letter-spacing 0.12em, color var(--text-muted), padding 0.5rem 0 0.25rem, left-aligned, white-space nowrap. @_ag"
+  - op: insert
+    path: ["#def","web styles","#grid"]
+    field: note
+    new: |
+      "Attributes grid is 2 columns (repeat(2, minmax(0, 1fr))) with 1px var(--border) lines; cells are flex column with 0.75-1rem padding and uppercase muted labels. @_ag"
+  - op: insert
+    path: ["#def","web styles","#product-grid"]
+    field: note
+    new: |
+      "Product page layout is a single-column stack: main is flex column with 0.75rem gap, 0.5rem padding, max-width 480px; hero is square (aspect 1/1) and full width; sections stack vertically. @_ag"

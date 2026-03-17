@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Static Build</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/styles/site.css" />
+  </head>
+  <body class="return-page">
+    <main>
+      <header><h1>Payment status</h1><div class="badge neutral" id="status-pill"><span id="status-label">Checking status…</span></div></header><section class="panel"><div class="status-grid"><div class="status-row"><span class="inline-code" id="status-raw">pending</span></div><p class="status-detail" id="status-detail">Give us a second while we talk to Stripe.</p><p class="muted" id="status-email"></p></div></section><section class="panel" id="codes-panel" style="visibility: hidden;" hidden="hidden"><div class="codes" id="codes"></div></section><section class="panel"><button class="btn secondary" id="refresh-btn" type="button">Refresh status</button></section><footer><a href="/" class="shop-link">Back to shop</a></footer>
+    </main>
+  </body>
+</html>

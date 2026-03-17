@@ -1,0 +1,5 @@
+diff:
+  - op: replace
+    path: [root, "backend", "server", "endpoints", "checkout"]
+    field: text
+    new: "checkout: /create-checkout-session, /calculate-shipping-options, /newsletter-checkout-opt-in"

@@ -1,0 +1,12 @@
+diff:
+  - op: replace
+    path: ["#def","web styles","@agent help me write styles for the main top level tags, based on the styles in our / and /m8-plate pages."]
+    field: text
+    new: "Top-level tag styles (from / + /m8-plate)"
+  - op: insert
+    path: ["#def","web styles","Top-level tag styles (from / + /m8-plate)"]
+    field: note
+    new: |
+      "Use the main shell from / (2:3 aspect, centered, full-bleed content, 1px border); keep m8-plate's soft bg image/gradient and muted palette."
+      "Sections: column flex, 0.8rem gap, 0.9rem padding, thin separators using var(--border); titles use stealth57, muted color."
+      "Grids: #grid/#product-grid as 2-col on desktop, 1-col <=768, 0.8rem gap; cards have 1px border, subtle bg tint, uppercase labels and letter-spacing like attributes. @_ag"

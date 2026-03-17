@@ -352,6 +352,62 @@
             gap: 0.4rem;
         }
 
+        .glyph-upload__input {
+            font-size: 0.7rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--text-main);
+        }
+
+        .glyph-upload__controls {
+            display: grid;
+            gap: 0.5rem;
+        }
+
+        .glyph-upload__controls.is-disabled {
+            opacity: 0.45;
+            pointer-events: none;
+        }
+
+        .glyph-upload__preview {
+            width: 96px;
+            height: 96px;
+            border-radius: 0.4rem;
+            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.75);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .glyph-upload__preview canvas {
+            width: 96px;
+            height: 96px;
+            image-rendering: pixelated;
+        }
+
+        .glyph-upload__label {
+            font-size: 0.65rem;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            display: grid;
+            gap: 0.2rem;
+        }
+
+        .glyph-upload__label input[type="range"] {
+            width: 100%;
+        }
+
+        .glyph-upload__hint {
+            margin: 0;
+            font-size: 0.6rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+
         .attribute__select {
             width: 100%;
             padding: 0.35rem 0.5rem;
@@ -1058,6 +1114,34 @@
             </form>
         </section>
 
+        <section class="inquiry" aria-label="Custom glyph upload">
+            <h2 class="inquiry__title">Custom glyph</h2>
+            <div class="inquiry__form">
+                <div class="attribute__value attribute__value--glyph">
+                    <button class="toggle" type="button" aria-pressed="false" aria-label="Toggle custom glyph"
+                        id="glyph-toggle">
+                        <span class="toggle__knob"></span>
+                    </button>
+                </div>
+                <input class="glyph-upload__input" id="glyph-upload" type="file" accept="image/*" />
+                <div class="glyph-upload__controls" id="glyph-controls">
+                    <div class="glyph-upload__preview">
+                        <canvas id="glyph-preview" width="32" height="32"
+                            aria-label="Glyph preview"></canvas>
+                    </div>
+                    <label class="glyph-upload__label" for="glyph-scale">
+                        Scale
+                        <input id="glyph-scale" type="range" min="0.05" max="4" step="0.01" value="1" />
+                    </label>
+                    <label class="glyph-upload__label" for="glyph-threshold">
+                        Threshold
+                        <input id="glyph-threshold" type="range" min="0" max="255" step="1" value="128" />
+                    </label>
+                    <p class="glyph-upload__hint">Drag to position. Output is 32x32 black/white.</p>
+                </div>
+            </div>
+        </section>
+
         <section class="cta">
             <div class="cta__price">
                 <!-- <span class="price-note">🎄 25% OFF!</span> -->
@@ -1112,6 +1196,7 @@
                 wireLimitsModal();
                 wireCartPopup();
                 wireBatteryInquiry();
+                wireGlyphUpload();
             });
 
             const THIS_API_BASE = "https://api.porchlogic.com";
@@ -1379,6 +1464,9 @@
                             color: state.color,
                             batterySize: { ...state.batterySize },
                             batteryModel: state.batteryModel,
+                            customGlyphImage: window.m8BackpackGlyphEnabled
+                                ? (window.m8BackpackGlyphData || null)
+                                : null,
                         };
                         if (typeof addItemToCart === 'function') {
                             addItemToCart(item);
@@ -1432,6 +1520,167 @@
                         hideCartPopup();
                     });
                 }
+            }
+
+            function wireGlyphUpload() {
+                const fileInput = document.getElementById('glyph-upload');
+                const scaleInput = document.getElementById('glyph-scale');
+                const thresholdInput = document.getElementById('glyph-threshold');
+                const toggle = document.getElementById('glyph-toggle');
+                const controls = document.getElementById('glyph-controls');
+                const preview = document.getElementById('glyph-preview');
+                if (!fileInput || !scaleInput || !thresholdInput || !toggle || !controls || !preview) return;
+
+                const ctx = preview.getContext('2d');
+                if (!ctx) return;
+
+                const state = {
+                    image: null,
+                    scale: 1,
+                    offsetX: 0,
+                    offsetY: 0,
+                    threshold: 128,
+                    enabled: false,
+                    isDragging: false,
+                    dragStartX: 0,
+                    dragStartY: 0,
+                    dragBaseX: 0,
+                    dragBaseY: 0,
+                };
+
+                window.m8BackpackGlyphEnabled = false;
+
+                const syncToggleUI = () => {
+                    toggle.classList.toggle('is-on', state.enabled);
+                    toggle.setAttribute('aria-pressed', String(state.enabled));
+                    controls.classList.toggle('is-disabled', !state.enabled);
+                    fileInput.disabled = !state.enabled;
+                    scaleInput.disabled = !state.enabled;
+                    thresholdInput.disabled = !state.enabled;
+                    if (!state.enabled) {
+                        ctx.clearRect(0, 0, preview.width, preview.height);
+                        window.m8BackpackGlyphData = null;
+                    }
+                    window.m8BackpackGlyphEnabled = state.enabled;
+                };
+
+                const render = () => {
+                    ctx.clearRect(0, 0, preview.width, preview.height);
+                    if (!state.enabled || !state.image) {
+                        window.m8BackpackGlyphData = null;
+                        return;
+                    }
+
+                    const img = state.image;
+                    const scale = state.scale;
+                    const drawW = img.width * scale;
+                    const drawH = img.height * scale;
+                    const centerX = (preview.width - drawW) / 2 + state.offsetX;
+                    const centerY = (preview.height - drawH) / 2 + state.offsetY;
+
+                    ctx.imageSmoothingEnabled = true;
+                    ctx.drawImage(img, centerX, centerY, drawW, drawH);
+
+                    const imageData = ctx.getImageData(0, 0, preview.width, preview.height);
+                    const data = imageData.data;
+                    const threshold = state.threshold;
+                    for (let i = 0; i < data.length; i += 4) {
+                        const r = data[i];
+                        const g = data[i + 1];
+                        const b = data[i + 2];
+                        const lum = Math.round(0.299 * r + 0.587 * g + 0.114 * b);
+                        const value = lum >= threshold ? 255 : 0;
+                        data[i] = value;
+                        data[i + 1] = value;
+                        data[i + 2] = value;
+                        data[i + 3] = 255;
+                    }
+                    ctx.putImageData(imageData, 0, 0);
+                    window.m8BackpackGlyphData = preview.toDataURL('image/png');
+                };
+
+                fileInput.addEventListener('change', () => {
+                    if (!state.enabled) return;
+                    const file = fileInput.files && fileInput.files[0];
+                    if (!file) return;
+                    const img = new Image();
+                    img.onload = () => {
+                        state.image = img;
+                        state.scale = 1;
+                        state.offsetX = 0;
+                        state.offsetY = 0;
+                        state.threshold = 128;
+                        scaleInput.value = String(state.scale);
+                        thresholdInput.value = String(state.threshold);
+                        render();
+                    };
+                    img.src = URL.createObjectURL(file);
+                });
+
+                scaleInput.addEventListener('input', () => {
+                    if (!state.enabled) return;
+                    state.scale = Number(scaleInput.value);
+                    render();
+                });
+
+                thresholdInput.addEventListener('input', () => {
+                    if (!state.enabled) return;
+                    state.threshold = Number(thresholdInput.value);
+                    render();
+                });
+
+                toggle.addEventListener('click', () => {
+                    state.enabled = !state.enabled;
+                    syncToggleUI();
+                });
+
+                const startDrag = (clientX, clientY) => {
+                    if (!state.enabled) return;
+                    state.isDragging = true;
+                    state.dragStartX = clientX;
+                    state.dragStartY = clientY;
+                    state.dragBaseX = state.offsetX;
+                    state.dragBaseY = state.offsetY;
+                };
+
+                const moveDrag = (clientX, clientY) => {
+                    if (!state.enabled) return;
+                    if (!state.isDragging) return;
+                    state.offsetX = state.dragBaseX + (clientX - state.dragStartX);
+                    state.offsetY = state.dragBaseY + (clientY - state.dragStartY);
+                    render();
+                };
+
+                const endDrag = () => {
+                    state.isDragging = false;
+                };
+
+                preview.addEventListener('mousedown', (event) => {
+                    if (!state.image) return;
+                    startDrag(event.clientX, event.clientY);
+                });
+
+                window.addEventListener('mousemove', (event) => {
+                    moveDrag(event.clientX, event.clientY);
+                });
+
+                window.addEventListener('mouseup', endDrag);
+
+                preview.addEventListener('touchstart', (event) => {
+                    if (!state.image) return;
+                    const touch = event.touches[0];
+                    if (!touch) return;
+                    startDrag(touch.clientX, touch.clientY);
+                }, { passive: true });
+
+                preview.addEventListener('touchmove', (event) => {
+                    const touch = event.touches[0];
+                    if (!touch) return;
+                    moveDrag(touch.clientX, touch.clientY);
+                }, { passive: true });
+
+                preview.addEventListener('touchend', endDrag);
+                syncToggleUI();
             }
 
             function wireBatteryInquiry() {

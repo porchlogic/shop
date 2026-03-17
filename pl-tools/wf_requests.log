@@ -1,0 +1,67 @@
+pl_pull_wf: start 2026-01-24 13:30:23 (logging first 5 Workflowy requests)
+workflowy request 1: GET https://workflowy.com/api/v1/nodes/359efefc-ac20-0a09-a571-2f208a1a61ae
+workflowy request 2: GET https://workflowy.com/api/v1/nodes?parent_id=359efefc-ac20-0a09-a571-2f208a1a61ae
+workflowy request 3: GET https://workflowy.com/api/v1/nodes?parent_id=43858cd4-c1d9-31b4-3aec-adbc375a1a29
+workflowy request 4: GET https://workflowy.com/api/v1/nodes?parent_id=6353f0e0-bf5a-f8ad-05b7-866ddf74b5fd
+workflowy request 5: GET https://workflowy.com/api/v1/nodes?parent_id=67fc1b33-9a09-c4b9-f176-1bf7a947719b
+pl_pull_wf: start 2026-01-24 13:39:00 (logging Workflowy requests)
+workflowy request 1: GET https://workflowy.com/api/v1/nodes/359efefc-ac20-0a09-a571-2f208a1a61ae
+pl_pull_wf: start 2026-01-24 13:39:42 (logging Workflowy requests)
+workflowy request 1: GET https://workflowy.com/api/v1/nodes/359efefc-ac20-0a09-a571-2f208a1a61ae
+pl_pull_wf: start 2026-01-24 13:43:28 (logging Workflowy requests)
+workflowy request 1: GET https://workflowy.com/api/v1/nodes/359efefc-ac20-0a09-a571-2f208a1a61ae
+pl_pull_wf: start 2026-01-24 13:48:30 (logging Workflowy requests)
+workflowy request 1: GET https://workflowy.com/api/v1/nodes/359efefc-ac20-0a09-a571-2f208a1a61ae
+pl_pull_wf: outline unchanged at root; modifiedAt=1769219728. Skipping.
+pl_pull_wf: start 2026-01-24 14:10:16 (logging Workflowy requests)
+workflowy request 1: GET https://workflowy.com/api/v1/nodes-export
+pl_pull_wf: error Exceeded WF_MAX_NODES=2000
+pl_pull_wf: start 2026-01-24 14:30:24 (logging Workflowy requests)
+workflowy request 1: GET https://workflowy.com/api/v1/nodes?parent_id=shop
+pl_pull_wf: target shop returned 12 nodes
+pl_pull_wf: target node id=0287aba9-43c8-567c-8cbe-c8e953e2147c modifiedAt=1769185448 name=
+pl_pull_wf: target node id=c8ffbe23-24c7-5acf-d0db-2ed8ce863424 modifiedAt=1769184417 name=#def 
+pl_pull_wf: target node id=67fc1b33-9a09-c4b9-f176-1bf7a947719b modifiedAt=1769219934 name=#page <span class="colored c-sky">/checkout</span>
+pl_pull_wf: target node id=c6ac180c-b988-ad99-dcd5-0662b2532fce modifiedAt=1769219945 name=#page #product <span class="colored c-sky">/m8-plate-1</span>
+pl_pull_wf: target node id=8f9fd844-fb39-85e6-c7fb-cdc0ef8f6ba8 modifiedAt=1769219949 name=#page #product <span class="colored c-sky">/m8-kit-supporter</span>
+pl_pull_wf: target node id=43858cd4-c1d9-31b4-3aec-adbc375a1a29 modifiedAt=1769219925 name=#page <span class="colored c-sky">/</span>
+pl_pull_wf: target node id=6353f0e0-bf5a-f8ad-05b7-866ddf74b5fd modifiedAt=1769219933 name=#page <span class="colored c-sky">/cart</span>
+pl_pull_wf: target node id=f0c4a14e-7bca-135c-04d8-42f65d2b71bb modifiedAt=1769219947 name=#page #product <span class="colored c-sky">/m8-backpack-1</span>
+pl_pull_wf: target node id=150b42d7-d352-45b6-0c09-4036c1b36ea9 modifiedAt=1769219948 name=#page #product <span class="colored c-sky">/m8-kit-1</span>
+pl_pull_wf: target node id=18a7589c-600e-5f48-75ee-e439ebec433e modifiedAt=1769128456 name=#ideas
+pl_pull_wf: target node id=91d9f8a6-0ec7-01d9-76dc-214b9925be53 modifiedAt=1769285641 name=backend
+pl_pull_wf: target node id=2e7c9899-f554-26f3-e534-144206c8a3c0 modifiedAt=1769292141 name=
+pl_pull_wf: start 2026-01-24 16:31:55 (logging Workflowy requests)
+pl_pull_wf: fetching nodes export
+workflowy request 1: GET https://workflowy.com/api/v1/nodes-export
+pl_pull_wf: nodes export received (14926 nodes)
+pl_pull_wf: rebuilding node maps from export
+pl_pull_wf: error Exceeded WF_MAX_NODES=2000
+pl_pull_wf: start 2026-01-24 16:38:36 (logging Workflowy requests)
+pl_pull_wf: fetching nodes export
+workflowy request 1: GET https://workflowy.com/api/v1/nodes-export
+pl_pull_wf: nodes export received (14926 nodes)
+pl_pull_wf: rebuilding node maps from export
+pl_pull_wf: slicing subtree for 359efefc-ac20-0a09-a571-2f208a1a61ae
+pl_pull_wf: building outline tree
+pl_pull_wf: start 2026-01-24 17:02:15 (logging Workflowy requests)
+pl_pull_wf: fetching nodes export
+workflowy request 1: GET https://workflowy.com/api/v1/nodes-export
+pl_pull_wf: nodes export received (14926 nodes)
+pl_pull_wf: rebuilding node maps from export
+pl_pull_wf: slicing subtree for 359efefc-ac20-0a09-a571-2f208a1a61ae
+pl_pull_wf: building outline tree
+pl_pull_wf: start 2026-01-24 17:13:22 (logging Workflowy requests)
+pl_pull_wf: fetching nodes export
+workflowy request 1: GET https://workflowy.com/api/v1/nodes-export
+pl_pull_wf: nodes export received (14926 nodes)
+pl_pull_wf: rebuilding node maps from export
+pl_pull_wf: slicing subtree for 359efefc-ac20-0a09-a571-2f208a1a61ae
+pl_pull_wf: building outline tree
+pl_pull_wf: start 2026-01-24 17:28:53 (logging Workflowy requests)
+pl_pull_wf: fetching nodes export
+workflowy request 1: GET https://workflowy.com/api/v1/nodes-export
+pl_pull_wf: nodes export received (14932 nodes)
+pl_pull_wf: rebuilding node maps from export
+pl_pull_wf: slicing subtree for 359efefc-ac20-0a09-a571-2f208a1a61ae
+pl_pull_wf: building outline tree
