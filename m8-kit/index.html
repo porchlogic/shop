@@ -11,7 +11,7 @@
 <header>
   <div class="header-left">
     <a href="../" class="shop-link" aria-label="Back to shop">&lt; Shop</a>
-    <h1>M8 BACKPACK</h1>
+    <h1>M8 KIT</h1>
   </div>
   <a href="../cart/" class="cart-icon" aria-label="View cart">
   <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
@@ -20,18 +20,24 @@
   <span class="cart-count-badge" data-cart-count>0</span>
 </a>
 </header>
-<script type="application/json" id="product-data">{"id":"m8_backpack_1","name":"M8 Backpack","price":28,"images":["m8-backpack-hero1_smoke.png","m8-backpack-hero2_smoke.png","backpack_glyph.png"],"variants":["smoke","clear"],"type":"","attributes":{"material":{"type":"fixed","value":"PETG"},"color":{"type":"options","options":["smoke","clear"]},"cargo_size":{"note":"measure your cargo precisely with calipers","width":50,"height":100,"thickness":10},"custom_glyph":{"type":"toggle","label":"+ Custom Glyph","editor":"pixel","full_length":{"label":"Full-length","product_id":"m8_full_length_glyph_1","name":"Full-length Custom Glyph","price":6}},"compatible_device":{"type":"fixed","value":{"name":"M8 Tracker","model":"model:01"}}},"add_ons":{},"image_variants":{"1":{"for":["smoke"],"image":"m8-backpack-hero1_smoke.png"},"2":{"for":["clear"],"image":"backpack_clear.png"}},"images_base_url":"/images"}</script>
+<script type="application/json" id="product-data">{"id":"m8_kit_1","name":"M8 Kit","price":36,"images":["m8_kit_1.png","m8-plate-3_smoke.png","m8-plate-4_smoke.png","m8-backpack-hero1_smoke.png","m8-backpack-hero2_smoke.png"],"variants":null,"type":"kit","attributes":{},"add_ons":{"keycaps":{"price_each":1,"colors":["smoke","clear"],"product_ids":["m8_keycap_smoke","m8_keycap_clear"]}},"image_variants":{},"images_base_url":"/images","includes":[{"id":"m8_plate_1","name":"M8 Plate","price":24,"images":["m8-plate-3_smoke.png","m8-plate-4.png"],"variants":["smoke","clear"],"type":"","attributes":{"material":{"type":"fixed","value":"PETG"},"color":{"type":"options","options":["smoke","clear"]},"custom_glyph":{"type":"toggle","label":"+ Custom Glyph"},"compatible_device":{"type":"fixed","value":{"name":"M8 Tracker","model":"model:01"}}},"add_ons":{"keycaps":{"price_each":1,"colors":["smoke","clear"],"product_ids":["m8_keycap_smoke","m8_keycap_clear"]}},"image_variants":{"1":{"for":["smoke"],"image":"m8-plate-3_smoke.png"},"2":{"for":["clear"],"image":"m8-plate-3_clear.png"}}},{"id":"m8_backpack_1","name":"M8 Backpack","price":28,"images":["m8-backpack-hero1_smoke.png","m8-backpack-hero2_smoke.png","backpack_glyph.png"],"variants":["smoke","clear"],"type":"","attributes":{"material":{"type":"fixed","value":"PETG"},"color":{"type":"options","options":["smoke","clear"]},"cargo_size":{"note":"measure your cargo precisely with calipers","width":50,"height":100,"thickness":10},"custom_glyph":{"type":"toggle","label":"+ Custom Glyph","editor":"pixel","full_length":{"label":"Full-length","product_id":"m8_full_length_glyph_1","name":"Full-length Custom Glyph","price":6}},"compatible_device":{"type":"fixed","value":{"name":"M8 Tracker","model":"model:01"}}},"add_ons":{},"image_variants":{"1":{"for":["smoke"],"image":"m8-backpack-hero1_smoke.png"},"2":{"for":["clear"],"image":"backpack_clear.png"}}}]}</script>
 <section class="hero">
   <div class="pl-carousel" data-carousel>
     <div class="pl-carousel__track" data-carousel-track>
       <div class="pl-carousel__slide is-active">
+        <img src="/images/m8_kit_1.png" alt="">
+      </div>
+      <div class="pl-carousel__slide">
+        <img src="/images/m8-plate-3_smoke.png" alt="">
+      </div>
+      <div class="pl-carousel__slide">
+        <img src="/images/m8-plate-4_smoke.png" alt="">
+      </div>
+      <div class="pl-carousel__slide">
         <img src="/images/m8-backpack-hero1_smoke.png" alt="">
       </div>
       <div class="pl-carousel__slide">
         <img src="/images/m8-backpack-hero2_smoke.png" alt="">
-      </div>
-      <div class="pl-carousel__slide">
-        <img src="/images/backpack_glyph.png" alt="">
       </div>
     </div>
     <button class="pl-carousel__arrow pl-carousel__arrow--prev" data-carousel-prev>&lt;</button>
@@ -42,6 +48,47 @@
     </div>
   </div>
 </section>
+<section class="bundle-attributes">
+<section class="bundle-item" data-bundle-item="m8_plate_1">
+  <h2 class="bundle-item__title">M8 Plate</h2>
+<section class="attributes">
+<div class="attribute attribute--material">
+  <h2 class="attribute__label">Material</h2>
+  <div class="attribute__value">
+    <span class="attribute__primary-text">PETG</span>
+  </div>
+</div>
+<div class="attribute attribute--color">
+  <h2 class="attribute__label">Color</h2>
+  <div class="attribute__value attribute__value--choices">
+    <button class="chip chip--selected" type="button" aria-pressed="true" data-attribute="color" data-value="smoke" data-color="Smoke">Smoke</button>
+    <button class="chip" type="button" aria-pressed="false" data-attribute="color" data-value="clear" data-color="Clear">Clear</button>
+  </div>
+</div>
+<div class="attribute attribute--custom_glyph">
+  <h2 class="attribute__label">+ Custom Glyph</h2>
+  <div class="attribute__value attribute__value--glyph">
+    <button class="toggle" type="button" aria-pressed="false" aria-label="Toggle + Custom Glyph" data-attribute="custom_glyph" data-glyph-toggle="true">
+      <span class="toggle__knob"></span>
+    </button>
+
+    <button class="glyph-thumb is-disabled" type="button" aria-label="Edit custom glyph" aria-disabled="true" data-glyph-thumb="true" tabindex="-1">
+      <span class="glyph-thumb__edit">Edit</span>
+      <canvas class="glyph-icon-canvas" width="160" height="80" data-glyph-canvas="true"></canvas>
+    </button>
+  </div>
+</div>
+<div class="attribute attribute--for">
+  <h2 class="attribute__label">For</h2>
+  <div class="attribute__value">
+    <span class="attribute__primary-text">M8 TRACKER</span>
+    <span class="attribute__secondary-text">model:01</span>
+  </div>
+</div>
+</section>
+</section>
+<section class="bundle-item" data-bundle-item="m8_backpack_1">
+  <h2 class="bundle-item__title">M8 Backpack</h2>
 <section class="attributes">
 <div class="attribute attribute--material">
   <h2 class="attribute__label">Material</h2>
@@ -108,6 +155,46 @@
   </div>
 </div>
 </section>
+</section>
+</section>
+<section class="keycaps" aria-label="Keycaps add-on">
+  <div class="keycaps__header">
+    <h2 class="keycaps__label">Add keycaps</h2>
+    <p class="keycaps__note">$1 each</p>
+  </div>
+  <div class="keycaps__rows">
+  <div class="keycaps__row is-zero" data-keycap-row="Smoke">
+    <div>
+      <div class="keycaps__name">Smoke</div>
+      <div class="keycaps__meta">Keycaps</div>
+    </div>
+    <div class="stepper" data-keycap="Smoke">
+      <button type="button" class="stepper__btn" data-step="-1" aria-label="Decrease smoke keycaps">
+        &#9660;
+      </button>
+      <input type="number" class="stepper__input" min="0" max="8" value="0" inputmode="numeric" aria-label="Smoke keycaps quantity">
+      <button type="button" class="stepper__btn" data-step="1" aria-label="Increase smoke keycaps">
+        &#9650;
+      </button>
+    </div>
+  </div>
+  <div class="keycaps__row is-zero" data-keycap-row="Clear">
+    <div>
+      <div class="keycaps__name">Clear</div>
+      <div class="keycaps__meta">Keycaps</div>
+    </div>
+    <div class="stepper" data-keycap="Clear">
+      <button type="button" class="stepper__btn" data-step="-1" aria-label="Decrease clear keycaps">
+        &#9660;
+      </button>
+      <input type="number" class="stepper__input" min="0" max="8" value="0" inputmode="numeric" aria-label="Clear keycaps quantity">
+      <button type="button" class="stepper__btn" data-step="1" aria-label="Increase clear keycaps">
+        &#9650;
+      </button>
+    </div>
+  </div>
+  </div>
+</section>
 <section class="product-comment" aria-label="Product note">
   <ul class="product-comment__list">
   <li class="product-comment__item">M8 Plate owners: email support@porchlogic.com for M8 Backpack discount</li>
@@ -116,7 +203,7 @@
 <section class="cta">
 <div class="cta__price">
   <div class="price-row">
-    <span class="price">$28</span>
+    <span class="price">$36</span>
   </div>
 </div>
 <button type="button" class="buy" id="add-to-cart">Add to cart</button>
