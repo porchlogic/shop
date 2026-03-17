@@ -347,10 +347,15 @@
             var glyphData = glyphAttr && glyphAttr.data ? glyphAttr.data : item.glyphData;
             if (!glyphData) return;
             var editorType = glyphAttr && glyphAttr.editor ? glyphAttr.editor : null;
+            var isBackpackGlyph =
+                editorType === "pixel" && item && item.product_id === "m8_backpack_1";
             var pixelOptions =
                 editorType === "pixel"
                     ? {
-                        rows: glyphAttr && glyphAttr.full_length ? 32 : 16,
+                        rows:
+                            (glyphAttr && glyphAttr.full_length) || isBackpackGlyph
+                                ? 32
+                                : 16,
                         cols: 16,
                     }
                     : null;
@@ -2053,7 +2058,7 @@
         if (!instance || instance.editorType !== "pixel") {
             return { rows: 16, cols: 16 };
         }
-        if (instance.isBackpack && instance.state && instance.state.full_length) {
+        if (instance.isBackpack) {
             return { rows: 32, cols: 16 };
         }
         return { rows: 16, cols: 16 };
@@ -2094,15 +2099,10 @@
                 bundleItemId === "m8_backpack_1" ||
                 (!bundleItemId && pageProductId === "m8_backpack_1");
             var editorType = toggle.getAttribute("data-glyph-editor") || "mound";
-            var fullLengthToggle = root.querySelector("[data-glyph-full-length]");
-            var fullLengthEnabled = fullLengthToggle
-                ? fullLengthToggle.getAttribute("aria-pressed") === "true"
-                : false;
             var state = {
                 enabled: false,
                 data: null,
                 editor: editorType,
-                full_length: fullLengthEnabled,
             };
             if (editorType === "pixel" && !isPixelData(state.data)) {
                 state.data = null;
@@ -2114,7 +2114,6 @@
                 toggle: toggle,
                 thumb: thumb,
                 canvas: canvas,
-                fullLengthToggle: fullLengthToggle,
                 editorType: editorType,
                 isBackpack: isBackpack,
                 state: state,
@@ -2143,14 +2142,6 @@
             var enabled = instance.state.enabled;
             instance.toggle.classList.toggle("is-on", enabled);
             instance.toggle.setAttribute("aria-pressed", String(enabled));
-            if (instance.fullLengthToggle) {
-                var fullLengthEnabled = !!instance.state.full_length;
-                instance.fullLengthToggle.classList.toggle("is-on", fullLengthEnabled);
-                instance.fullLengthToggle.setAttribute(
-                    "aria-pressed",
-                    String(fullLengthEnabled)
-                );
-            }
             instance.thumb.classList.toggle("is-disabled", !enabled);
             instance.thumb.setAttribute("aria-disabled", String(!enabled));
             instance.thumb.tabIndex = enabled ? 0 : -1;
@@ -2221,24 +2212,6 @@
                 if (!instance.state.enabled) return;
                 openGlyphEditor(instance);
             });
-
-            if (instance.fullLengthToggle) {
-                instance.fullLengthToggle.addEventListener("click", function () {
-                    instance.state.full_length = !instance.state.full_length;
-                    var pixelOptions = getPixelGridOptions(instance);
-                    if (
-                        instance.editorType === "pixel" &&
-                        !isPixelDataOfSize(
-                            instance.state.data,
-                            pixelOptions.rows,
-                            pixelOptions.cols
-                        )
-                    ) {
-                        instance.state.data = null;
-                    }
-                    syncGlyphUI(instance);
-                });
-            }
 
             syncGlyphUI(instance);
         });
@@ -2404,7 +2377,6 @@
             if (type === "toggle" && toggle && toggle._glyphState) {
                 selection.data = toggle._glyphState.enabled ? toggle._glyphState.data : null;
                 selection.editor = toggle._glyphState.editor || null;
-                selection.full_length = !!toggle._glyphState.full_length;
             }
             selections[key] = selection;
         });
@@ -2615,34 +2587,34 @@
         }, 0);
     }
 
-    function getFullLengthDef(item) {
+    function getGlyphSurchargeDef(item) {
         return item &&
             item.attributes &&
             item.attributes.custom_glyph &&
-            item.attributes.custom_glyph.full_length
-            ? item.attributes.custom_glyph.full_length
+            item.attributes.custom_glyph.surcharge
+            ? item.attributes.custom_glyph.surcharge
             : null;
     }
 
-    function isFullLengthSelected(selections) {
+    function isGlyphSurchargeSelected(selections) {
         return !!(
             selections &&
             selections.custom_glyph &&
-            selections.custom_glyph.full_length
+            selections.custom_glyph.value
         );
     }
 
-    function resolveFullLengthPrice(def) {
+    function resolveGlyphSurchargePrice(def) {
         var price = Number(def && def.price);
         return Number.isFinite(price) ? price : 6;
     }
 
-    function resolveFullLengthProductId(def) {
+    function resolveGlyphSurchargeProductId(def) {
         if (def && def.product_id) return String(def.product_id);
         return "m8_full_length_glyph_1";
     }
 
-    function resolveFullLengthName(def) {
+    function resolveGlyphSurchargeName(def) {
         if (def && def.name) return String(def.name);
         return "Full-length Custom Glyph";
     }
@@ -2657,7 +2629,7 @@
         return null;
     }
 
-    function calcFullLengthTotal(product) {
+    function calcGlyphSurchargeTotal(product) {
         if (!product) return 0;
         var total = 0;
 
@@ -2668,18 +2640,22 @@
                 var bundleDef = findBundleDefinition(product, bundleId);
                 if (!bundleDef) return;
                 var selections = collectSelectionsFor(bundleDef, section);
-                if (!isFullLengthSelected(selections)) return;
-                total += resolveFullLengthPrice(getFullLengthDef(bundleDef));
+                if (!isGlyphSurchargeSelected(selections)) return;
+                var surchargeDef = getGlyphSurchargeDef(bundleDef);
+                if (!surchargeDef) return;
+                total += resolveGlyphSurchargePrice(surchargeDef);
             });
             return total;
         }
 
         var selections = collectSelectionsFor(product, document);
-        if (!isFullLengthSelected(selections)) return 0;
-        return resolveFullLengthPrice(getFullLengthDef(product));
+        if (!isGlyphSurchargeSelected(selections)) return 0;
+        var surchargeDef = getGlyphSurchargeDef(product);
+        if (!surchargeDef) return 0;
+        return resolveGlyphSurchargePrice(surchargeDef);
     }
 
-    function buildFullLengthItems(product) {
+    function buildGlyphSurchargeItems(product) {
         if (!product) return [];
         var items = [];
 
@@ -2690,12 +2666,13 @@
                 var bundleDef = findBundleDefinition(product, bundleId);
                 if (!bundleDef) return;
                 var selections = collectSelectionsFor(bundleDef, section);
-                if (!isFullLengthSelected(selections)) return;
-                var def = getFullLengthDef(bundleDef);
+                if (!isGlyphSurchargeSelected(selections)) return;
+                var def = getGlyphSurchargeDef(bundleDef);
+                if (!def) return;
                 items.push({
-                    product_id: resolveFullLengthProductId(def),
-                    name: resolveFullLengthName(def),
-                    price: resolveFullLengthPrice(def),
+                    product_id: resolveGlyphSurchargeProductId(def),
+                    name: resolveGlyphSurchargeName(def),
+                    price: resolveGlyphSurchargePrice(def),
                     quantity: 1,
                     attributes: null,
                     add_ons: null,
@@ -2706,12 +2683,13 @@
         }
 
         var selections = collectSelectionsFor(product, document);
-        if (!isFullLengthSelected(selections)) return items;
-        var def = getFullLengthDef(product);
+        if (!isGlyphSurchargeSelected(selections)) return items;
+        var def = getGlyphSurchargeDef(product);
+        if (!def) return items;
         items.push({
-            product_id: resolveFullLengthProductId(def),
-            name: resolveFullLengthName(def),
-            price: resolveFullLengthPrice(def),
+            product_id: resolveGlyphSurchargeProductId(def),
+            name: resolveGlyphSurchargeName(def),
+            price: resolveGlyphSurchargePrice(def),
             quantity: 1,
             attributes: null,
             add_ons: null,
@@ -2725,7 +2703,7 @@
         if (!priceEl) return;
         var selections = collectSelectionsFor(product, document);
         var base = resolveBasePrice(product, selections);
-        var total = base + calcKeycapTotal(product) + calcFullLengthTotal(product);
+        var total = base + calcKeycapTotal(product) + calcGlyphSurchargeTotal(product);
         priceEl.textContent = formatMoney(total);
     }
 
@@ -2779,7 +2757,7 @@
     function initPriceUpdates(product) {
         if (!product) return;
         var controls = document.querySelectorAll(
-            '.chip[data-attribute="variant"], [data-glyph-full-length="true"]'
+            '.chip[data-attribute="variant"], [data-attribute="custom_glyph"]'
         );
         if (!controls.length) return;
         Array.prototype.forEach.call(controls, function (button) {
@@ -2873,7 +2851,7 @@
         button.addEventListener("click", function () {
             if (button.disabled) return;
             var keycapItems = buildKeycapItems(product);
-            var fullLengthItems = buildFullLengthItems(product);
+            var glyphSurchargeItems = buildGlyphSurchargeItems(product);
             var bundleItems = [];
 
             if (product.type === "kit" && Array.isArray(product.includes)) {
@@ -2918,7 +2896,7 @@
             keycapItems.forEach(function (addonItem) {
                 items.push(addonItem);
             });
-            fullLengthItems.forEach(function (surchargeItem) {
+            glyphSurchargeItems.forEach(function (surchargeItem) {
                 items.push(surchargeItem);
             });
             PorchLogic.cartStore.set(items);

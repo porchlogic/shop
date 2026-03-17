@@ -20,7 +20,7 @@
   <span class="cart-count-badge" data-cart-count>0</span>
 </a>
 </header>
-<script type="application/json" id="product-data">{"id":"m8_backpack_1","name":"M8 Backpack","price":28,"images":["m8-backpack-hero1_smoke.png","m8-backpack-hero2_smoke.png","backpack_glyph.png"],"variants":["smoke","clear"],"type":"","attributes":{"material":{"type":"fixed","value":"PETG"},"color":{"type":"options","options":["smoke","clear"]},"cargo_size":{"note":"measure your cargo precisely with calipers","width":50,"height":100,"thickness":10},"custom_glyph":{"type":"toggle","label":"+ Custom Glyph","editor":"pixel","full_length":{"label":"Full-length","product_id":"m8_full_length_glyph_1","name":"Full-length Custom Glyph","price":6}},"compatible_device":{"type":"fixed","value":{"name":"M8 Tracker","model":"model:01"}}},"add_ons":{},"image_variants":{"1":{"for":["smoke"],"image":"m8-backpack-hero1_smoke.png"},"2":{"for":["clear"],"image":"backpack_clear.png"}},"images_base_url":"/images"}</script>
+<script type="application/json" id="product-data">{"id":"m8_backpack_1","name":"M8 Backpack","price":28,"images":["m8-backpack-hero1_smoke.png","m8-backpack-hero2_smoke.png","backpack_glyph.png"],"variants":["smoke","clear"],"type":"","attributes":{"material":{"type":"fixed","value":"PETG"},"color":{"type":"options","options":["smoke","clear"]},"cargo_size":{"note":"measure your cargo precisely with calipers","width":50,"height":100,"thickness":10},"custom_glyph":{"type":"toggle","label":"+ Custom Glyph","editor":"pixel","surcharge":{"product_id":"m8_full_length_glyph_1","name":"Full-length Custom Glyph","price":6}},"compatible_device":{"type":"fixed","value":{"name":"M8 Tracker","model":"model:01"}}},"add_ons":{},"image_variants":{"1":{"for":["smoke"],"image":"m8-backpack-hero1_smoke.png"},"2":{"for":["clear"],"image":"backpack_clear.png"}},"images_base_url":"/images"}</script>
 <section class="hero">
   <div class="pl-carousel" data-carousel>
     <div class="pl-carousel__track" data-carousel-track>
@@ -88,12 +88,6 @@
     <button class="toggle" type="button" aria-pressed="false" aria-label="Toggle + Custom Glyph" data-attribute="custom_glyph" data-glyph-toggle="true" data-glyph-editor="pixel">
       <span class="toggle__knob"></span>
     </button>
-    <div class="glyph-length">
-      <span class="glyph-length__label">Full-length</span>
-      <button class="toggle toggle--secondary" type="button" aria-pressed="false" aria-label="Toggle Full-length" data-glyph-full-length="true">
-        <span class="toggle__knob"></span>
-      </button>
-    </div>
     <button class="glyph-thumb is-disabled" type="button" aria-label="Edit custom glyph" aria-disabled="true" data-glyph-thumb="true" tabindex="-1">
       <span class="glyph-thumb__edit">Edit</span>
       <canvas class="glyph-icon-canvas" width="96" height="96" data-glyph-canvas="true"></canvas>
