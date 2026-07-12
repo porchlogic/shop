@@ -27,6 +27,80 @@
             .filter(Boolean);
     }
 
+    function toImageSlides(images, baseUrl) {
+        return toSlideUrls(images, baseUrl).map(function (url) {
+            return {
+                type: "image",
+                src: url
+            };
+        });
+    }
+
+    function toYouTubeEmbedUrl(url) {
+        var value = String(url || "").trim();
+        if (!value) return "";
+        if (value.indexOf("/embed/") !== -1) return value;
+        try {
+            var parsed = new URL(value, global.location.href);
+            var videoId = "";
+            var start = parsed.searchParams.get("t") || parsed.searchParams.get("start") || "";
+            if (parsed.hostname.indexOf("youtu.be") !== -1) {
+                videoId = parsed.pathname.replace(/^\/+/, "").split("/")[0];
+            } else {
+                videoId = parsed.searchParams.get("v") || "";
+            }
+            if (!videoId) return "";
+            var embed = "https://www.youtube.com/embed/" + encodeURIComponent(videoId);
+            if (start) {
+                var seconds = parseInt(start, 10);
+                if (Number.isFinite(seconds) && seconds > 0) {
+                    embed += "?start=" + seconds;
+                }
+            }
+            return embed;
+        } catch (err) {
+            return "";
+        }
+    }
+
+    function toMediaSlides(media) {
+        var items = Array.isArray(media) ? media : [];
+        return items.map(function (item) {
+            if (!item || typeof item !== "object") return null;
+            if (item.type !== "youtube") return null;
+            var src = toYouTubeEmbedUrl(item.url);
+            if (!src) return null;
+            return {
+                type: "youtube",
+                src: src,
+                title: String(item.title || "Product video")
+            };
+        }).filter(Boolean);
+    }
+
+    function buildSlideMarkup(slide, active) {
+        var type = slide && slide.type ? slide.type : "image";
+        var activeClass = active ? " is-active" : "";
+        if (type === "youtube") {
+            return (
+                '<div class="pl-carousel__slide pl-carousel__slide--video' +
+                activeClass +
+                '"><iframe src="' +
+                String(slide.src || "") +
+                '" title="' +
+                String(slide.title || "Product video") +
+                '" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>'
+            );
+        }
+        return (
+            '<div class="pl-carousel__slide' +
+            activeClass +
+            '"><img src="' +
+            String(slide && slide.src ? slide.src : "") +
+            '" alt=""></div>'
+        );
+    }
+
     function readCurrentSelections() {
         var selections = {};
         var selectedButtons = document.querySelectorAll(
@@ -108,36 +182,34 @@
         var initialSlides = Array.prototype.slice.call(
             root.querySelectorAll(".pl-carousel__slide img")
         ).map(function (img) {
-            return String(img.getAttribute("src") || "");
-        }).filter(Boolean);
+            return {
+                type: "image",
+                src: String(img.getAttribute("src") || "")
+            };
+        }).filter(function (slide) {
+            return !!slide.src;
+        });
         if (!initialSlides.length) return;
 
         var product = getProductData();
         var rules = product && product.image_variants
             ? product.image_variants
             : {};
-        var baseUrls = initialSlides.slice();
-        var baseFromData = product ? toSlideUrls(product.images, product.images_base_url) : [];
-        if (baseFromData.length) {
-            baseUrls = baseFromData;
+        var baseSlides = initialSlides.slice();
+        if (product && Array.isArray(product.images)) {
+            baseSlides = toImageSlides(product.images, product.images_base_url);
         }
+        var mediaSlides = product ? toMediaSlides(product.media) : [];
 
         var currentIndex = 0;
         var slides = [];
         var dots = [];
         var orderSlideCount = 0;
 
-        function buildSlides(urls, orderCount) {
-            track.innerHTML = urls
-                .map(function (url, idx) {
-                    var active = idx === 0 ? " is-active" : "";
-                    return (
-                        '<div class="pl-carousel__slide' +
-                        active +
-                        '"><img src="' +
-                        url +
-                        '" alt=""></div>'
-                    );
+        function buildSlides(slidesData, orderCount) {
+            track.innerHTML = slidesData
+                .map(function (slide, idx) {
+                    return buildSlideMarkup(slide, idx === 0);
                 })
                 .join("");
             slides = Array.prototype.slice.call(
@@ -199,23 +271,21 @@
             if (!rules || (Array.isArray(rules) && !rules.length)) return;
             var selected = readCurrentSelections();
             var variantImages = resolveImageVariantImages(rules, selected);
-            var variantUrls = variantImages
-                ? toSlideUrls(variantImages, product ? product.images_base_url : "")
+            var variantSlides = variantImages
+                ? toImageSlides(variantImages, product ? product.images_base_url : "")
                 : [];
-            var combined = variantUrls.length
-                ? variantUrls.concat(baseUrls)
-                : baseUrls.slice();
-            buildSlides(combined, variantUrls.length);
+            var combined = variantSlides.length
+                ? variantSlides.concat(baseSlides, mediaSlides)
+                : baseSlides.concat(mediaSlides);
+            buildSlides(combined, variantSlides.length);
         }
-
-        if (prevBtn) prevBtn.addEventListener("click", prev);
-        if (nextBtn) nextBtn.addEventListener("click", next);
-
-        buildSlides(baseUrls, 0);
 
         var hasRules = Array.isArray(rules)
             ? rules.length > 0
             : !!(rules && typeof rules === "object" && Object.keys(rules).length);
+        if (prevBtn) prevBtn.addEventListener("click", prev);
+        if (nextBtn) nextBtn.addEventListener("click", next);
+
         if (hasRules) {
             var controls = document.querySelectorAll(
                 '.chip[data-attribute], select[data-attribute], .toggle[data-attribute], .cargo-size__input[data-attribute]'
@@ -243,6 +313,8 @@
                 }
             });
             applyMyOrderSelection();
+        } else {
+            buildSlides(baseSlides.concat(mediaSlides), 0);
         }
     };
 
