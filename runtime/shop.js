@@ -12,6 +12,16 @@
         }
     }
 
+    function findIncludedProduct(product, id) {
+        if (!product || !Array.isArray(product.includes) || !id) return null;
+        for (var i = 0; i < product.includes.length; i += 1) {
+            if (product.includes[i] && product.includes[i].id === id) {
+                return product.includes[i];
+            }
+        }
+        return null;
+    }
+
     function toSlideUrls(images, baseUrl) {
         var source = Array.isArray(images) ? images : [];
         var base = String(baseUrl || "");
@@ -101,9 +111,10 @@
         );
     }
 
-    function readCurrentSelections() {
+    function readCurrentSelections(scope) {
+        var root = scope || document;
         var selections = {};
-        var selectedButtons = document.querySelectorAll(
+        var selectedButtons = root.querySelectorAll(
             '.chip[data-attribute][aria-pressed="true"]'
         );
         Array.prototype.forEach.call(selectedButtons, function (btn) {
@@ -111,13 +122,13 @@
             selections[btn.dataset.attribute] = String(btn.dataset.value || "");
         });
 
-        var selects = document.querySelectorAll("select[data-attribute]");
+        var selects = root.querySelectorAll("select[data-attribute]");
         Array.prototype.forEach.call(selects, function (select) {
             if (!select.dataset || !select.dataset.attribute) return;
             selections[select.dataset.attribute] = String(select.value || "");
         });
 
-        var toggles = document.querySelectorAll(".toggle[data-attribute]");
+        var toggles = root.querySelectorAll(".toggle[data-attribute]");
         Array.prototype.forEach.call(toggles, function (toggle) {
             if (!toggle.dataset || !toggle.dataset.attribute) return;
             selections[toggle.dataset.attribute] =
@@ -191,10 +202,20 @@
         });
         if (!initialSlides.length) return;
 
-        var product = getProductData();
+        var pageProduct = getProductData();
+        var productId = root.getAttribute("data-carousel-product-id") || "";
+        var product = productId
+            ? findIncludedProduct(pageProduct, productId)
+            : pageProduct;
+        if (!product) return;
         var rules = product && product.image_variants
             ? product.image_variants
             : {};
+        var scopeSelector = root.getAttribute("data-carousel-scope") || "";
+        var selectionScope = document;
+        if (scopeSelector) {
+            selectionScope = document.querySelector(scopeSelector) || document;
+        }
         var baseSlides = initialSlides.slice();
         if (product && Array.isArray(product.images)) {
             baseSlides = toImageSlides(product.images, product.images_base_url);
@@ -269,7 +290,7 @@
 
         function applyMyOrderSelection() {
             if (!rules || (Array.isArray(rules) && !rules.length)) return;
-            var selected = readCurrentSelections();
+            var selected = readCurrentSelections(selectionScope);
             var variantImages = resolveImageVariantImages(rules, selected);
             var variantSlides = variantImages
                 ? toImageSlides(variantImages, product ? product.images_base_url : "")
@@ -287,7 +308,7 @@
         if (nextBtn) nextBtn.addEventListener("click", next);
 
         if (hasRules) {
-            var controls = document.querySelectorAll(
+            var controls = selectionScope.querySelectorAll(
                 '.chip[data-attribute], select[data-attribute], .toggle[data-attribute], .cargo-size__input[data-attribute]'
             );
             var queued = false;
@@ -2328,7 +2349,12 @@
         }
 
         if (PorchLogic.initCarousel) {
-            PorchLogic.initCarousel(document.querySelector("[data-carousel]"));
+            Array.prototype.forEach.call(
+                document.querySelectorAll("[data-carousel]"),
+                function (carousel) {
+                    PorchLogic.initCarousel(carousel);
+                }
+            );
         }
 
         if (PorchLogic.initChoiceChips) {
